@@ -8,7 +8,27 @@ import random
 
 class buildAnyShape:
     def __init__(self, sim, volume, domains, voxel_membrane_area, voxel_PSD, voxel_ER_area):
+
+		"""Exceptions are documented in the same way as classes.
+
+		The __init__ method may be documented in either the class level
+		docstring, or as a docstring on the __init__ method itself.
+		Either form is acceptable, but the two should not be mixed.
+		Note:
+		    Do not include the `self` parameter in the ``Args`` section.
+
+		Args:
+		    msg (str): Human readable string describing the exception.
+		    code (:obj:`int`, optional): Error code.
+
+		Attributes:
+		    msg (str): Human readable string describing the exception.
+		    code (int): Exception error code.
+
+		"""
+
         """
+        
 		sim.siteTypes['domain name'] may be different from volume_id.
 		
 		param sim           RDMESimulation object

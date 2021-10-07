@@ -19,29 +19,23 @@ class createVolumeFromReconstructFile():
 
 	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch):
 
+		"""Exceptions are documented in the same way as classes.
+
+		The __init__ method may be documented in either the class level
+		docstring, or as a docstring on the __init__ method itself.
+		Either form is acceptable, but the two should not be mixed.
+		Note:
+		    Do not include the `self` parameter in the ``Args`` section.
+
+		Args:
+		    msg (str): Human readable string describing the exception.
+		    code (:obj:`int`, optional): Error code.
+
+		Attributes:
+		    msg (str): Human readable string describing the exception.
+		    code (int): Exception error code.
 
 		"""
-		Initialization of createVolumeFromReconstructFile
-		It automatically calculate the 
-		
-		Parameters
-		----------
-		path_to_reconstruct_dxf_files : str
-			Relative path or absolute path of 
-		xypitch : float
-			xy pitch per pixel in micro m
-		zpitch : float
-			z ptich per voxel in micro m
-		
-		Returns
-		-------
-		createVolumeFromReconstructFile object.
-		
-		See Also
-		--------
-		get_fruit_id_list : DBに保存されている果物のマスタIDのリストを取得する。
-		"""
-
 
 		self.rotation_matrix = []
 		self.xypitch = xypitch
