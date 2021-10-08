@@ -1,8 +1,12 @@
 Utilities
 =========
 
-.. automodule:: utils
-   :members:
+.. currentmodule:: utils
+
+.. autosummary::
+
 .. toctree::
    :maxdepth: 4
 
+.. automodule:: utils
+   :members:
