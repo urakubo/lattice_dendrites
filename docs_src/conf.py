@@ -32,6 +32,7 @@ release = '0.0.1'
 # ones.
 extensions = ['sphinx.ext.autosummary','sphinx.ext.githubpages',"sphinx.ext.autodoc", 'sphinx.ext.napoleon']
 
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -55,6 +56,8 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 
+# Autosummary settings
+autosummary_generate = True
 
 # Napoleon settings
 napoleon_google_docstring = True

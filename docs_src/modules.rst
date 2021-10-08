@@ -10,3 +10,8 @@ Utilities
 
 .. automodule:: utils
    :members:
+   .. autosummary::
+      :toctree: _gen
+
+   ButtonWrapper
+
