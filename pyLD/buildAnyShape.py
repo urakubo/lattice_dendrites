@@ -1,28 +1,29 @@
 from __future__ import print_function
 from __future__ import division
-from pyLM import *
+#from pyLM import *
 import numpy as np
 import os
 import random
 
 
 class buildAnyShape:
+	"""Build a buildAnyShape object.
+
+	sim.siteTypes['domain name'] may be different from volume_id.
+
+	Args:
+		sim (obj): RDMESimulation object
+		volume (numpy[int]): 3D array that specifies volume_ids
+		domains (dict[str]): {'domain name', volume_id}
+		voxel_membrane_area (numpy[float]): 3D array that specifies membrane_voxels > 0
+		voxel_PSD (numpy[float]): 3D array that specifies PSD_voxels > 0
+		voxel_ER_area (numpy[float]): 3D array that specifies ER_voxels > 0
+
+	Returns:
+		(pyLD.buildAnyShape): buildAnyShape object
+	"""
+
 	def __init__(self, sim, volume, domains, voxel_membrane_area, voxel_PSD, voxel_ER_area):
-		"""Build a buildAnyShape object.
-
-		sim.siteTypes['domain name'] may be different from volume_id.
-
-		Args:
-			sim (obj): RDMESimulation object
-			volume (numpy[int]): 3D array that specifies volume_ids
-			domains (dict[str]): {'domain name', volume_id}
-			voxel_membrane_area (numpy[float]): 3D array that specifies membrane_voxels > 0
-			voxel_PSD (numpy[float]): 3D array that specifies PSD_voxels > 0
-			voxel_ER_area (numpy[float]): 3D array that specifies ER_voxels > 0
-
-		Returns:
-			(pyLD.buildAnyShape): buildAnyShape object
-		"""
 
 		self.sim = sim
 
