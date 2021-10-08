@@ -15,27 +15,22 @@ import copy
 from skimage.transform import rescale
 
  
-class createVolumeFromReconstructFile():
+class createVolumeFromReconstruct():
+	"""Create a volume from a set of Reconstruct dxf files. The volume can have multiple domains.
+
+	Args:
+		path_to_reconstruct_dxf_files (obj): RDMESimulation object
+		volume (numpy[int]): 3D array that specifies volume_ids
+		domains (dict[str]): {'domain name', volume_id}
+		voxel_membrane_area (numpy[float]): 3D array that specifies membrane_voxels > 0
+		voxel_PSD (numpy[float]): 3D array that specifies PSD_voxels > 0
+		voxel_ER_area (numpy[float]): 3D array that specifies ER_voxels > 0
+
+	Returns:
+		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
+	"""
 
 	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch):
-
-		"""Exceptions are documented in the same way as classes.
-
-		The __init__ method may be documented in either the class level
-		docstring, or as a docstring on the __init__ method itself.
-		Either form is acceptable, but the two should not be mixed.
-		Note:
-		    Do not include the `self` parameter in the ``Args`` section.
-
-		Args:
-		    msg (str): Human readable string describing the exception.
-		    code (:obj:`int`, optional): Error code.
-
-		Attributes:
-		    msg (str): Human readable string describing the exception.
-		    code (int): Exception error code.
-
-		"""
 
 		self.rotation_matrix = []
 		self.xypitch = xypitch
