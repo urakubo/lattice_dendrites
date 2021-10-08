@@ -6,6 +6,17 @@ import numpy as np
 import os
 
 def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
+
+	"""Calculate a surface area of a volume.
+	Domains are transformed in a minimal bounding box of the X-Y space.
+
+	Args:
+	    pitch (float): Unit length per voxel
+	    volume (numpy): Input volume (3D array, bool preferred)
+	    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
+	"""
+
+
 	#
 	# @param pitch			unit length per voxel		(float)
 	# @param volume			input volume			(numpy 3d array, bool preferred)
@@ -14,7 +25,6 @@ def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 	# @return smooth_vertices	vertices of smoothing mesh	(numpy 3xX array)
 	# @return smooth_faces		faces of smoothing mesh		(numpy 3xX array)
         # @return Smooth_area_per_face  Areas of faces			(numpy 1xX array)
-
 
 	volume = volume.astype(np.bool)
 	print('volume.shape: ', volume.shape)
@@ -31,7 +41,7 @@ def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 	v_march, f_march, normals, values = measure.marching_cubes(volume, 0.5, spacing=(1,1,1))
 	v_march = v_march - 1
 
-        # PSD
+	    # PSD
 	if PSD is not None:
 		xvnum, yvnum, zvnum = PSD.shape
 		face_loc   = ( v_march[f_march[:,0]]+v_march[f_march[:,1]]+v_march[f_march[:,2]] ) / 3.0

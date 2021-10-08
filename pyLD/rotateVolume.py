@@ -5,29 +5,27 @@ import cv2
 # import matplotlib.pyplot as plt
 
 class rotateVolume():
-	"""Exceptions are documented in the same way as classes.
-
-	The __init__ method may be documented in either the class level
-	docstring, or as a docstring on the __init__ method itself.
-	Either form is acceptable, but the two should not be mixed.
-	Note:
-	    Do not include the `self` parameter in the ``Args`` section.
+	"""Rotate a volume in a minimal bounding box.
+	Domains are transformed in a minimal bounding box of the X-Y space.
 
 	Args:
-	    msg (str): Human readable string describing the exception.
-	    code (:obj:`int`, optional): Error code.
-
-	Attributes:
-	    msg (str): Human readable string describing the exception.
-	    code (int): Exception error code.
-
+	    volume (numpy[int]): Volume to calcutate a minimal bounding box
+	    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
 	"""
 	def __init__(self, volume, fixed_axis = 0):
 
 		self.d  = 2
-		self.calc(volume, fixed_axis)
+		self._calc(volume, fixed_axis)
 
-	def calc(self, volume, fixed_axis):
+	def _calc(self, volume, fixed_axis):
+		"""Calculate a rotation matrix.
+		_calc is automatically called from the initial definition.
+		Users can redefine the rotation matrix.
+
+		Args:
+	    	volume (numpy[int]): Volume to calcutate a minimal bounding box
+		    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
+		"""
 
 		self.fixed_axis = fixed_axis
 		volume = volume.swapaxes(0, self.fixed_axis)
@@ -72,7 +70,14 @@ class rotateVolume():
 
 
 	def exec(self, volume):
+		"""Execute a rotation.
 
+		Args:
+	    	volume (numpy[int]): Target volume
+
+		Returns:
+			(numpy[int]): Rotated volume
+		"""
 		volume_dtype  = volume.dtype
 		volume_transp = volume.swapaxes(0, self.fixed_axis)
 
@@ -82,8 +87,12 @@ class rotateVolume():
 
 		for i in range(volume_transp.shape[0]):
 			slice     = volume_transp[i,:,:].astype(np.int)
-			slice_rot = cv2.warpAffine( slice, self.M, (self.cols+self.xwidth_box_after, self.rows + self.ywidth_box_after) , flags=cv2.INTER_NEAREST )
-			volume_transp_rotated[i+self.d, self.d:-self.d, self.d:-self.d] = slice_rot[0: self.ywidth_box_after, 0: self.xwidth_box_after ].astype(volume_dtype)
+			slice_rot = cv2.warpAffine( slice, \
+					self.M, (self.cols+self.xwidth_box_after, \
+					self.rows + self.ywidth_box_after), \
+					flags=cv2.INTER_NEAREST )
+			volume_transp_rotated[i+self.d, self.d:-self.d, self.d:-self.d] = \
+					slice_rot[0: self.ywidth_box_after, 0: self.xwidth_box_after ].astype(volume_dtype)
 
 
 		return volume_transp_rotated

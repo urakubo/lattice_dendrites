@@ -19,6 +19,8 @@ API Reference
 .. toctree::
    :maxdepth: 1
    
+   createVolumeFromReconstruct
+   rotateVolume
    buildAnyShape
    utils
 

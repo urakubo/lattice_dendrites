@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lattice dendrites &mdash; lattice dendrites 0.0.1 documentation</title>
+  <title>rotateVolume &mdash; lattice dendrites 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,7 @@
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="createVolumeFromReconstruct" href="createVolumeFromReconstruct.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> lattice dendrites
+            <a href="index.html" class="icon icon-home"> lattice dendrites
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -38,7 +37,6 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="createVolumeFromReconstruct.html">createVolumeFromReconstruct</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rotateVolume.html">rotateVolume</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildAnyShape.html">buildAnyShape</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
 </ul>
@@ -49,17 +47,17 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">lattice dendrites</a>
+          <a href="index.html">lattice dendrites</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Lattice dendrites</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>rotateVolume</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/rotateVolume.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -67,38 +65,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="lattice-dendrites">
-<h1>Lattice dendrites<a class="headerlink" href="#lattice-dendrites" title="Permalink to this headline"></a></h1>
-<p>Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPU).</p>
-<p>Lattice Dendrites (LD) is an extension of LM that can incorporate morphologically realistic shapes of cells, in particular, from 3-dimentional (3D) reconstruction of electron microscopic (EM) images. LD is fully written in Python.</p>
-<p>LD is licensed under the MIT license. The original LM is licensed under the University of Illinois Open Source License. More info on LM can be found at <a class="reference external" href="http://www.scs.illinois.edu/schulten/lm/">http://www.scs.illinois.edu/schulten/lm/</a>.</p>
-</section>
-<section id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="createVolumeFromReconstruct.html">createVolumeFromReconstruct</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rotateVolume.html">rotateVolume</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildAnyShape.html">buildAnyShape</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
+  <section id="module-rotateVolume">
+<span id="rotatevolume"></span><h1>rotateVolume<a class="headerlink" href="#module-rotateVolume" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="rotateVolume.rotateVolume">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">rotateVolume.</span></span><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a volume in a minimal bounding box.
+Domains are transformed in a minimal bounding box of the X-Y space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
 </ul>
-</div>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="rotateVolume.rotateVolume.exec">
+<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume.exec" title="Permalink to this definition"></a></dt>
+<dd><p>Execute a rotation.</p>
+<p>Args:
+volume (numpy[int]): Target volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Rotated volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(numpy[int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="createVolumeFromReconstruct.html" class="btn btn-neutral float-right" title="createVolumeFromReconstruct" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

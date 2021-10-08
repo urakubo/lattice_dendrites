@@ -16,15 +16,14 @@ from skimage.transform import rescale
 
  
 class createVolumeFromReconstruct():
-	"""Create a volume from a set of Reconstruct dxf files. The volume can have multiple domains.
+	"""Create a volume from a set of Reconstruct dxf files.
+	Multiple domains can be converted into a volume.
+	Domains are transformed into a minimal bounding box of the X-Y space.
 
 	Args:
-		path_to_reconstruct_dxf_files (obj): RDMESimulation object
-		volume (numpy[int]): 3D array that specifies volume_ids
-		domains (dict[str]): {'domain name', volume_id}
-		voxel_membrane_area (numpy[float]): 3D array that specifies membrane_voxels > 0
-		voxel_PSD (numpy[float]): 3D array that specifies PSD_voxels > 0
-		voxel_ER_area (numpy[float]): 3D array that specifies ER_voxels > 0
+		path_to_reconstruct_dxf_files (str): Relative and absolute path to dxf files
+		xypitch (float): 3D array that specifies volume_ids
+		zpitch (float): {'domain name', volume_id}
 
 	Returns:
 		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
@@ -58,6 +57,13 @@ class createVolumeFromReconstruct():
 
 
 	def calc_bounding_box(self, target_domain):
+		"""Calculate a transformation matrix for a domain to fit a minimal bounding box.
+
+		Args:
+			target_domain (str): Target domain name
+		Returns:
+			(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
+		"""
 
 		if isinstance(target_domain, list) or isinstance(target_domain, tuple):
 			domains = target_domain
@@ -108,6 +114,13 @@ class createVolumeFromReconstruct():
 
 
 	def create(self, target_domain):
+		"""Create a volume of a target domain.
+
+		Args:
+			target_domain (str): Target domain name
+		Returns:
+			(numpy[bool]): Volume
+		"""
 
 		if self.rotation_matrix == []:
 			print('Calculate bounding_box beforehand.')
