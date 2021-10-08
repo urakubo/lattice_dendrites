@@ -1,5 +1,5 @@
-Utilities
-=========
+buildAnyShape
+=============
 
 .. automodule:: buildAnyShape
    :members:
