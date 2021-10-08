@@ -14,10 +14,11 @@ LD is licensed under the MIT license. The original LM is licensed under the Univ
 
 
 
+API Reference
+=============
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
+   :maxdepth: 1
+   
    modules
 
 

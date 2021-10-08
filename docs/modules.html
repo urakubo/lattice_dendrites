@@ -36,8 +36,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a><ul class="simple">
 </ul>
 </li>
@@ -79,6 +78,109 @@
 </table>
 <div class="toctree-wrapper compound">
 </div>
+<span class="target" id="module-utils"></span><dl class="py function">
+<dt class="sig sig-object py" id="utils.get_annot_colors">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_annot_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spine_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_annot_colors" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain spine color from the UNI-EM morphometric plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Filename of the paint npz file (the morphometric plugin).</p></li>
+<li><p><strong>spine_ids</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>/tuple</em><em>[</em><em>int</em><em>]</em>) – Target spine ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of the RGB colors of the target ids.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cols (list[tuple[int]])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.get_domain_concs">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_domain_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_domain_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain time development of molecular concentrations.</p>
+<p>A 3D image is padded to a multiple of 32 voxels,
+because LM only accepts the size of volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenames</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Output filenames of LM</p></li>
+<li><p><strong>targs</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Target domains</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time in s?,
+uMs (numpy[float]): Concentration in uM.
+numbers (numpy[int]): Molecular number</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Ts (numpy[float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.get_species_name">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_species_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_species_name" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve species names from a LM output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Molecular names and id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>s (cell[str] = id)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.get_volume_info">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_volume_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_volume_info" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve domain info from a LM output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p></li>
+<li><p><strong>domain_ids</strong> (<em>int/list</em><em>[</em><em>int</em><em>]</em><em>/tuple</em><em>[</em><em>int</em><em>]</em>) – Target domain ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of voxels of the target domain.
+volume_in_L (float): Volume of the target domain.
+spacing: Unit length (unit?)
+s: Molecular names that specifies id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>num_voxels (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.lmpad">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">lmpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.lmpad" title="Permalink to this definition"></a></dt>
+<dd><p>3D padding for lattice microbes.</p>
+<p>A 3D image is padded to a multiple of 32 voxels,
+because LM only accepts the size of volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>any</em>) – Three dimentional numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Padded volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>volume</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
