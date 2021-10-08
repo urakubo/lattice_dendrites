@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>calcSurfaceArea &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utilities" href="utils.html" />
+    <link rel="prev" title="buildAnyShape" href="buildAnyShape.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="createVolumeFromReconstruct.html">createVolumeFromReconstruct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rotateVolume.html">rotateVolume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildAnyShape.html">buildAnyShape</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">calcSurfaceArea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>calcSurfaceArea</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/calcSurfaceArea.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-calcSurfaceArea">
+<span id="calcsurfacearea"></span><h1>calcSurfaceArea<a class="headerlink" href="#module-calcSurfaceArea" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="calcSurfaceArea.calcSurfaceArea">
+<span class="sig-prename descclassname"><span class="pre">calcSurfaceArea.</span></span><span class="sig-name descname"><span class="pre">calcSurfaceArea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calcSurfaceArea.calcSurfaceArea" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate a surface area of a volume.
+Domains are transformed in a minimal bounding box of the X-Y space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
+<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh
+PSD (numpy): PSD volume</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple containing:
+- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
+- smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
+- smooth_faces (numpy[float]): Faces of smoothing mesh (3xX array)
+- smooth_area_per_face (numpy[float]): Areas of faces (3xX array)
+- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="buildAnyShape.html" class="btn btn-neutral float-left" title="buildAnyShape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

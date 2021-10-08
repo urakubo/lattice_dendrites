@@ -22,6 +22,7 @@ API Reference
    createVolumeFromReconstruct
    rotateVolume
    buildAnyShape
+   calcSurfaceArea
    utils
 
 

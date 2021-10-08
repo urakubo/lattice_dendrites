@@ -13,18 +13,18 @@ def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 	Args:
 	    pitch (float): Unit length per voxel
 	    volume (numpy): Input volume (3D array, bool preferred)
-	    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
+	    num_smoothing (int): Number of smoothing rounds for the target surface mesh
+		PSD (numpy): PSD volume
+
+	Returns:
+		(tuple): Tuple containing:
+		- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
+		- smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
+		- smooth_faces (numpy[float]): Faces of smoothing mesh (3xX array)
+		- smooth_area_per_face (numpy[float]): Areas of faces (3xX array)
+		- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 	"""
 
-
-	#
-	# @param pitch			unit length per voxel		(float)
-	# @param volume			input volume			(numpy 3d array, bool preferred)
-	## @param num_iterations		iter num for smoothing		(int)
-	# @return surface_areas		surface areas in voxel space(numpy 3d array)
-	# @return smooth_vertices	vertices of smoothing mesh	(numpy 3xX array)
-	# @return smooth_faces		faces of smoothing mesh		(numpy 3xX array)
-        # @return Smooth_area_per_face  Areas of faces			(numpy 1xX array)
 
 	volume = volume.astype(np.bool)
 	print('volume.shape: ', volume.shape)
