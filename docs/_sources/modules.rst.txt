@@ -1,5 +1,5 @@
-docs
-====
+Utilities
+=========
 
 .. automodule:: utils
    :members:
