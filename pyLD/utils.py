@@ -13,7 +13,6 @@ def lmpad(volume):
 
 	Returns:
 		(numpy): Padded volume
-
 	"""
 
 	nx,ny,nz = volume.shape
@@ -45,9 +44,9 @@ def get_domain_concs(filenames, targs):
 	Returns:
 		(tuple): Tuple containing:
 
-			time (numpy[float]): Time in s
-			concs (numpy[float]): Concentration in uM
-			numbers (numpy[int]): Numbers of Molecules
+		- time (numpy[float]): Time in s
+		- concs (numpy[float]): Concentration in uM
+		- numbers (numpy[int]): Numbers of Molecules
 	"""
 
 	for i, fname in enumerate(filenames):
@@ -110,10 +109,10 @@ def get_volume_info(filename, domain_ids):
 	Returns:
 		(tuple): Tuple containing:
 
-			- num_voxels (int): Number of voxels of the target domain
-			- volume_in_L (float): Volume of the target domain
-			- spacing: Unit length (um)
-			- s: Pairs of molecular name and id
+		- num_voxels (int): Number of voxels of the target domain
+		- volume_in_L (float): Volume of the target domain
+		- spacing: Unit length (um)
+		- s: Pairs of molecular name and id
 	"""
 	with h5py.File(filename,'r') as f:
 	    data = f['Model']['Diffusion']['LatticeSites'][()]
@@ -141,7 +140,7 @@ def get_volume_info(filename, domain_ids):
 
 
 def get_annot_colors(filename, ids):
-	"""Obtain the colors of painted areas using the UNI-EM morphometric plugin.
+	"""Obtain colors of painted areas in the file of UNI-EM morphometric plugin.
 
 	Args:
 		filename (str): Filename of the paint npz file (the morphometric plugin).
@@ -149,7 +148,8 @@ def get_annot_colors(filename, ids):
 
 	Returns:
 		(list): List containing:
-			(R, G, B): colors (0-1 float) of target ids
+
+		- (R, G, B): colors (0-1 float) of target ids
 	"""
 	with open(filename,'rb') as f:
 	    list = pickle.load(f)
