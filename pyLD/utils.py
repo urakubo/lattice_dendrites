@@ -89,7 +89,7 @@ def get_species_name(filename):
 		filename (str): Output filename of LM
 
 	Returns:
-		s (cell[str] = id): Molecular names and id
+		(cell[str] = id): Pairs of molecular name and id
 	"""
 
 	with h5py.File(filename,'r') as f:
@@ -110,10 +110,10 @@ def get_volume_info(filename, domain_ids):
 	Returns:
 		(tuple): Tuple containing:
 
-			num_voxels (int): Number of voxels of the target domain
-			volume_in_L (float): Volume of the target domain
-			spacing: Unit length (um)
-			s: Molecular names that specifies id
+			- num_voxels (int): Number of voxels of the target domain
+			- volume_in_L (float): Volume of the target domain
+			- spacing: Unit length (um)
+			- s: Pairs of molecular name and id
 	"""
 	with h5py.File(filename,'r') as f:
 	    data = f['Model']['Diffusion']['LatticeSites'][()]
@@ -148,7 +148,7 @@ def get_annot_colors(filename, ids):
 		spine_ids(list[int]/tuple[int]): Target spine ids
 
 	Returns:
-		(list[tuple[float]]): List containing:
+		(list): List containing:
 			(R, G, B): colors (0-1 float) of target ids
 	"""
 	with open(filename,'rb') as f:

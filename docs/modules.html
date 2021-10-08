@@ -85,7 +85,7 @@
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(list[tuple[float]])</p>
+<dd class="field-odd"><p>(list)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -127,10 +127,10 @@ numbers (numpy[int]): Numbers of Molecules</p>
 <dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Molecular names and id</p>
+<dd class="field-even"><p>Pairs of molecular name and id</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>s (cell[str] = id)</p>
+<dd class="field-odd"><p>(cell[str] = id)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -149,10 +149,12 @@ numbers (numpy[int]): Numbers of Molecules</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <blockquote>
-<div><p>num_voxels (int): Number of voxels of the target domain
-volume_in_L (float): Volume of the target domain
-spacing: Unit length (um)
-s: Molecular names that specifies id</p>
+<div><ul class="simple">
+<li><p>num_voxels (int): Number of voxels of the target domain</p></li>
+<li><p>volume_in_L (float): Volume of the target domain</p></li>
+<li><p>spacing: Unit length (um)</p></li>
+<li><p>s: Pairs of molecular name and id</p></li>
+</ul>
 </div></blockquote>
 </p>
 </dd>
