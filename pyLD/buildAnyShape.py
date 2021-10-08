@@ -8,16 +8,17 @@ import random
 
 class buildAnyShape:
     def __init__(self, sim, volume, domains, voxel_membrane_area, voxel_PSD, voxel_ER_area):
-
 		"""Exceptions are documented in the same way as classes.
 
-		The __init__ method may be documented in either the class level
-		docstring, or as a docstring on the __init__ method itself.
-		Either form is acceptable, but the two should not be mixed.
-		Note:
-		    Do not include the `self` parameter in the ``Args`` section.
+		sim.siteTypes['domain name'] may be different from volume_id.
 
 		Args:
+			sim (obj): RDMESimulation object
+			volume (numpy[int]): Three-dimentional array that specifies volume_ids
+			domains (dict[str]): {'domain name', volume_id}
+			voxel_membrane_area  Three-dimentional array that specifies membrane_voxels > 0
+			
+			
 		    msg (str): Human readable string describing the exception.
 		    code (:obj:`int`, optional): Error code.
 
@@ -33,7 +34,7 @@ class buildAnyShape:
 		
 		param sim           RDMESimulation object
 		param volume        Three-dimentional array that indicates volume_id
-		param domains_ dict {'domain name', volume_id}
+		param 
 		param voxel_membrane_area  Three-dimentional array that specifies membrane_voxels > 0
 		param voxel_PSD   Three-dimentional array that specifies PSD_voxels > 0
 

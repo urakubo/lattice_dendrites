@@ -37,9 +37,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a></li>
 </ul>
 
         </div>
@@ -66,22 +64,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="utilities">
-<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline"></a></h1>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-</tbody>
-</table>
-<div class="toctree-wrapper compound">
-</div>
-<span class="target" id="module-utils"></span><dl class="py function">
+  <section id="module-utils">
+<span id="utilities"></span><h1>Utilities<a class="headerlink" href="#module-utils" title="Permalink to this headline"></a></h1>
+<dl class="py function">
 <dt class="sig sig-object py" id="utils.get_annot_colors">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_annot_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spine_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_annot_colors" title="Permalink to this definition"></a></dt>
-<dd><p>Obtain spine color from the UNI-EM morphometric plugin.</p>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_annot_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_annot_colors" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain the colors of painted areas using the UNI-EM morphometric plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -90,10 +78,14 @@
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of the RGB colors of the target ids.</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>List containing:</dt><dd><p>(R, G, B): colors (0-1 float) of target ids</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>cols (list[tuple[int]])</p>
+<dd class="field-odd"><p>(list[tuple[float]])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -112,12 +104,16 @@ because LM only accepts the size of volume.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Time in s?,
-uMs (numpy[float]): Concentration in uM.
-numbers (numpy[int]): Molecular number</p>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<blockquote>
+<div><p>time (numpy[float]): Time in s
+concs (numpy[float]): Concentration in uM
+numbers (numpy[int]): Numbers of Molecules</p>
+</div></blockquote>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Ts (numpy[float])</p>
+<dd class="field-odd"><p>(tuple)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -151,13 +147,17 @@ numbers (numpy[int]): Molecular number</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Number of voxels of the target domain.
-volume_in_L (float): Volume of the target domain.
-spacing: Unit length (unit?)
+<dd class="field-even"><p><p>Tuple containing:</p>
+<blockquote>
+<div><p>num_voxels (int): Number of voxels of the target domain
+volume_in_L (float): Volume of the target domain
+spacing: Unit length (um)
 s: Molecular names that specifies id</p>
+</div></blockquote>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>num_voxels (int)</p>
+<dd class="field-odd"><p>(tuple)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -170,13 +170,13 @@ s: Molecular names that specifies id</p>
 because LM only accepts the size of volume.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>volume</strong> (<em>any</em>) – Three dimentional numpy array</p>
+<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em>) – Three dimentional numpy array</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Padded volume</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>volume</p>
+<dd class="field-odd"><p>(numpy)</p>
 </dd>
 </dl>
 </dd></dl>

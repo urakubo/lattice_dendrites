@@ -9,10 +9,10 @@ def lmpad(volume):
 	because LM only accepts the size of volume.
 
 	Args:
-		volume (any): Three dimentional numpy array
+		volume (numpy): Three dimentional numpy array
 
 	Returns:
-		volume: Padded volume
+		(numpy): Padded volume
 
 	"""
 
@@ -43,9 +43,11 @@ def get_domain_concs(filenames, targs):
 		targs (list[str]): Target domains
 
 	Returns:
-		Ts (numpy[float]): Time in s?, 
-		uMs (numpy[float]): Concentration in uM.
-		numbers (numpy[int]): Molecular number
+		(tuple): Tuple containing:
+
+			time (numpy[float]): Time in s
+			concs (numpy[float]): Concentration in uM
+			numbers (numpy[int]): Numbers of Molecules
 	"""
 
 	for i, fname in enumerate(filenames):
@@ -65,19 +67,19 @@ def get_domain_concs(filenames, targs):
 	    # Connect
 	    if i == 0:
 	        #print('molecules: ', molecules)
-	        uMs     = tmp1
+	        concs   = tmp1
 	        numbers = tmp2
 	        #t[-1] = 10.0
-	        Ts  = t
+	        time = t
 	        #print('t: ', t)
 	    else:
 	        #print('uMs.shape : ', uMs.shape)
 	        #print('tmp.shape: ', tmp.shape)
-	        uMs     = np.vstack( (uMs, tmp1[1:,:]) )
+	        concs   = np.vstack( (concs, tmp1[1:,:]) )
 	        numbers = np.vstack( (numbers, tmp2[1:,:]) )
-	        Ts      = np.hstack( (Ts, t[1:]+Ts[-1]) )     
+	        time    = np.hstack( (time, t[1:]+Ts[-1]) )     
 	    # print('No', i, ', Filename: ', fname)
-	return Ts, uMs, numbers
+	return time, concs, numbers
 
 
 def get_species_name(filename):
@@ -106,10 +108,12 @@ def get_volume_info(filename, domain_ids):
 		domain_ids(int/list[int]/tuple[int]): Target domain ids
 
 	Returns:
-		num_voxels (int): Number of voxels of the target domain.
-		volume_in_L (float): Volume of the target domain.
-		spacing: Unit length (unit?)
-		s: Molecular names that specifies id
+		(tuple): Tuple containing:
+
+			num_voxels (int): Number of voxels of the target domain
+			volume_in_L (float): Volume of the target domain
+			spacing: Unit length (um)
+			s: Molecular names that specifies id
 	"""
 	with h5py.File(filename,'r') as f:
 	    data = f['Model']['Diffusion']['LatticeSites'][()]
@@ -136,21 +140,22 @@ def get_volume_info(filename, domain_ids):
 	return num_voxels, volume_in_L, spacing, s
 
 
-def get_annot_colors(filename, spine_ids):
-	"""Obtain spine color from the UNI-EM morphometric plugin.
+def get_annot_colors(filename, ids):
+	"""Obtain the colors of painted areas using the UNI-EM morphometric plugin.
 
 	Args:
 		filename (str): Filename of the paint npz file (the morphometric plugin).
 		spine_ids(list[int]/tuple[int]): Target spine ids
 
 	Returns:
-		cols (list[tuple[int]]): List of the RGB colors of the target ids.
+		(list[tuple[float]]): List containing:
+			(R, G, B): colors (0-1 float) of target ids
 	"""
 	with open(filename,'rb') as f:
 	    list = pickle.load(f)
 	cols = []
-	for id_spine in ids_spine:
-	    c = [x for x in list['list'] if x['id'] == id_spine]
+	for id in ids:
+	    c = [x for x in list['list'] if x['id'] == id]
 	    r = c[0]['r']/256.0
 	    g = c[0]['g']/256.0
 	    b = c[0]['b']/256.0
