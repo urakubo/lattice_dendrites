@@ -27,7 +27,7 @@ class createVolumeFromReconstruct():
 		path_to_reconstruct_dxf_files (str): Relative and absolute path to dxf files
 		xypitch (float): 3D array that specifies volume_ids
 		zpitch (float): {'domain name', volume_id}
-		target_domain (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
+		target_domains (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
 
 	Returns:
 		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
