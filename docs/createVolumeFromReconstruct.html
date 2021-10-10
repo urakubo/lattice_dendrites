@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="buildAnyShape" href="buildAnyShape.html" />
+    <link rel="next" title="rotateVolume" href="rotateVolume.html" />
     <link rel="prev" title="Lattice dendrites" href="index.html" /> 
 </head>
 
@@ -39,7 +39,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">createVolumeFromReconstruct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rotateVolume.html">rotateVolume</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildAnyShape.html">buildAnyShape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calcSurfaceArea.html">calcSurfaceArea</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
 </ul>
 
@@ -71,7 +73,7 @@
 <span id="createvolumefromreconstruct"></span><h1>createVolumeFromReconstruct<a class="headerlink" href="#module-createVolumeFromReconstruct" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="createVolumeFromReconstruct.createVolumeFromReconstruct">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">createVolumeFromReconstruct.</span></span><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">createVolumeFromReconstruct.</span></span><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
 <dd><p>Create a volume from a set of Reconstruct dxf files.
 Multiple domains can be converted into a volume.
 Domains are transformed into a minimal bounding box of the X-Y space.</p>
@@ -81,6 +83,7 @@ Domains are transformed into a minimal bounding box of the X-Y space.</p>
 <li><p><strong>path_to_reconstruct_dxf_files</strong> (<em>str</em>) – Relative and absolute path to dxf files</p></li>
 <li><p><strong>xypitch</strong> (<em>float</em>) – 3D array that specifies volume_ids</p></li>
 <li><p><strong>zpitch</strong> (<em>float</em>) – {‘domain name’, volume_id}</p></li>
+<li><p><strong>target_domain</strong> (<em>str/list</em><em>[</em><em>str</em><em>]</em><em>/tuple</em><em>[</em><em>str</em><em>]</em>) – Target domain names to calcutate a minimal bounding box</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -90,23 +93,6 @@ Domains are transformed into a minimal bounding box of the X-Y space.</p>
 <dd class="field-odd"><p>(pyLD.createVolumeFromReconstruct)</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="createVolumeFromReconstruct.createVolumeFromReconstruct.calc_bounding_box">
-<span class="sig-name descname"><span class="pre">calc_bounding_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct.calc_bounding_box" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate a transformation matrix for a domain to fit a minimal bounding box.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target_domain</strong> (<em>str</em>) – Target domain name</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>createVolumeFromReconstruct object</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(pyLD.createVolumeFromReconstruct)</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="createVolumeFromReconstruct.createVolumeFromReconstruct.create">
 <span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct.create" title="Permalink to this definition"></a></dt>
@@ -133,7 +119,7 @@ Domains are transformed into a minimal bounding box of the X-Y space.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Lattice dendrites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="buildAnyShape.html" class="btn btn-neutral float-right" title="buildAnyShape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rotateVolume.html" class="btn btn-neutral float-right" title="rotateVolume" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

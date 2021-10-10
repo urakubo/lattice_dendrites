@@ -17,7 +17,9 @@
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="buildAnyShape" href="buildAnyShape.html" />
+    <link rel="prev" title="createVolumeFromReconstruct" href="createVolumeFromReconstruct.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -35,9 +37,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="createVolumeFromReconstruct.html">createVolumeFromReconstruct</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rotateVolume</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildAnyShape.html">buildAnyShape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calcSurfaceArea.html">calcSurfaceArea</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
 </ul>
 
@@ -71,19 +75,19 @@
 <dt class="sig sig-object py" id="rotateVolume.rotateVolume">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">rotateVolume.</span></span><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume" title="Permalink to this definition"></a></dt>
 <dd><p>Rotate a volume in a minimal bounding box.
-Domains are transformed in a minimal bounding box of the X-Y space.</p>
+Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
 <li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="rotateVolume.rotateVolume.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume.exec" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a rotation.</p>
+<dt class="sig sig-object py" id="rotateVolume.rotateVolume.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume.rotate" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a specified volume.</p>
 <p>Args:
 volume (numpy[int]): Target volume</p>
 <dl class="field-list simple">
@@ -103,7 +107,10 @@ volume (numpy[int]): Target volume</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="createVolumeFromReconstruct.html" class="btn btn-neutral float-left" title="createVolumeFromReconstruct" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="buildAnyShape.html" class="btn btn-neutral float-right" title="buildAnyShape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
