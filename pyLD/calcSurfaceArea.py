@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+
 from skimage import measure
 from skimage import morphology
 import trimesh

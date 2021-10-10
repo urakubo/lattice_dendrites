@@ -1,4 +1,5 @@
-
+from __future__ import print_function
+from __future__ import division
 
 import numpy as np
 import cv2
@@ -6,10 +7,10 @@ import cv2
 
 class rotateVolume():
 	"""Rotate a volume in a minimal bounding box.
-	Domains are transformed in a minimal bounding box of the X-Y space.
+	Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.
 
 	Args:
-	    volume (numpy[int]): Volume to calcutate a minimal bounding box
+	    volume (numpy[int]): Reference volume to calcutate a minimal bounding box
 	    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
 	"""
 	def __init__(self, volume, fixed_axis = 0):
@@ -69,8 +70,8 @@ class rotateVolume():
 #		self.M = cv2.getRotationMatrix2D( (self.xmin_box_after, self.ymin_box_after), theta, 1)
 
 
-	def exec(self, volume):
-		"""Execute a rotation.
+	def rotate(self, volume):
+		"""Rotate a specified volume.
 
 		Args:
 	    	volume (numpy[int]): Target volume

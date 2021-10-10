@@ -1,16 +1,19 @@
 #
 # AquireVolumeFromDxfFile
 #
-
+from __future__ import print_function
+from __future__ import division
 
 import sys, os, errno
 import glob
 import numpy as np
 import cv2
 import pathlib
-# from natsort import natsorted
 import copy
+import re
+
 #import matplotlib.pyplot as plt
+# from natsort import natsorted
 
 from skimage.transform import rescale
 
@@ -24,12 +27,13 @@ class createVolumeFromReconstruct():
 		path_to_reconstruct_dxf_files (str): Relative and absolute path to dxf files
 		xypitch (float): 3D array that specifies volume_ids
 		zpitch (float): {'domain name', volume_id}
+		target_domain (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
 
 	Returns:
 		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
 	"""
 
-	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch):
+	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch, target_domains):
 
 		self.rotation_matrix = []
 		self.xypitch = xypitch
@@ -44,31 +48,32 @@ class createVolumeFromReconstruct():
 		else:
 			self.path_to_dxf = path_to_reconstruct_dxf_files
 
-
-
 #		self.dxf_files = natsorted( glob.glob( os.path.join(self.path_to_dxf, "*.dxf") ) )
 		self.dxf_files = glob.glob( os.path.join(self.path_to_dxf, "*.dxf") )
-		self.dxf_files = sorted(self.dxf_files, key=lambda s: int(re.search(r'\d+', s).group()))
+		self.dxf_files = sorted(self.dxf_files, key=lambda s: int(re.findall(r'\d+', s)[-1]))
 		if self.dxf_files == []:
 			print('No reconstruct dxf files!')
 			return False
 
 		# print(self.dxf_files)
+		self._calc_bounding_box(target_domains)
 
 
-	def calc_bounding_box(self, target_domain):
+	def _calc_bounding_box(self, target_domains):
 		"""Calculate a transformation matrix for a domain to fit a minimal bounding box.
+		_calc_bounding_box is automatically called from the initial definition.
+		Users can redefine the rotation matrix.
 
 		Args:
-			target_domain (str): Target domain name
+			target_domains (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
 		Returns:
 			(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
 		"""
 
-		if isinstance(target_domain, list) or isinstance(target_domain, tuple):
-			domains = target_domain
-		elif isinstance(target_domain, str):
-			domains = [target_domain]
+		if isinstance(target_domains, list) or isinstance(target_domains, tuple):
+			domains = target_domains
+		elif isinstance(target_domains, str):
+			domains = [target_domains]
 		else:
 			print('Target domains must be str, tuple, or list!, but:')
 			print(target_domain)
@@ -169,7 +174,15 @@ class createVolumeFromReconstruct():
 
 
 	def _load_vertices_xy(self, dxf_file, target_domain):
-		
+		"""Load vertices of target_domain from a dxf_file.
+
+		Args:
+			dxf_file (str): Dxf file name
+			target_domain (str): Target domain name
+		Returns:
+			(list[list[float,float]]): List of vertices
+		"""
+
 		with open(dxf_file, 'r') as f:
 			textlist = f.readlines()
 

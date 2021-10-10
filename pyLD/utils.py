@@ -1,6 +1,9 @@
 
-import numpy as np
 
+from __future__ import print_function
+from __future__ import division
+
+import numpy as np
 
 def lmpad(volume):
 	"""3D padding for lattice microbes.
@@ -26,7 +29,7 @@ def lmpad(volume):
 	lx2 = lx - lx1
 	ly2 = ly - ly1
 	lz2 = lz - lz1
-	padding = np.array( [[lx1,lx2],[ly1,ly2],[lz1,lz2]] , dtype=volume.dtype)
+	padding = np.array( [[lx1,lx2],[ly1,ly2],[lz1,lz2]] , dtype='int')
 	volume  = np.pad(volume, padding)
 	return volume
 
@@ -82,7 +85,7 @@ def get_domain_concs(filenames, targs):
 
 
 def get_species_name(filename):
-	"""Retrieve species names from a LM output file.
+	"""Retrieve species names from a LM/LM-output file.
 
 	Args:
 		filename (str): Output filename of LM
@@ -100,7 +103,7 @@ def get_species_name(filename):
 
 
 def get_volume_info(filename, domain_ids):
-	"""Retrieve domain info from a LM output file.
+	"""Retrieve domain info from a LM/LM-output file.
 
 	Args:
 		filename (str): Output filename of LM
