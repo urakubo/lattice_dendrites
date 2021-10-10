@@ -21,6 +21,7 @@ def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 
 	Returns:
 		(tuple): Tuple containing:
+
 		- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
 		- smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
 		- smooth_faces (numpy[float]): Faces of smoothing mesh (3xX array)
