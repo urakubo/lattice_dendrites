@@ -75,13 +75,15 @@
 <dt class="sig sig-object py" id="calcSurfaceArea.calcSurfaceArea">
 <span class="sig-name descname"><span class="pre">calcSurfaceArea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calcSurfaceArea.calcSurfaceArea" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate a surface area of a volume.
-Domains are transformed in a minimal bounding box of the X-Y space.</p>
+calcSurfaceArea generates a smooth surface mesh based on marching cubes plus a humphrey filter.
+Smoothed surface area per face is calcudated.
+Faces in the specifed PSD volume is also detected (Note, currently BEFORE smoothing).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
 <li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
-<li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume</p></li>
+<li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p></li>
 <li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
 </ul>
 </dd>
@@ -90,8 +92,8 @@ Domains are transformed in a minimal bounding box of the X-Y space.</p>
 <ul class="simple">
 <li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
 <li><p>smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
-<li><p>smooth_faces (numpy[float]): Faces of smoothing mesh (3xX array)</p></li>
-<li><p>smooth_area_per_face (numpy[float]): Areas of faces (3xX array)</p></li>
+<li><p>smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
+<li><p>smooth_area_per_face (numpy[float]): Areas of faces (Y array)</p></li>
 <li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
 </ul>
 </p>

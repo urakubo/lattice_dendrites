@@ -11,12 +11,14 @@ import os
 def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 
 	"""Calculate a surface area of a volume.
-	Domains are transformed in a minimal bounding box of the X-Y space.
+	calcSurfaceArea generates a smooth surface mesh based on marching cubes plus a humphrey filter.
+	Smoothed surface area per face is calcudated.
+	Faces in the specifed PSD volume is also detected (Note, currently BEFORE smoothing).
 
 	Args:
 	    pitch (float): Unit length per voxel
 	    volume (numpy): Input volume (3D array, bool preferred)
-	    PSD (numpy): PSD volume
+	    PSD (numpy): PSD volume  (3D array)
 	    num_smoothing (int): Number of smoothing rounds for the target surface mesh
 
 	Returns:
@@ -24,8 +26,8 @@ def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
 
 		- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
 		- smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
-		- smooth_faces (numpy[float]): Faces of smoothing mesh (3xX array)
-		- smooth_area_per_face (numpy[float]): Areas of faces (3xX array)
+		- smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)
+		- smooth_area_per_face (numpy[float]): Areas of faces (Y array)
 		- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 	"""
 
