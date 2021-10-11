@@ -5,6 +5,23 @@ from __future__ import division
 
 import numpy as np
 
+def smooth_species_name(volume, ):
+	"""Rotate a specified volume.
+
+	Args:
+		volume (numpy[int]): Target volume
+
+	Returns:
+		(numpy[int]): Rotated volume
+	"""
+
+	with h5py.File(filename,'r') as f:
+	    mnames  = f['Parameters'].attrs['speciesNames'].decode().split(',')
+	s = {}
+	for i in range(len(mnames)):
+	    s[mnames[i]] = i+1
+	return s
+
 def lmpad(volume):
 	"""3D padding for lattice microbes.
 
