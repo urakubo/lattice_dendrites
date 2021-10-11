@@ -1,2 +1,10 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Sphinx
 +build/doctrees
 +.DS_Store
+
+# C extensions
+#*.so
