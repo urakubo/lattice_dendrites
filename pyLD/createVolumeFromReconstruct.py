@@ -24,16 +24,16 @@ class createVolumeFromReconstruct():
 	Domains are transformed into a minimal bounding box of the X-Y space.
 
 	Args:
-		path_to_reconstruct_dxf_files (str): Relative and absolute path to dxf files
-		xypitch (float): 3D array that specifies volume_ids
-		zpitch (float): {'domain name', volume_id}
-		target_domains (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
+		path_to_reconstruct_dxf_files (str): Relative or absolute path to dxf files
+		xypitch (float): XYZ-pitch per voxel
+		zpitch (float): Z-slice thickness
+		reference_domains (str/list[str]/tuple[str]): Reference domain names to calcutate a minimal bounding box
 
 	Returns:
 		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
 	"""
 
-	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch, target_domains):
+	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch, reference_domains):
 
 		self.rotation_matrix = []
 		self.xypitch = xypitch
@@ -56,27 +56,27 @@ class createVolumeFromReconstruct():
 			return False
 
 		# print(self.dxf_files)
-		self._calc_bounding_box(target_domains)
+		self._calc_bounding_box(reference_domains)
 
 
-	def _calc_bounding_box(self, target_domains):
+	def _calc_bounding_box(self, reference_domains):
 		"""Calculate a transformation matrix for a domain to fit a minimal bounding box.
-		_calc_bounding_box is automatically called from the initial definition.
+		_calc_bounding_box is automatically called from the initialization.
 		Users can redefine the rotation matrix.
 
 		Args:
-			target_domains (str/list[str]/tuple[str]): Target domain names to calcutate a minimal bounding box
+			reference_domains (str/list[str]/tuple[str]): Reference domain names to calcutate a minimal bounding box
 		Returns:
 			(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
 		"""
 
-		if isinstance(target_domains, list) or isinstance(target_domains, tuple):
-			domains = target_domains
-		elif isinstance(target_domains, str):
-			domains = [target_domains]
+		if isinstance(reference_domains, list) or isinstance(reference_domains, tuple):
+			domains = reference_domains
+		elif isinstance(reference_domains, str):
+			domains = [reference_domains]
 		else:
 			print('Target domains must be str, tuple, or list!, but:')
-			print(target_domain)
+			print(reference_domains)
 			return False
 
 		ids = []
@@ -92,7 +92,7 @@ class createVolumeFromReconstruct():
 		self.min_id_z = min(ids)
 
 		if vertices == []:
-			print('No target domain: ', target_domain)
+			print('No reference domain(s): ', reference_domains)
 			return False
 
 		vertices = (np.array(vertices)/self.xypitch).astype('int')

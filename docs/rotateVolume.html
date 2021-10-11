@@ -73,13 +73,13 @@
 <span id="rotatevolume"></span><h1>rotateVolume<a class="headerlink" href="#module-rotateVolume" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="rotateVolume.rotateVolume">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rotateVolume.rotateVolume" title="Permalink to this definition"></a></dt>
 <dd><p>Rotate a volume in a minimal bounding box.
 Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
 <li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
 </ul>
 </dd>

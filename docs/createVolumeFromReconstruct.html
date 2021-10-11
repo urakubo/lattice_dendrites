@@ -73,17 +73,17 @@
 <span id="createvolumefromreconstruct"></span><h1>createVolumeFromReconstruct<a class="headerlink" href="#module-createVolumeFromReconstruct" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="createVolumeFromReconstruct.createVolumeFromReconstruct">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#createVolumeFromReconstruct.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
 <dd><p>Create a volume from a set of Reconstruct dxf files.
 Multiple domains can be converted into a volume.
 Domains are transformed into a minimal bounding box of the X-Y space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path_to_reconstruct_dxf_files</strong> (<em>str</em>) – Relative and absolute path to dxf files</p></li>
-<li><p><strong>xypitch</strong> (<em>float</em>) – 3D array that specifies volume_ids</p></li>
-<li><p><strong>zpitch</strong> (<em>float</em>) – {‘domain name’, volume_id}</p></li>
-<li><p><strong>target_domains</strong> (<em>str/list</em><em>[</em><em>str</em><em>]</em><em>/tuple</em><em>[</em><em>str</em><em>]</em>) – Target domain names to calcutate a minimal bounding box</p></li>
+<li><p><strong>path_to_reconstruct_dxf_files</strong> (<em>str</em>) – Relative or absolute path to dxf files</p></li>
+<li><p><strong>xypitch</strong> (<em>float</em>) – XYZ-pitch per voxel</p></li>
+<li><p><strong>zpitch</strong> (<em>float</em>) – Z-slice thickness</p></li>
+<li><p><strong>reference_domains</strong> (<em>str/list</em><em>[</em><em>str</em><em>]</em><em>/tuple</em><em>[</em><em>str</em><em>]</em>) – Reference domain names to calcutate a minimal bounding box</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
