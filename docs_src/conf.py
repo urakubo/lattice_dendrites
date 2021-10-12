@@ -12,6 +12,7 @@
 #
 import os
 import sys
+sys.path.insert(0, os.path.abspath('../'))
 sys.path.insert(0, os.path.abspath('../pyLD'))
 
 # -- Project information -----------------------------------------------------
@@ -76,5 +77,5 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 # https://stackoverflow.com/questions/46263274/how-can-i-prevent-sphinx-from-displaying-the-full-path-to-my-class
-add_module_names = False
+#add_module_names = False
 

@@ -19,12 +19,7 @@ API Reference
 .. toctree::
    :maxdepth: 1
    
-   createVolumeFromReconstruct
-   rotateVolume
-   buildAnyShape
-   calcSurfaceArea
-   utils
-
+   classes
 
 Indices and tables
 ==================

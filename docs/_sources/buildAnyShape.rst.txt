@@ -1,7 +1,0 @@
-buildAnyShape
-=============
-
-.. automodule:: buildAnyShape
-   :members:
-
-

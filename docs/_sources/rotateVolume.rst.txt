@@ -1,7 +1,0 @@
-rotateVolume
-============
-
-.. automodule:: rotateVolume
-   :members:
-
-

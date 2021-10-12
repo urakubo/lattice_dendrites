@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyLD &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Lattice dendrites" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pyLD</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>pyLD</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/classes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyLD">
+<span id="pyld"></span><h1>pyLD<a class="headerlink" href="#module-pyLD" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.buildAnyShape">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">buildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_membrane_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_PSD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_ER_area</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape" title="Permalink to this definition"></a></dt>
+<dd><p>Build a buildAnyShape object.</p>
+<p>sim.siteTypes[‘domain name’] may be different from volume_id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>obj</em>) – RDMESimulation object</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – 3D array that specifies volume_ids</p></li>
+<li><p><strong>domains</strong> (<em>dict</em><em>[</em><em>str</em><em>]</em>) – {‘domain name’, volume_id}</p></li>
+<li><p><strong>voxel_membrane_area</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies membrane_voxels &gt; 0</p></li>
+<li><p><strong>voxel_PSD</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies PSD_voxels &gt; 0</p></li>
+<li><p><strong>voxel_ER_area</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies ER_voxels &gt; 0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>buildAnyShape object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.buildAnyShape" title="pyLD.buildAnyShape">pyLD.buildAnyShape</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.buildAnyShape.addCytosolicMolecules">
+<span class="sig-name descname"><span class="pre">addCytosolicMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecular_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addCytosolicMolecules" title="Permalink to this definition"></a></dt>
+<dd><p>Add cytosolic molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
+<li><p><strong>molecular_number</strong> (<em>int</em>) – Number of molecules</p></li>
+<li><p><strong>domain_name</strong> (<em>str</em>) – Domain name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.buildAnyShape.addERMolecules">
+<span class="sig-name descname"><span class="pre">addERMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addERMolecules" title="Permalink to this definition"></a></dt>
+<dd><p>Add ER molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.buildAnyShape.addMembraneMolecules">
+<span class="sig-name descname"><span class="pre">addMembraneMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addMembraneMolecules" title="Permalink to this definition"></a></dt>
+<dd><p>Add membrane molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.buildAnyShape.addPSDMolecules">
+<span class="sig-name descname"><span class="pre">addPSDMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addPSDMolecules" title="Permalink to this definition"></a></dt>
+<dd><p>Add PSD molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.calcSurfaceArea">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">calcSurfaceArea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.calcSurfaceArea" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate a surface area of a volume.
+calcSurfaceArea generates a smooth surface mesh based on marching cubes plus a humphrey filter.
+Smoothed surface area per face is calcudated.
+Faces in the specifed PSD volume is also detected (Note, currently BEFORE smoothing).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
+<li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p></li>
+<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
+<li><p>smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
+<li><p>smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
+<li><p>smooth_area_per_face (numpy[float]): Areas of faces (Y array)</p></li>
+<li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.createVolumeFromReconstruct">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
+<dd><p>Create a volume from a set of Reconstruct dxf files.
+Multiple domains can be converted into a volume.
+Domains are transformed into a minimal bounding box of the X-Y space, based on cv2.minAreaRect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_reconstruct_dxf_files</strong> (<em>str</em>) – Relative or absolute path to dxf files</p></li>
+<li><p><strong>xypitch</strong> (<em>float</em>) – XYZ-pitch per voxel</p></li>
+<li><p><strong>zpitch</strong> (<em>float</em>) – Z-slice thickness</p></li>
+<li><p><strong>reference_domains</strong> (<em>str/list</em><em>[</em><em>str</em><em>]</em><em>/tuple</em><em>[</em><em>str</em><em>]</em>) – Reference domain names to calcutate a minimal bounding box</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>createVolumeFromReconstruct object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.createVolumeFromReconstruct" title="pyLD.createVolumeFromReconstruct">pyLD.createVolumeFromReconstruct</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.createVolumeFromReconstruct.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.createVolumeFromReconstruct.create" title="Permalink to this definition"></a></dt>
+<dd><p>Create a volume of a target domain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_domain</strong> (<em>str</em>) – Target domain name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_annot_colors">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_annot_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_annot_colors" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain colors of painted areas in the file of UNI-EM morphometric plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Filename of the paint npz file (the morphometric plugin).</p></li>
+<li><p><strong>spine_ids</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>/tuple</em><em>[</em><em>int</em><em>]</em>) – Target spine ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>List containing:</p>
+<ul class="simple">
+<li><p>(R, G, B): colors (0-1 float) of target ids</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_domain_concs">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_domain_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_domain_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain time development of molecular concentrations.</p>
+<p>A 3D image is padded to a multiple of 32 voxels,
+because LM only accepts the size of volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenames</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Output filenames of LM</p></li>
+<li><p><strong>targs</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Target domains</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>time (numpy[float]): Time in s</p></li>
+<li><p>concs (numpy[float]): Concentration in uM</p></li>
+<li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_species_name">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_species_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_species_name" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve species names from a LM/LM-output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pairs of molecular name and id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(cell[str] = id)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_volume_info">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_volume_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_volume_info" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve domain info from a LM/LM-output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p></li>
+<li><p><strong>domain_ids</strong> (<em>int/list</em><em>[</em><em>int</em><em>]</em><em>/tuple</em><em>[</em><em>int</em><em>]</em>) – Target domain ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>num_voxels (int): Number of voxels of the target domain</p></li>
+<li><p>volume_in_L (float): Volume of the target domain</p></li>
+<li><p>spacing: Unit length (um)</p></li>
+<li><p>s: Pairs of molecular name and id</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.lmpad">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">lmpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.lmpad" title="Permalink to this definition"></a></dt>
+<dd><p>3D padding for lattice microbes.</p>
+<p>A 3D image is padded to a multiple of 32 voxels,
+because LM only accepts the size of volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em>) – Three dimentional numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Padded volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.rotateVolume">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.rotateVolume" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a volume to a minimal bounding box using cv2.minAreaRect.
+Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.rotateVolume.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.rotateVolume.rotate" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a specified volume.</p>
+<p>Args:
+volume (numpy[int]): Target volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Rotated volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(numpy[int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.smooth_species_name">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_species_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_species_name" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a specified volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Target volume</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Rotated volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Lattice dendrites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

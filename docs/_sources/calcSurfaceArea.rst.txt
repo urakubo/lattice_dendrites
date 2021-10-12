@@ -1,7 +1,0 @@
-calcSurfaceArea
-===============
-
-.. automodule:: calcSurfaceArea
-   :members:
-
-
