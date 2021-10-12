@@ -1,5 +1,5 @@
-pyLD
-====
+API reference
+=============
 
 .. automodule:: pyLD
    :members:
