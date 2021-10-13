@@ -6,7 +6,7 @@ import os
 import random
 
 
-class buildAnyShape:
+class BuildAnyShape:
 	"""Build a buildAnyShape object.
 
 	sim.siteTypes['domain name'] may be different from volume_id.
@@ -93,7 +93,7 @@ class buildAnyShape:
 		#print("len(locs['cytoplasm']) : ", len(self.locs['cytoplasm']))
 		#print("len(locs['psd'])       : ", len(self.locs['psd']))                           
 
-	def addCytosolicMolecules(self, molecular_name, molecular_number, domain_name):
+	def add_cytosolic_molecules(self, molecular_name, molecular_number, domain_name):
 		"""Add cytosolic molecules.
 
 		Args:
@@ -112,7 +112,7 @@ class buildAnyShape:
 		return True
 
 
-	def addMembraneMolecules(self, molecular_name, density):
+	def add_membrane_molecules(self, molecular_name, density):
 		"""Add membrane molecules.
 
 		Args:
@@ -136,7 +136,7 @@ class buildAnyShape:
 		return True
 
 
-	def addPSDMolecules(self, molecular_name, density):
+	def add_psd_molecules(self, molecular_name, density):
 		"""Add PSD molecules.
 
 		Args:
@@ -159,7 +159,7 @@ class buildAnyShape:
 		return True
 
 
-	def addERMolecules(self, molecular_name, density):
+	def add_er_molecules(self, molecular_name, density):
 		"""Add ER molecules.
 
 		Args:

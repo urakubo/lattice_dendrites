@@ -67,8 +67,8 @@
   <section id="module-pyLD">
 <span id="api-reference"></span><h1>API reference<a class="headerlink" href="#module-pyLD" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyLD.buildAnyShape">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">buildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_membrane_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_PSD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_ER_area</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">BuildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_membrane_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_PSD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_ER_area</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape" title="Permalink to this definition"></a></dt>
 <dd><p>Build a buildAnyShape object.</p>
 <p>sim.siteTypes[‘domain name’] may be different from volume_id.</p>
 <dl class="field-list simple">
@@ -86,12 +86,12 @@
 <dd class="field-even"><p>buildAnyShape object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.buildAnyShape" title="pyLD.buildAnyShape">pyLD.buildAnyShape</a>)</p>
+<dd class="field-odd"><p>(pyLD.buildAnyShape)</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.buildAnyShape.addCytosolicMolecules">
-<span class="sig-name descname"><span class="pre">addCytosolicMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecular_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addCytosolicMolecules" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_cytosolic_molecules">
+<span class="sig-name descname"><span class="pre">add_cytosolic_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecular_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_cytosolic_molecules" title="Permalink to this definition"></a></dt>
 <dd><p>Add cytosolic molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -111,8 +111,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.buildAnyShape.addERMolecules">
-<span class="sig-name descname"><span class="pre">addERMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addERMolecules" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_er_molecules">
+<span class="sig-name descname"><span class="pre">add_er_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_er_molecules" title="Permalink to this definition"></a></dt>
 <dd><p>Add ER molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -131,8 +131,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.buildAnyShape.addMembraneMolecules">
-<span class="sig-name descname"><span class="pre">addMembraneMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addMembraneMolecules" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_membrane_molecules">
+<span class="sig-name descname"><span class="pre">add_membrane_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_membrane_molecules" title="Permalink to this definition"></a></dt>
 <dd><p>Add membrane molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -151,8 +151,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.buildAnyShape.addPSDMolecules">
-<span class="sig-name descname"><span class="pre">addPSDMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.buildAnyShape.addPSDMolecules" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_psd_molecules">
+<span class="sig-name descname"><span class="pre">add_psd_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_psd_molecules" title="Permalink to this definition"></a></dt>
 <dd><p>Add PSD molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -173,8 +173,8 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyLD.createVolumeFromReconstruct">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.CreateVolumeFromReconstruct">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">CreateVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
 <dd><p>Create a volume from a set of Reconstruct dxf files.
 Multiple domains can be converted into a volume.
 Domains are transformed into a minimal bounding box of the X-Y space, based on cv2.minAreaRect.</p>
@@ -191,12 +191,12 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 <dd class="field-even"><p>createVolumeFromReconstruct object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.createVolumeFromReconstruct" title="pyLD.createVolumeFromReconstruct">pyLD.createVolumeFromReconstruct</a>)</p>
+<dd class="field-odd"><p>(pyLD.createVolumeFromReconstruct)</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.createVolumeFromReconstruct.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.createVolumeFromReconstruct.create" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.CreateVolumeFromReconstruct.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateVolumeFromReconstruct.create" title="Permalink to this definition"></a></dt>
 <dd><p>Create a volume of a target domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -207,6 +207,37 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.RotateVolume">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">RotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RotateVolume" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a volume to a minimal bounding box using cv2.minAreaRect.
+Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.RotateVolume.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RotateVolume.rotate" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a specified volume.</p>
+<p>Args:
+volume (numpy[int/bool]): Target volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Rotated volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(numpy[int/bool])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -356,37 +387,6 @@ because LM only accepts the size of volume.</p>
 <dd class="field-odd"><p>(numpy)</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyLD.rotateVolume">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">rotateVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.rotateVolume" title="Permalink to this definition"></a></dt>
-<dd><p>Rotate a volume to a minimal bounding box using cv2.minAreaRect.
-Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
-<li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyLD.rotateVolume.rotate">
-<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.rotateVolume.rotate" title="Permalink to this definition"></a></dt>
-<dd><p>Rotate a specified volume.</p>
-<p>Args:
-volume (numpy[int/bool]): Target volume</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Rotated volume</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(numpy[int/bool])</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py function">

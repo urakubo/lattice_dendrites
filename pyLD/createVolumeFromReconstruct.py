@@ -18,7 +18,7 @@ import re
 from skimage.transform import rescale
 
  
-class createVolumeFromReconstruct():
+class CreateVolumeFromReconstruct():
 	"""Create a volume from a set of Reconstruct dxf files.
 	Multiple domains can be converted into a volume.
 	Domains are transformed into a minimal bounding box of the X-Y space, based on cv2.minAreaRect.

@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 # import matplotlib.pyplot as plt
 
-class rotateVolume():
+class RotateVolume():
 	"""Rotate a volume to a minimal bounding box using cv2.minAreaRect.
 	Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.
 
