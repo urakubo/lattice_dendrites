@@ -217,9 +217,8 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 <dt class="sig sig-object py" id="pyLD.create_surface">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">create_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.create_surface" title="Permalink to this definition"></a></dt>
 <dd><p>Create a smooth surface mesh of a volume.
-Smoothing is based a humphrey filter, and
-surface area per face is calcudated.
-Faces in a specifed PSD volume is labeled (Note, currently BEFORE smoothing).</p>
+Smoothing is based a humphrey filter, and surface area per face is calcudated.
+Faces within PSD regions are labeled (Note, currently BEFORE smoothing).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

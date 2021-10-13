@@ -11,9 +11,8 @@ import os
 def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 
 	"""Create a smooth surface mesh of a volume.
-	Smoothing is based a humphrey filter, and 
-	surface area per face is calcudated.
-	Faces in a specifed PSD volume is labeled (Note, currently BEFORE smoothing).
+	Smoothing is based a humphrey filter, and surface area per face is calcudated.
+	Faces within PSD regions are labeled (Note, currently BEFORE smoothing).
 
 	Args:
 	    pitch (float): Unit length per voxel
