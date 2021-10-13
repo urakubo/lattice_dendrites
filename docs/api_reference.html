@@ -172,39 +172,6 @@
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pyLD.calcSurfaceArea">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">calcSurfaceArea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.calcSurfaceArea" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate a surface area of a volume.
-calcSurfaceArea generates a smooth surface mesh based on marching cubes plus a humphrey filter.
-Smoothed surface area per face is calcudated.
-Faces in the specifed PSD volume is also detected (Note, currently BEFORE smoothing).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
-<li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
-<li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p></li>
-<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Tuple containing:</p>
-<ul class="simple">
-<li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
-<li><p>smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
-<li><p>smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
-<li><p>smooth_area_per_face (numpy[float]): Areas of faces (Y array)</p></li>
-<li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(tuple)</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.createVolumeFromReconstruct">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">createVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.createVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
@@ -244,6 +211,39 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.create_surface">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">create_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.create_surface" title="Permalink to this definition"></a></dt>
+<dd><p>Create a smooth surface mesh of a volume.
+Smoothing is based a humphrey filter, and
+surface area per face is calcudated.
+Faces in a specifed PSD volume is labeled (Note, currently BEFORE smoothing).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
+<li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p></li>
+<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
+<li><p>smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
+<li><p>smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
+<li><p>smooth_area_per_face (numpy[float]): Areas of faces (Y array)</p></li>
+<li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -345,9 +345,7 @@ because LM only accepts the size of volume.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.lmpad">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">lmpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.lmpad" title="Permalink to this definition"></a></dt>
-<dd><p>3D padding for lattice microbes.</p>
-<p>A 3D image is padded to a multiple of 32 voxels,
-because LM only accepts the size of volume.</p>
+<dd><p>3D padding into a multiple of 32 voxels, because LM only accepts the size of volume.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em>) – Three dimentional numpy array</p>
@@ -369,7 +367,7 @@ Domains are transformed in a minimal bounding box of a reference volume in the X
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
+<li><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p></li>
 <li><p><strong>fixed_axis</strong> (<em>int</em>) – Fixed axis in rotation (x:0, y:1, z:2)</p></li>
 </ul>
 </dd>
@@ -379,13 +377,13 @@ Domains are transformed in a minimal bounding box of a reference volume in the X
 <span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.rotateVolume.rotate" title="Permalink to this definition"></a></dt>
 <dd><p>Rotate a specified volume.</p>
 <p>Args:
-volume (numpy[int]): Target volume</p>
+volume (numpy[int/bool]): Target volume</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Rotated volume</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(numpy[int])</p>
+<dd class="field-even"><p>(numpy[int/bool])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,18 +391,35 @@ volume (numpy[int]): Target volume</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pyLD.smooth_species_name">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_species_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_species_name" title="Permalink to this definition"></a></dt>
-<dd><p>Rotate a specified volume.</p>
+<dt class="sig sig-object py" id="pyLD.smooth_volume_dilation_then_erosion">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_dilation_then_erosion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_dilation_then_erosion" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth a volume by a one-round dilation then erosion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – Target volume</p>
+<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Rotated volume</p>
+<dd class="field-even"><p>Smoothing volume</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(numpy[int])</p>
+<dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.smooth_volume_erosion_then_dilation">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_erosion_then_dilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_erosion_then_dilation" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth a volume by a one-round erosion then dilation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Smoothing volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[bool])</p>
 </dd>
 </dl>
 </dd></dl>

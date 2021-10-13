@@ -8,7 +8,7 @@ import h5py
 import numpy as np
 import os
 
-def calcSurfaceArea(pitch, volume, PSD = None, num_smoothing = 15):
+def calc_surface_area(pitch, volume, PSD = None, num_smoothing = 15):
 
 	"""Calculate a surface area of a volume.
 	calcSurfaceArea generates a smooth surface mesh based on marching cubes plus a humphrey filter.

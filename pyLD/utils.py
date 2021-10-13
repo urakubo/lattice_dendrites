@@ -4,29 +4,36 @@ from __future__ import print_function
 from __future__ import division
 
 import numpy as np
+from skimage import morphology
 
-def smooth_species_name(volume, ):
-	"""Rotate a specified volume.
+def smooth_volume_erosion_then_dilation(volume):
+	"""Smooth a volume by a one-round erosion then dilation.
 
 	Args:
-		volume (numpy[int]): Target volume
+		volume (numpy[bool]): Target volume
 
 	Returns:
-		(numpy[int]): Rotated volume
+		(numpy[bool]): Smoothing volume
 	"""
+	volume = morphology.binary_erosion(volume) # morphology.ball(1)
+	volume = morphology.binary_dilation(volume) # morphology.ball(1)
+	return volume
 
-	with h5py.File(filename,'r') as f:
-	    mnames  = f['Parameters'].attrs['speciesNames'].decode().split(',')
-	s = {}
-	for i in range(len(mnames)):
-	    s[mnames[i]] = i+1
-	return s
+def smooth_volume_dilation_then_erosion(volume):
+	"""Smooth a volume by a one-round dilation then erosion.
+
+	Args:
+		volume (numpy[bool]): Target volume
+
+	Returns:
+		(numpy[bool]): Smoothing volume
+	"""
+	volume = morphology.binary_dilation(volume) # morphology.ball(1)
+	volume = morphology.binary_erosion(volume) # morphology.ball(1)
+	return volume
 
 def lmpad(volume):
-	"""3D padding for lattice microbes.
-
-	A 3D image is padded to a multiple of 32 voxels,
-	because LM only accepts the size of volume.
+	"""3D padding into a multiple of 32 voxels, because LM only accepts the size of volume.
 
 	Args:
 		volume (numpy): Three dimentional numpy array

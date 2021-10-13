@@ -1,5 +1,5 @@
 from .buildAnyShape import *
-from .calcSurfaceArea import *
+from .create_surface import *
 from .createVolumeFromReconstruct import *
 from .rotateVolume import *
 from .utils import *
@@ -28,7 +28,7 @@ for targ_name in targ_names:
 	classes_funcs = [o[0] for o in getmembers(m) if isfunction(o[1]) or isclass(o[1])]
 	classes_funcs = [s for s in classes_funcs if s not in ['flatten', 'rescale']]
 	__all__.extend(classes_funcs)
-	print('File: ', targ_name)
+	print('pyLD file: ', targ_name)
 	print(', '.join(classes_funcs) )
 
 

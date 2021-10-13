@@ -10,7 +10,7 @@ class rotateVolume():
 	Domains are transformed in a minimal bounding box of a reference volume in the X-Y space.
 
 	Args:
-	    reference_volume (numpy[int]): Reference volume to calcutate a minimal bounding box
+	    reference_volume (numpy[int/bool]): Reference volume to calcutate a minimal bounding box
 	    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
 	"""
 	def __init__(self, reference_volume, fixed_axis = 0):
@@ -24,7 +24,7 @@ class rotateVolume():
 		Users can redefine the rotation matrix.
 
 		Args:
-	    	volume (numpy[int]): Reference volume to calcutate a minimal bounding box
+	    	volume (numpy[int/bool]): Reference volume to calcutate a minimal bounding box
 		    fixed_axis (int): Fixed axis in rotation (x:0, y:1, z:2)
 		"""
 
@@ -74,10 +74,10 @@ class rotateVolume():
 		"""Rotate a specified volume.
 
 		Args:
-	    	volume (numpy[int]): Target volume
+	    	volume (numpy[int/bool]): Target volume
 
 		Returns:
-			(numpy[int]): Rotated volume
+			(numpy[int/bool]): Rotated volume
 		"""
 		volume_dtype  = volume.dtype
 		volume_transp = volume.swapaxes(0, self.fixed_axis)
