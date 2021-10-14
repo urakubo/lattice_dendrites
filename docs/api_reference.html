@@ -390,12 +390,53 @@ because LM only accepts the size of volume.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.save_uniem_annotator">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">save_uniem_annotator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.save_uniem_annotator" title="Permalink to this definition"></a></dt>
+<dd><p>Save a volume and surface meshes under the style of UNI-EM annotator.
+This is aimed to directly connect pyLD-generated surfaces with UNI-EM annotator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>foldername</strong> – Relative/absolute path to a foldername for uni-em annotator. The folder will be generated if it does not exit.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True or false</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.smooth_volume_closing_then_opening">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_closing_then_opening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_in_voxel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_closing_then_opening" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth a volume by a one-round closing then opening.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p></li>
+<li><p><strong>radius_in_voxel</strong> (<em>int</em>) – Ball radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Smoothing volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.smooth_volume_dilation_then_erosion">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_dilation_then_erosion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_dilation_then_erosion" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_dilation_then_erosion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_in_voxel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_dilation_then_erosion" title="Permalink to this definition"></a></dt>
 <dd><p>Smooth a volume by a one-round dilation then erosion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p></li>
+<li><p><strong>radius_in_voxel</strong> (<em>int</em>) – Ball radius</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Smoothing volume</p>
@@ -408,11 +449,34 @@ because LM only accepts the size of volume.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.smooth_volume_erosion_then_dilation">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_erosion_then_dilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_erosion_then_dilation" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_erosion_then_dilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_in_voxel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_erosion_then_dilation" title="Permalink to this definition"></a></dt>
 <dd><p>Smooth a volume by a one-round erosion then dilation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p></li>
+<li><p><strong>radius_in_voxel</strong> (<em>int</em>) – Ball radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Smoothing volume</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.smooth_volume_opening_then_closing">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">smooth_volume_opening_then_closing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_in_voxel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.smooth_volume_opening_then_closing" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth a volume by a one-round opening then closing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>bool</em><em>]</em>) – Target volume</p></li>
+<li><p><strong>radius_in_voxel</strong> (<em>int</em>) – Ball radius</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Smoothing volume</p>

@@ -32,7 +32,6 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 
 
 	volume = volume.astype(np.bool)
-	print('volume.shape: ', volume.shape)
 	xvnum, yvnum, zvnum = volume.shape
 
 	# Obtain the region of membrane

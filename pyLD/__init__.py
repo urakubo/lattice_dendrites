@@ -2,6 +2,7 @@ from .BuildAnyShape import *
 from .CreateVolumeFromReconstruct import *
 from .RotateVolume import *
 from .create_surface import *
+from .save_uniem_annotator import *
 from .utils import *
 
 
@@ -28,10 +29,10 @@ for targ_name in targ_names:
 	classes_funcs = [o[0] for o in getmembers(m) if isfunction(o[1]) or isclass(o[1])]
 	classes_funcs = [s for s in classes_funcs if s not in ['flatten', 'rescale']]
 	__all__.extend(classes_funcs)
-	print('pyLD file: ', targ_name)
-	print(', '.join(classes_funcs) )
+	# print(', '.join(classes_funcs) )
 
-
+print('pyLD file: ', targ_name)
+print(', '.join(targ_names) )
 
 # https://stackoverflow.com/questions/46263274/how-can-i-prevent-sphinx-from-displaying-the-full-path-to-my-class
 # https://qiita.com/suzuki-kei/items/8fea67655abf216a5013

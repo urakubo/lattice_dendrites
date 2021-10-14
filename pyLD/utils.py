@@ -6,30 +6,64 @@ from __future__ import division
 import numpy as np
 from skimage import morphology
 
-def smooth_volume_erosion_then_dilation(volume):
+def smooth_volume_opening_then_closing(volume, radius_in_voxel=1):
+	"""Smooth a volume by a one-round opening then closing.
+
+	Args:
+		volume (numpy[bool]): Target volume
+		radius_in_voxel (int): Ball radius
+
+	Returns:
+		(numpy[bool]): Smoothing volume
+	"""
+	ball = morphology.ball(radius_in_voxel)
+	volume = morphology.binary_opening(volume, ball) # morphology.ball(1)
+	volume = morphology.binary_closing(volume, ball) # morphology.ball(1)
+	return volume
+
+def smooth_volume_closing_then_opening(volume, radius_in_voxel=1):
+	"""Smooth a volume by a one-round closing then opening.
+
+	Args:
+		volume (numpy[bool]): Target volume
+		radius_in_voxel (int): Ball radius
+
+	Returns:
+		(numpy[bool]): Smoothing volume
+	"""
+	ball = morphology.ball(radius_in_voxel)
+	volume = morphology.binary_closing(volume, ball) # morphology.ball(1)
+	volume = morphology.binary_opening(volume, ball) # morphology.ball(1)
+	return volume
+
+def smooth_volume_erosion_then_dilation(volume, radius_in_voxel=1):
 	"""Smooth a volume by a one-round erosion then dilation.
 
 	Args:
 		volume (numpy[bool]): Target volume
+		radius_in_voxel (int): Ball radius
 
 	Returns:
 		(numpy[bool]): Smoothing volume
 	"""
-	volume = morphology.binary_erosion(volume) # morphology.ball(1)
-	volume = morphology.binary_dilation(volume) # morphology.ball(1)
+	ball = morphology.ball(radius_in_voxel)
+	volume = morphology.binary_erosion(volume, ball) # morphology.ball(1)
+	volume = morphology.binary_dilation(volume, ball) # morphology.ball(1)
 	return volume
 
-def smooth_volume_dilation_then_erosion(volume):
+def smooth_volume_dilation_then_erosion(volume, radius_in_voxel=1):
 	"""Smooth a volume by a one-round dilation then erosion.
 
 	Args:
 		volume (numpy[bool]): Target volume
+		radius_in_voxel (int): Ball radius
 
 	Returns:
 		(numpy[bool]): Smoothing volume
 	"""
-	volume = morphology.binary_dilation(volume) # morphology.ball(1)
-	volume = morphology.binary_erosion(volume) # morphology.ball(1)
+	ball = morphology.ball(radius_in_voxel)
+	volume = morphology.binary_dilation(volume, ball) # morphology.ball(1)
+	volume = morphology.binary_erosion(volume, ball) # morphology.ball(1)
 	return volume
 
 def lmpad(volume):
