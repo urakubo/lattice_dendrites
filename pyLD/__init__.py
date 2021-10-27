@@ -3,6 +3,7 @@ from .CreateVolumeFromReconstruct import *
 from .RotateVolume import *
 from .create_surface import *
 from .save_uniem_annotator import *
+from .GenerateClosedVolumesFromUniEM import *
 from .utils import *
 
 

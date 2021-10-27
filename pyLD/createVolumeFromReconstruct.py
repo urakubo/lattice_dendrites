@@ -30,7 +30,7 @@ class CreateVolumeFromReconstruct():
 		reference_domains (str/list[str]/tuple[str]): Reference domain names to calcutate a minimal bounding box
 
 	Returns:
-		(pyLD.createVolumeFromReconstruct): createVolumeFromReconstruct object
+		(pyLD.CreateVolumeFromReconstruct): CreateVolumeFromReconstruct object
 	"""
 
 	def __init__(self, path_to_reconstruct_dxf_files, xypitch, zpitch, reference_domains):

@@ -188,10 +188,10 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>createVolumeFromReconstruct object</p>
+<dd class="field-even"><p>CreateVolumeFromReconstruct object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(pyLD.createVolumeFromReconstruct)</p>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.CreateVolumeFromReconstruct" title="pyLD.CreateVolumeFromReconstruct">pyLD.CreateVolumeFromReconstruct</a>)</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -207,6 +207,49 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.GenerateClosedVolumesFromUniEM">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">GenerateClosedVolumesFromUniEM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_annot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateClosedVolumesFromUniEM" title="Permalink to this definition"></a></dt>
+<dd><p>Generate volumes from the painted areas in UNI-EM annotator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>folder_annot</strong> (<em>str</em>) – UNI-EM annotator folder</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GenerateClosedVolumesFromUniEM object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(pyLD. GenerateClosedVolumesFromUniEM)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.GenerateClosedVolumesFromUniEM.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateClosedVolumesFromUniEM.generate" title="Permalink to this definition"></a></dt>
+<dd><p>Generate volumes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh_id</strong> (<em>int</em>) – Target mesh id</p></li>
+<li><p><strong>dilation_radius</strong> (<em>int</em>) – dilation radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>new_labels (numpy[int]): Generated labels in voxel space (3D array)</p></li>
+<li><p>ids_new_labels (numpy[int]): Ids of new labels (1D array)</p></li>
+<li><p>ref_volume (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -262,10 +305,10 @@ Faces within PSD regions are labeled (Note, currently BEFORE smoothing).</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <ul class="simple">
-<li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
 <li><p>smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
 <li><p>smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
 <li><p>smooth_area_per_face (numpy[float]): Areas of faces (Y array)</p></li>
+<li><p>surface_areas (numpy[float]): Surface areas in voxel space (3D array)</p></li>
 <li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
 </ul>
 </p>

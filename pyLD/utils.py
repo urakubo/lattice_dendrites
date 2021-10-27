@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import division
 
+import sys, os
 import numpy as np
 from skimage import morphology
 
@@ -222,5 +223,23 @@ def get_annot_colors(filename, ids):
 	    b = c[0]['b']/256.0
 	    cols.append((r,g,b))
 	return cols
+
+
+
+class Params():
+	def __init__(self, user_path):
+
+	    self.annotator_files_path      = user_path
+	    self.volume_path               = os.path.join(self.annotator_files_path, 'volume')
+	    self.volume_file               = os.path.join(self.volume_path, 'volume.hdf5')
+
+	    self.skeletons_path            = os.path.join(self.annotator_files_path, 'skeletons')
+	    self.surfaces_path             = os.path.join(self.annotator_files_path, 'surfaces')
+	    self.skeletons_whole_path      = os.path.join(self.annotator_files_path, 'skeletons', 'whole')
+	    self.surfaces_whole_path       = os.path.join(self.annotator_files_path, 'surfaces' , 'whole')
+	    self.paint_path                = os.path.join(self.annotator_files_path, 'paint')
+
+	    self.surfaces_segment_info_json_file 	    = os.path.join(self.surfaces_path, 'segmentInfo.json')
+	    self.surfaces_volume_description_json_file 	= os.path.join(self.surfaces_path, 'VolumeDescription.json')
 
 

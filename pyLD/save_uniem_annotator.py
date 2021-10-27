@@ -174,21 +174,3 @@ def save_uniem_annotator_generate_info_file(ids_volume, surfaces_segment_info_js
 
 
 
-class Params():
-	def __init__(self, user_path):
-
-	    self.annotator_files_path      = user_path
-	    self.volume_path               = os.path.join(self.annotator_files_path, 'volume')
-	    self.volume_file               = os.path.join(self.volume_path, 'volume.hdf5')
-
-	    self.skeletons_path            = os.path.join(self.annotator_files_path, 'skeletons')
-	    self.surfaces_path             = os.path.join(self.annotator_files_path, 'surfaces')
-	    self.skeletons_whole_path      = os.path.join(self.annotator_files_path, 'skeletons', 'whole')
-	    self.surfaces_whole_path       = os.path.join(self.annotator_files_path, 'surfaces' , 'whole')
-	    self.paint_path                = os.path.join(self.annotator_files_path, 'paint')
-
-	    self.surfaces_segment_info_json_file 	    = os.path.join(self.surfaces_path, 'segmentInfo.json')
-	    self.surfaces_volume_description_json_file 	= os.path.join(self.surfaces_path, 'VolumeDescription.json')
-
-
-

@@ -23,10 +23,10 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 	Returns:
 		(tuple): Tuple containing:
 
-		- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
 		- smooth_vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
 		- smooth_faces (numpy[int]): Faces of smoothing mesh (3xY array)
 		- smooth_area_per_face (numpy[float]): Areas of faces (Y array)
+		- surface_areas (numpy[float]): Surface areas in voxel space (3D array)
 		- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 	"""
 
@@ -110,7 +110,7 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 	smooth_faces    = f_smooth
 	smooth_area_per_face = f_areas * pitch * pitch
 	if PSD is not None:
-		return surface_areas, smooth_vertices, smooth_faces, smooth_area_per_face, id_face_psd
+		return smooth_vertices, smooth_faces, smooth_area_per_face, surface_areas, id_face_psd
 	else:
-		return surface_areas, smooth_vertices, smooth_faces, smooth_area_per_face
+		return smooth_vertices, smooth_faces, smooth_area_per_face, surface_areas
 
