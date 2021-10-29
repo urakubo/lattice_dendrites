@@ -8,7 +8,7 @@ import h5py
 import json
 import pathlib
 import trimesh
-
+from .utils import Params
 
 
 def save_uniem_annotator(foldername, pitch, ids_volume, surfaces):

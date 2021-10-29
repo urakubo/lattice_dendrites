@@ -289,7 +289,7 @@ volume (numpy[int/bool]): Target volume</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.create_surface">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">create_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.create_surface" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">create_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'humphrey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.create_surface" title="Permalink to this definition"></a></dt>
 <dd><p>Create a smooth surface mesh of a volume.
 Smoothing is based a humphrey filter, and surface area per face is calcudated.
 Faces within PSD regions are labeled (Note, currently BEFORE smoothing).</p>
@@ -299,7 +299,8 @@ Faces within PSD regions are labeled (Note, currently BEFORE smoothing).</p>
 <li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
 <li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
 <li><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p></li>
-<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
+<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh
+method_smoothing(str): Smoothing method: ‘laplacian’, ‘humphrey’, ‘mut_dif_laplacian’, or ‘taubin’</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -362,6 +363,30 @@ because LM only accepts the size of volume.</p>
 <li><p>time (numpy[float]): Time in s</p></li>
 <li><p>concs (numpy[float]): Concentration in uM</p></li>
 <li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_labeled_concs">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ca'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_labeled_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Get time series of moleuclar numbers/concentrations within labeled areas from LM simulation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lm_filename</strong> – Filename of lm simulation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>num_molecules (dict): Time development of the number of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
+<li><p>uMs (dict): Time development of molecular concentrations.</p></li>
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
 </ul>
 </p>
 </dd>

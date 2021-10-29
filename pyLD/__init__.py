@@ -1,11 +1,12 @@
+from .utils import *
 from .BuildAnyShape import *
 from .CreateVolumeFromReconstruct import *
 from .RotateVolume import *
 from .create_surface import *
 from .save_uniem_annotator import *
-from .GenerateClosedVolumesFromUniEM import *
-from .utils import *
 
+from .get_labeled_concs import *
+from .GenerateClosedVolumesFromUniEM import *
 
 """
 __all__ = ['buildAnyShape','calcSurfaceArea','createVolumeFromReconstruct','rotateVolume']

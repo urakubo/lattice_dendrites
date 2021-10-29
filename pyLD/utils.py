@@ -7,6 +7,17 @@ import sys, os
 import numpy as np
 from skimage import morphology
 
+
+def get_volume(filename, id_domains):
+	with h5py.File(filename,'r') as f:
+		data = f['Model']['Diffusion']['LatticeSites'][()]
+		Spacing = f['Model']['Diffusion'].attrs['latticeSpacing']
+	if isinstance(id_domains, int) | isinstance(id_domains, bool) :
+		return (data == id_domains)
+	else:
+		print("id_domains must be int or bool.")
+		return False
+
 def smooth_volume_opening_then_closing(volume, radius_in_voxel=1):
 	"""Smooth a volume by a one-round opening then closing.
 

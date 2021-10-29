@@ -8,7 +8,7 @@ import h5py
 import numpy as np
 import os
 
-def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
+def create_surface(pitch, volume, PSD = None, num_smoothing = 30, method_smoothing = 'humphrey'):
 
 	"""Create a smooth surface mesh of a volume.
 	Smoothing is based a humphrey filter, and surface area per face is calcudated.
@@ -19,6 +19,7 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 	    volume (numpy): Input volume (3D array, bool preferred)
 	    PSD (numpy): PSD volume  (3D array)
 	    num_smoothing (int): Number of smoothing rounds for the target surface mesh
+		method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
 
 	Returns:
 		(tuple): Tuple containing:
@@ -45,10 +46,39 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 	v_march, f_march, normals, values = measure.marching_cubes(volume, 0.5, spacing=(1,1,1))
 	v_march = v_march - 1
 
-	    # PSD
+
+	# Smoothing
+	trimesh.constants.tol.merge = 1e-7
+	mesh = trimesh.Trimesh(vertices=v_march, faces=f_march)
+	v1  = mesh.vertices
+	v1center = np.sum(v1,0) / v1.shape[0]
+
+	if method_smoothing == 'laplacian':
+		mesh_smooth = trimesh.smoothing.filter_laplacian(mesh, iterations=num_smoothing)
+		v2 = mesh_smooth.vertices
+		v2center = np.sum(v2,0) / v2.shape[0]
+		mesh_smooth.vertices += v1center - v2center
+	elif method_smoothing == 'humphrey':
+		mesh_smooth = trimesh.smoothing.filter_humphrey(mesh, alpha = 1.0, beta=0.0, iterations=num_smoothing)
+	elif method_smoothing == 'mut_dif_laplacian':
+		mesh_smooth = trimesh.smoothing.filter_mut_dif_laplacian(mesh, iterations=num_smoothing)
+	elif method_smoothing == 'taubin':
+		mesh_smooth = trimesh.smoothing.filter_taubin(mesh, iterations=num_smoothing)
+	else :
+		print('No smoothing method: ', method_smoothing)
+		return False
+
+
+	mesh_smooth.merge_vertices()
+	mesh_smooth.remove_degenerate_faces()
+	mesh_smooth.remove_duplicate_faces()
+	v_smooth = mesh_smooth.vertices
+	f_smooth = mesh_smooth.faces
+
+	# PSD
 	if PSD is not None:
 		xvnum, yvnum, zvnum = PSD.shape
-		face_loc   = ( v_march[f_march[:,0]]+v_march[f_march[:,1]]+v_march[f_march[:,2]] ) / 3.0
+		face_loc   = ( v_smooth[f_smooth[:,0]]+v_smooth[f_smooth[:,1]]+v_smooth[f_smooth[:,2]] ) / 3.0
 		face_voxel = np.round( face_loc ).astype(np.int)
 		face_voxel = (face_voxel < 0) + (face_voxel >= 0) * face_voxel
 		face_voxel[:,0] = (face_voxel[:,0] >= xvnum) * (xvnum-1) + (face_voxel[:,0] < xvnum) * face_voxel[:,0]
@@ -56,18 +86,6 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 15):
 		face_voxel[:,2] = (face_voxel[:,2] >= zvnum) * (zvnum-1) + (face_voxel[:,2] < zvnum) * face_voxel[:,2]
 		id_face_psd = (PSD[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
 
-	# Smoothing
-	trimesh.constants.tol.merge = 1e-7
-	mesh = trimesh.Trimesh(vertices=v_march, faces=f_march)
-	#mesh_smooth = trimesh.smoothing.filter_laplacian(mesh, iterations=num_smoothing)
-	mesh_smooth = trimesh.smoothing.filter_humphrey(mesh, iterations=num_smoothing)
-	if PSD is None:
-		mesh.merge_vertices()
-		mesh.remove_degenerate_faces()
-		mesh.remove_duplicate_faces()
-
-	v_smooth = mesh_smooth.vertices
-	f_smooth = mesh_smooth.faces
 
 	# Obrain the surface area of each trianglar face.
 	f_vec_ac = v_smooth[f_smooth[:,0]] - v_smooth[f_smooth[:,2]]
