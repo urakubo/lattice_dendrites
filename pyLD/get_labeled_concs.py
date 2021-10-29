@@ -37,7 +37,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 	Args:
 		lm_filename (str): Filename of lm simulation.
 		labels (numpy[int/bool]): Label volume (3D array). id=0 will be ignored.
-		output_filename (none/str): If None, get_labeled_concs will give returns. If specified, it will save a hdf5 file.
+		output_filename (none/str): If None, get_labeled_concs will give returns below. If specified, it will save a hdf5 file.
 		monitor_species (none/str): If None, get_labeled_concs will give no messages in the console. If a moleuclar species is specified, it will show a example result.
 
 	Returns:
