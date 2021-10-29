@@ -389,7 +389,7 @@ because LM only accepts the size of volume.</p>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <ul class="simple">
 <li><p>num_molecules (dict): Time development of the number of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
-<li><p>uMs (dict): Time development of molecular concentrations.</p></li>
+<li><p>uMs (dict): Time development of molecular concentrations. The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
 <li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
 <li><p>ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
 </ul>

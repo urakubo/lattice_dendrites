@@ -44,7 +44,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		(tuple): Tuple containing:
 
 		- num_molecules (dict): Time development of the number of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-		- uMs (dict): Time development of molecular concentrations.
+		- uMs (dict): Time development of molecular concentrations. The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
 		- timepoints (numpy[float]): Timepoints (s)
 		- ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
 
