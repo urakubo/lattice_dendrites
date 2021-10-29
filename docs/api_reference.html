@@ -378,7 +378,12 @@ because LM only accepts the size of volume.</p>
 <dd><p>Get time series of moleuclar numbers/concentrations within labeled areas from LM simulation result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lm_filename</strong> – Filename of lm simulation.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lm_filename</strong> (<em>str</em>) – Filename of lm simulation.</p></li>
+<li><p><strong>labels</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Label volume (3D array). id=0 will be ignored.</p></li>
+<li><p><strong>output_filename</strong> (<em>none/str</em>) – If None, get_labeled_concs will give returns. If specified, it will save a hdf5 file.</p></li>
+<li><p><strong>monitor_species</strong> (<em>none/str</em>) – If None, get_labeled_concs will give no messages in the console. If a moleuclar species is specified, it will show a example result.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
