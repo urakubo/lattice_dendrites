@@ -32,7 +32,7 @@ def save_labeled_concs(filename, num_molecules_spine, uMs, timepoints, S, ids_sp
 
 def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_species = 'Ca'):
 
-	"""Get time series of moleuclar numbers/concentrations within labeled areas from LM simulation result.
+	"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
 	Args:
 		lm_filename (str): Filename of lm simulation.
@@ -44,7 +44,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		(tuple): Tuple containing:
 
 		- num_molecules (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-		- uMs (dict): Time series of molecular concentrations. The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+		- uMs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
 		- timepoints (numpy[float]): Timepoints (s)
 		- ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
 
