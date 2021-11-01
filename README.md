@@ -16,3 +16,5 @@ Then, create a path to $LM_INSTALLED/bin, python paths to $LM_INSTALLED/lib/lm a
   > export PYTHONPATH=$LM_INSTALLED/lib/python:$PYTHONPATH
   > export LD_LIBRARY_PATH=$LM_INSTALLED/hdf5_1.12.0_gcc8.4.0/lib:$LD_LIBRARY_PATH
 
+This is a case of bash. You can also write the above setting to .bashrc .
+
