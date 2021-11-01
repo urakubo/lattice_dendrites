@@ -51,7 +51,7 @@ class BuildAnyShape:
 		for x in range(xnum):
 		    for y in range(ynum):
 		        for z in range(znum):
-		            sim.lattice.setSiteType(x, y, z, volume_mod[x,y,z])
+		            sim.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
 		sim.hasBeenDiscretized = True
 
 		# Register domain locations.
@@ -107,7 +107,7 @@ class BuildAnyShape:
 
 		particleNum=self.sim.particleMap[molecular_name]
 		for i in random.sample(self.locs[domain_name], molecular_number):
-		    self.sim.lattice.addParticle(i[0], i[1], i[2], particleNum)
+		    self.sim.lattice.addParticle(i[0], i[1], i[2], int(particleNum))
 		self.sim.customAddedParticleList.append((molecular_name, molecular_number))
 		return True
 
@@ -132,7 +132,7 @@ class BuildAnyShape:
 		                        molecular_numbers):
 		    # print('x,y,z, num: ', x,y,z, num)
 		    for i in range(num):
-		        self.sim.lattice.addParticle(x, y, z, particleNum)
+		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
 		return True
 
 
@@ -155,7 +155,7 @@ class BuildAnyShape:
 		                        molecular_numbers):
 		    # print('x,y,z, num: ', x,y,z, num)
 		    for i in range(num):
-		        self.sim.lattice.addParticle(x, y, z, particleNum)
+		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
 		return True
 
 
@@ -178,6 +178,6 @@ class BuildAnyShape:
 		                        molecular_numbers):
 		    # print('x,y,z, num: ', x,y,z, num)
 		    for i in range(num):
-		        self.sim.lattice.addParticle(x, y, z, particleNum)
+		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
 		return True
 
