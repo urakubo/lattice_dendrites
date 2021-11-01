@@ -4,8 +4,7 @@ Lattice Dendrites (LD) is an extension of lattice microbes (LM) that can incorpo
 
 ## Installation
 
-
-Under the combination of py3.6/CUDA11.0/ubuntu18.04, you can 
+We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 
   > tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 
