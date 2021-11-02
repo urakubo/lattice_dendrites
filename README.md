@@ -23,7 +23,7 @@ Then, create paths as follows:
   export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
   # System paths
-  export LD_LIBRARY_PATH=/lib64:/usr/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
   # Requirements in $LM_INSTALLED/hdf5_1.12.0_gcc8.4.0/lib:
   # libhdf5.so.200, libhdf5_hl.so.200
@@ -31,8 +31,10 @@ Then, create paths as follows:
   # libcudart.so.11.0
   # Requirements in /lib64:
   # ld-linux-x86-64.so.2
+  # Requirements in /usr/lib/x86_64-linux-gnu:
+  # libstdc++.so.6, libpython3.6m.so.1.0
   # Requirements in /lib/x86_64-linux-gnu:
-  # libstdc++.so.6, libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libpython3.6m.so.1.0, libexpat.so.1, libutil.so.1
+  # libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1
 
 ```
 
