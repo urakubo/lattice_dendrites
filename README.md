@@ -10,18 +10,20 @@ We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 
 Then, create paths as follows:
 
-  > # LM paths
-  > export PATH=$LM_INSTALLED/bin:$PATH
-  > export PYTHONPATH=$LM_INSTALLED/lib/lm:$PYTHONPATH
-  > export PYTHONPATH=$LM_INSTALLED/lib/python:$PYTHONPATH
-  > export LD_LIBRARY_PATH=$LM_INSTALLED/hdf5_1.12.0_gcc8.4.0/lib:$LD_LIBRARY_PATH
+```bash
+  # LM paths
+  export PATH=$LM_INSTALLED/bin:$PATH
+  export PYTHONPATH=$LM_INSTALLED/lib/lm:$PYTHONPATH
+  export PYTHONPATH=$LM_INSTALLED/lib/python:$PYTHONPATH
+  export LD_LIBRARY_PATH=$LM_INSTALLED/hdf5_1.12.0_gcc8.4.0/lib:$LD_LIBRARY_PATH
 
-  > # CUDA paths
-  > export PATH=/usr/local/cuda/bin:$PATH
-  > export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+  # CUDA paths
+  export PATH=/usr/local/cuda/bin:$PATH
+  export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
-  > # System paths (unnecessay in many cases)
-  > export LD_LIBRARY_PATH=/lib64:/usr/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+  # System paths (unnecessay in many cases)
+  export LD_LIBRARY_PATH=/lib64:/usr/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+```
 
 This is a case of bash. You can also write the above setting to .bashrc .
 
