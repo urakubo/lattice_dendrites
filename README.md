@@ -18,7 +18,6 @@ Then, create paths as follows:
   export LD_LIBRARY_PATH=$LM_INSTALLED/hdf5_1.12.0_gcc8.4.0/lib:$LD_LIBRARY_PATH
 
   # CUDA paths
-  # Requirements: libcudart.so.11.0, 
   export PATH=/usr/local/cuda/bin:$PATH
   export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
