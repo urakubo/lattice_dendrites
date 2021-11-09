@@ -1,9 +1,12 @@
 from __future__ import print_function
 from __future__ import division
-#from pyLM import *
 import numpy as np
 import os
 import random
+
+from pyLM import *
+from pySTDLM import *
+from pySTDLM.StandardReactionSystems import *
 
 NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
 	np.uint8, np.uint16, np.uint32, np.uint64]
@@ -26,7 +29,7 @@ class BuildAnyShape:
 
 	def __init__(self, sim, volume, domains, surfaces = {}):
 
-		self._check_arguments(sim, volume, domains, surfaces):
+		self._check_arguments(sim, volume, domains, surfaces)
 		self.sim = sim
 
 		# Add regions and rename regions of the target volume
@@ -82,7 +85,7 @@ class BuildAnyShape:
 		
 		for k, v in volume_surfaces.items():
 			self.surf_voxel_locs[k] = np.nonzero(v > 0)
-			self.surf_voxel_prob[k] = v[self.surf_voxel_locs[0], self.surf_voxel_locs[1], self.surf_voxel_locs[2] ]
+			self.surf_voxel_prob[k] = v[self.surf_voxel_locs[k][0], self.surf_voxel_locs[k][1], self.surf_voxel_locs[k][2] ]
 
 		# print('self.memb_voxel_locs[0].shape[0]: ', self.memb_voxel_locs[0].shape[0])
 		#print("len(locs['default'])   : ", len(self.locs['default']))
@@ -123,7 +126,7 @@ class BuildAnyShape:
 		particleNum=self.sim.particleMap[molecular_name]
 		molecular_numbers = np.random.binomial(density, self.surf_voxel_prob[surface_name])
 		# print('np.sum(molecular_numbers): ', np.sum(molecular_numbers))
-		locs = surf_voxel_locs[surface_name]
+		locs = self.surf_voxel_locs[surface_name]
 		for x, y, z, num in zip(locs[0], locs[1], locs[2], molecular_numbers):
 		    # print('x,y,z, num: ', x,y,z, num)
 		    for i in range(num):
@@ -131,7 +134,7 @@ class BuildAnyShape:
 		return True
 
 
-	def _check_arguments(sim, volume, domains, surfaces):
+	def _check_arguments(self, sim, volume, domains, surfaces):
 		if type(sim) != RDMESimulation:
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
