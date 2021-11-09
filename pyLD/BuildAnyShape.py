@@ -18,15 +18,15 @@ class BuildAnyShape:
 		sim (obj): RDMESimulation object
 		volume (numpy[int]): 3D array that specifies volume_ids
 		domains (dict): {'domain name', volume_id}
-		voxel_surface_areas (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
+		surfaces (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
 
 	Returns:
 		(pyLD.buildAnyShape): buildAnyShape object
 	"""
 
-	def __init__(self, sim, volume, domains, volume_surfaces = {}):
+	def __init__(self, sim, volume, domains, surfaces = {}):
 
-		self._check_arguments(sim, volume, domains, volume_surfaces):
+		self._check_arguments(sim, volume, domains, surfaces):
 		self.sim = sim
 
 		# Add regions and rename regions of the target volume
@@ -131,15 +131,15 @@ class BuildAnyShape:
 		return True
 
 
-	def _check_arguments(sim, volume, domains, volume_surfaces):
+	def _check_arguments(sim, volume, domains, surfaces):
 		if type(sim) != RDMESimulation:
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(domains, dict) :
 			raise ValueError('domains must be a dict.')
-		elif not isinstance(volume_surfaces, dict) :
-			raise ValueError('volume_surfaces must be a dict.')
+		elif not isinstance(surfaces, dict) :
+			raise ValueError('surfaces must be a dict.')
 		else:
 			return True
 
