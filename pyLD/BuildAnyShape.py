@@ -5,6 +5,9 @@ import numpy as np
 import os
 import random
 
+NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
+	np.uint8, np.uint16, np.uint32, np.uint64]
+
 
 class BuildAnyShape:
 	"""Build a buildAnyShape object.
@@ -14,17 +17,16 @@ class BuildAnyShape:
 	Args:
 		sim (obj): RDMESimulation object
 		volume (numpy[int]): 3D array that specifies volume_ids
-		domains (dict[str]): {'domain name', volume_id}
-		voxel_membrane_area (numpy[float]): 3D array that specifies membrane_voxels > 0
-		voxel_PSD (numpy[float]): 3D array that specifies PSD_voxels > 0
-		voxel_ER_area (numpy[float]): 3D array that specifies ER_voxels > 0
+		domains (dict): {'domain name', volume_id}
+		voxel_surface_areas (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
 
 	Returns:
 		(pyLD.buildAnyShape): buildAnyShape object
 	"""
 
-	def __init__(self, sim, volume, domains, voxel_cell_surface_area, voxel_PSD, voxel_ER_area):
+	def __init__(self, sim, volume, domains, volume_surfaces = {}):
 
+		self._check_arguments(sim, volume, domains, volume_surfaces):
 		self.sim = sim
 
 		# Add regions and rename regions of the target volume
@@ -74,21 +76,15 @@ class BuildAnyShape:
 
 
 		# Extract the regions of membranes and PSDs
-		self.memb_voxel_locs = np.nonzero(voxel_membrane_area > 0)
-		self.memb_voxel_prob = voxel_membrane_area[self.memb_voxel_locs[0],\
-		                                     self.memb_voxel_locs[1],\
-		                                     self.memb_voxel_locs[2] ]
-		self.PSD_voxel_locs = np.nonzero(voxel_membrane_area*voxel_PSD > 0)
-		self.PSD_voxel_prob = voxel_membrane_area[self.PSD_voxel_locs[0],\
-		                                     self.PSD_voxel_locs[1],\
-		                                     self.PSD_voxel_locs[2] ]
-		self.ER_voxel_locs = np.nonzero((volume == domains['cytoplasm'])*(voxel_ER_area > 0))
-		self.ER_voxel_prob = voxel_ER_area[self.ER_voxel_locs[0],\
-		                                     self.ER_voxel_locs[1],\
-		                                     self.ER_voxel_locs[2] ]
+		
+		self.surf_voxel_locs = {}
+		self.surf_voxel_prob = {}
+		
+		for k, v in volume_surfaces.items():
+			self.surf_voxel_locs[k] = np.nonzero(v > 0)
+			self.surf_voxel_prob[k] = v[self.surf_voxel_locs[0], self.surf_voxel_locs[1], self.surf_voxel_locs[2] ]
+
 		# print('self.memb_voxel_locs[0].shape[0]: ', self.memb_voxel_locs[0].shape[0])
-
-
 		#print("len(locs['default'])   : ", len(self.locs['default']))
 		#print("len(locs['cytoplasm']) : ", len(self.locs['cytoplasm']))
 		#print("len(locs['psd'])       : ", len(self.locs['psd']))                           
@@ -112,72 +108,38 @@ class BuildAnyShape:
 		return True
 
 
-	def add_membrane_molecules(self, molecular_name, density):
+	def add_surface_molecules(self, molecular_name, density, surface_name):
 		"""Add membrane molecules.
 
 		Args:
 			molecular_name (str): Molecular name
 			density (float): Number density (/um2?)
+			surface_name (str): Surface name
 
 		Returns:
 			(bool): The return value. True for success, False otherwise.
 		"""
 
 		particleNum=self.sim.particleMap[molecular_name]
-		molecular_numbers = np.random.binomial(density, self.memb_voxel_prob)
+		molecular_numbers = np.random.binomial(density, self.surf_voxel_prob[surface_name])
 		# print('np.sum(molecular_numbers): ', np.sum(molecular_numbers))
-		for x, y, z, num in zip(self.memb_voxel_locs[0], \
-		                        self.memb_voxel_locs[1], \
-		                        self.memb_voxel_locs[2], \
-		                        molecular_numbers):
+		locs = surf_voxel_locs[surface_name]
+		for x, y, z, num in zip(locs[0], locs[1], locs[2], molecular_numbers):
 		    # print('x,y,z, num: ', x,y,z, num)
 		    for i in range(num):
 		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
 		return True
 
 
-	def add_psd_molecules(self, molecular_name, density):
-		"""Add PSD molecules.
-
-		Args:
-			molecular_name (str): Molecular name
-			density (float): Number density (/um2?)
-
-		Returns:
-			(bool): The return value. True for success, False otherwise.
-		"""
-		particleNum=self.sim.particleMap[molecular_name]
-		molecular_numbers = np.random.binomial(density, self.PSD_voxel_prob)
-		# print('np.sum(molecular_numbers): ', np.sum(molecular_numbers))
-		for x, y, z, num in zip(self.PSD_voxel_locs[0], \
-		                        self.PSD_voxel_locs[1], \
-		                        self.PSD_voxel_locs[2], \
-		                        molecular_numbers):
-		    # print('x,y,z, num: ', x,y,z, num)
-		    for i in range(num):
-		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
-		return True
-
-
-	def add_er_molecules(self, molecular_name, density):
-		"""Add ER molecules.
-
-		Args:
-			molecular_name (str): Molecular name
-			density (float): Number density (/um2?)
-
-		Returns:
-			(bool): The return value. True for success, False otherwise.
-		"""
-		particleNum=self.sim.particleMap[molecular_name]
-		molecular_numbers = np.random.binomial(density, self.ER_voxel_prob)
-		# print('np.sum(molecular_numbers): ', np.sum(molecular_numbers))
-		for x, y, z, num in zip(self.ER_voxel_locs[0], \
-		                        self.ER_voxel_locs[1], \
-		                        self.ER_voxel_locs[2], \
-		                        molecular_numbers):
-		    # print('x,y,z, num: ', x,y,z, num)
-		    for i in range(num):
-		        self.sim.lattice.addParticle(int(x), int(y), int(z), int(particleNum))
-		return True
+	def _check_arguments(sim, volume, domains, volume_surfaces):
+		if type(sim) != RDMESimulation:
+			raise ValueError('volume must be a integer 3D np.ndarray.')
+		elif not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
+			raise ValueError('volume must be a integer 3D np.ndarray.')
+		elif not isinstance(domains, dict) :
+			raise ValueError('domains must be a dict.')
+		elif not isinstance(volume_surfaces, dict) :
+			raise ValueError('volume_surfaces must be a dict.')
+		else:
+			return True
 
