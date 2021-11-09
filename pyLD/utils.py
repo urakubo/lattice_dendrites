@@ -6,6 +6,7 @@ from __future__ import division
 import sys, os
 import numpy as np
 from skimage import morphology
+import h5py
 
 
 def get_volume(filename, id_domains):

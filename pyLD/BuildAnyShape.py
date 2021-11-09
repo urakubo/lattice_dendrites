@@ -83,7 +83,7 @@ class BuildAnyShape:
 		self.surf_voxel_locs = {}
 		self.surf_voxel_prob = {}
 		
-		for k, v in volume_surfaces.items():
+		for k, v in surfaces.items():
 			self.surf_voxel_locs[k] = np.nonzero(v > 0)
 			self.surf_voxel_prob[k] = v[self.surf_voxel_locs[k][0], self.surf_voxel_locs[k][1], self.surf_voxel_locs[k][2] ]
 
