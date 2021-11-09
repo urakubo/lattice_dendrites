@@ -6,7 +6,7 @@ import os
 import random
 
 
-class BuildAnyShape:
+class BuildAnyShapeOrg:
 	"""Build a buildAnyShape object.
 
 	sim.siteTypes['domain name'] may be different from volume_id.
@@ -23,7 +23,7 @@ class BuildAnyShape:
 		(pyLD.buildAnyShape): buildAnyShape object
 	"""
 
-	def __init__(self, sim, volume, domains, voxel_cell_surface_area, voxel_PSD, voxel_ER_area):
+	def __init__(self, sim, volume, domains, voxel_membrane_area, voxel_PSD, voxel_ER_area):
 
 		self.sim = sim
 
