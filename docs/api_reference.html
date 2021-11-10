@@ -68,7 +68,7 @@
 <span id="api-reference"></span><h1>API reference<a class="headerlink" href="#module-pyLD" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.BuildAnyShape">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">BuildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_membrane_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_PSD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_ER_area</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">BuildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape" title="Permalink to this definition"></a></dt>
 <dd><p>Build a buildAnyShape object.</p>
 <p>sim.siteTypes[‘domain name’] may be different from volume_id.</p>
 <dl class="field-list simple">
@@ -76,10 +76,8 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sim</strong> (<em>obj</em>) – RDMESimulation object</p></li>
 <li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – 3D array that specifies volume_ids</p></li>
-<li><p><strong>domains</strong> (<em>dict</em><em>[</em><em>str</em><em>]</em>) – {‘domain name’, volume_id}</p></li>
-<li><p><strong>voxel_membrane_area</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies membrane_voxels &gt; 0</p></li>
-<li><p><strong>voxel_PSD</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies PSD_voxels &gt; 0</p></li>
-<li><p><strong>voxel_ER_area</strong> (<em>numpy</em><em>[</em><em>float</em><em>]</em>) – 3D array that specifies ER_voxels &gt; 0</p></li>
+<li><p><strong>domains</strong> (<em>dict</em>) – {‘domain name’, volume_id}</p></li>
+<li><p><strong>surfaces</strong> (<em>dict</em>) – {‘surface_name’, numpy[float]} : Surface areas in voxel space (3D array)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -90,9 +88,9 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_cytosolic_molecules">
-<span class="sig-name descname"><span class="pre">add_cytosolic_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecular_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_cytosolic_molecules" title="Permalink to this definition"></a></dt>
-<dd><p>Add cytosolic molecules.</p>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_solute_molecules">
+<span class="sig-name descname"><span class="pre">add_solute_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecular_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_solute_molecules" title="Permalink to this definition"></a></dt>
+<dd><p>Add solute molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -111,54 +109,15 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_er_molecules">
-<span class="sig-name descname"><span class="pre">add_er_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_er_molecules" title="Permalink to this definition"></a></dt>
-<dd><p>Add ER molecules.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
-<li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(bool)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_membrane_molecules">
-<span class="sig-name descname"><span class="pre">add_membrane_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_membrane_molecules" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_surface_molecules">
+<span class="sig-name descname"><span class="pre">add_surface_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_surface_molecules" title="Permalink to this definition"></a></dt>
 <dd><p>Add membrane molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
 <li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The return value. True for success, False otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(bool)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyLD.BuildAnyShape.add_psd_molecules">
-<span class="sig-name descname"><span class="pre">add_psd_molecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecular_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape.add_psd_molecules" title="Permalink to this definition"></a></dt>
-<dd><p>Add PSD molecules.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>molecular_name</strong> (<em>str</em>) – Molecular name</p></li>
-<li><p><strong>density</strong> (<em>float</em>) – Number density (/um2?)</p></li>
+<li><p><strong>surface_name</strong> (<em>str</em>) – Surface name</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

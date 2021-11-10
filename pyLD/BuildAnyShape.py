@@ -88,8 +88,8 @@ class BuildAnyShape:
 		#print("len(locs['cytoplasm']) : ", len(self.locs['cytoplasm']))
 		#print("len(locs['psd'])       : ", len(self.locs['psd']))                           
 
-	def add_cytosolic_molecules(self, molecular_name, molecular_number, domain_name):
-		"""Add cytosolic molecules.
+	def add_solute_molecules(self, molecular_name, molecular_number, domain_name):
+		"""Add solute molecules.
 
 		Args:
 			molecular_name (str): Molecular name
