@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. ハンズオン：勉強会レポートを作成しよう &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api_reference.html" />
+    <link rel="prev" title="2. Sphinxのインストール" href="02.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">1. Sphinxとは</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">2. Sphinxのインストール</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. ハンズオン：勉強会レポートを作成しよう</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">3.1. 書く項目を決めます</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sphinx">3.2. Sphinxプロジェクトを作りましょう</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">3. </span>ハンズオン：勉強会レポートを作成しよう</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/03.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">3. </span>ハンズオン：勉強会レポートを作成しよう<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h1>
+<p>では、実際にドキュメントを書いてみましょう。</p>
+<p>今回の勉強会のレポートを作っていきます。</p>
+<p>文章はみなさんで好きなように書いていただいて問題ありません。</p>
+<section id="id2">
+<h2><span class="section-number">3.1. </span>書く項目を決めます<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
+<p>こんなことを書きましょうか</p>
+<ul class="simple">
+<li><p>勉強会のタイトル</p></li>
+<li><p>開催情報</p></li>
+<li><p>勉強会の内容</p></li>
+<li><p>資料</p></li>
+</ul>
+</section>
+<section id="sphinx">
+<h2><span class="section-number">3.2. </span>Sphinxプロジェクトを作りましょう<a class="headerlink" href="#sphinx" title="Permalink to this headline"></a></h2>
+<p>まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。</p>
+<p>以下では report というドキュメント名を指定して実行しています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sphinx-quickstart report
+
+Welcome to the Sphinx <span class="m">1</span>.2 quickstart utility.
+
+Please enter values <span class="k">for</span> the following settings <span class="o">(</span>just press Enter to
+accept a default value, <span class="k">if</span> one is given in brackets<span class="o">)</span>.
+
+Selected root path: report
+
+You have two options <span class="k">for</span> placing the build directory <span class="k">for</span> Sphinx output.
+Either, you use a directory <span class="s2">&quot;_build&quot;</span> within the root path, or you separate
+<span class="s2">&quot;source&quot;</span> and <span class="s2">&quot;build&quot;</span> directories within the root path.
+&gt; Separate <span class="nb">source</span> and build directories <span class="o">(</span>y/N<span class="o">)</span> <span class="o">[</span>n<span class="o">]</span>:
+
+Inside the root directory, two more directories will be created<span class="p">;</span> <span class="s2">&quot;_templates&quot;</span>
+<span class="k">for</span> custom HTML templates and <span class="s2">&quot;_static&quot;</span> <span class="k">for</span> custom stylesheets and other static
+files. You can enter another prefix <span class="o">(</span>such as <span class="s2">&quot;.&quot;</span><span class="o">)</span> to replace the underscore.
+&gt; Name prefix <span class="k">for</span> templates and static dir <span class="o">[</span>_<span class="o">]</span>:
+
+The project name will occur in several places in the built documentation.
+&gt; Project name: Sphinx勉強会レポート
+&gt; Author name<span class="o">(</span>s<span class="o">)</span>: 五十嵐大輔
+
+Sphinx has the notion of a <span class="s2">&quot;version&quot;</span> and a <span class="s2">&quot;release&quot;</span> <span class="k">for</span> the
+software. Each version can have multiple releases. For example, <span class="k">for</span>
+Python the version is something like <span class="m">2</span>.5 or <span class="m">3</span>.0, <span class="k">while</span> the release is
+something like <span class="m">2</span>.5.1 or <span class="m">3</span>.0a1.  If you don<span class="s1">&#39;t need this dual structure,</span>
+<span class="s1">just set both to the same value.</span>
+<span class="s1">&gt; Project version: 1.0.0</span>
+<span class="s1">&gt; Project release [1.0.0]:</span>
+
+<span class="s1">The file name suffix for source files. Commonly, this is either &quot;.txt&quot;</span>
+<span class="s1">or &quot;.rst&quot;.  Only files with this suffix are considered documents.</span>
+<span class="s1">&gt; Source file suffix [.rst]:</span>
+
+<span class="s1">One document is special in that it is considered the top node of the</span>
+<span class="s1">&quot;contents tree&quot;, that is, it is the root of the hierarchical structure</span>
+<span class="s1">of the documents. Normally, this is &quot;index&quot;, but if your &quot;index&quot;</span>
+<span class="s1">document is a custom template, you can also set this to another filename.</span>
+<span class="s1">&gt; Name of your master document (without suffix) [index]:</span>
+
+<span class="s1">Sphinx can also add configuration for epub output:</span>
+<span class="s1">&gt; Do you want to use the epub builder (y/N) [n]:</span>
+
+<span class="s1">Please indicate if you want to use one of the following Sphinx extensions:</span>
+<span class="s1">&gt; autodoc: automatically insert docstrings from modules (y/N) [n]:</span>
+<span class="s1">&gt; doctest: automatically test code snippets in doctest blocks (y/N) [n]:</span>
+<span class="s1">&gt; intersphinx: link between Sphinx documentation of different projects (y/N) [n]:</span>
+<span class="s1">&gt; todo: write &quot;todo&quot; entries that can be shown or hidden on build (y/N) [n]:</span>
+<span class="s1">&gt; coverage: checks for documentation coverage (y/N) [n]:</span>
+<span class="s1">&gt; pngmath: include math, rendered as PNG images (y/N) [n]:</span>
+<span class="s1">&gt; mathjax: include math, rendered in the browser by MathJax (y/N) [n]:</span>
+<span class="s1">&gt; ifconfig: conditional inclusion of content based on config values (y/N) [n]:</span>
+<span class="s1">&gt; viewcode: include links to the source code of documented Python objects (y/N) [n]:</span>
+
+<span class="s1">A Makefile and a Windows command file can be generated for you so that you</span>
+<span class="s1">only have to run e.g. `make html&#39;</span> instead of invoking sphinx-build
+directly.
+&gt; Create Makefile? <span class="o">(</span>Y/n<span class="o">)</span> <span class="o">[</span>y<span class="o">]</span>:
+<span class="o">)</span>
+&gt; Create Windows <span class="nb">command</span> file? <span class="o">(</span>Y/n<span class="o">)</span> <span class="o">[</span>y<span class="o">]</span>:
+
+Creating file report/conf.py.
+Creating file report/index.rst.
+Creating file report/Makefile.
+Creating file report/make.bat.
+
+Finished: An initial directory structure has been created.
+
+You should now populate your master file report/index.rst and create other documentation
+<span class="nb">source</span> files. Use the Makefile to build the docs, like so:
+make builder
+where <span class="s2">&quot;builder&quot;</span> is one of the supported builders, e.g. html, latex or linkcheck.
+</pre></div>
+</div>
+<p>今回は、index.rstの中身は必要ないので、一旦全て削除します。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="02.html" class="btn btn-neutral float-left" title="2. Sphinxのインストール" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

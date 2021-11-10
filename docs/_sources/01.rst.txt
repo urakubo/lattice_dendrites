@@ -1,0 +1,12 @@
+=========================
+What is Lattice dendrite?
+=========================
+
+Spihnxは、reStructuredText記法で書かれたテキストファイルをHTML、
+PDFやepubなどの様々な形式へ変換するためのツールです。
+
+Pythonの公式ドキュメントはSphinxを使って書かれています。
+また、Python以外の多くのプロジェクトでもSphinxが利用されています。
+
+
+Sphinxのよくある利用例
