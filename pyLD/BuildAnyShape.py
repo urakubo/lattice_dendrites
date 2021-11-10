@@ -4,10 +4,6 @@ import numpy as np
 import os
 import random
 
-from pyLM import *
-from pySTDLM import *
-from pySTDLM.StandardReactionSystems import *
-
 NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
 	np.uint8, np.uint16, np.uint32, np.uint64]
 
@@ -135,9 +131,19 @@ class BuildAnyShape:
 
 
 	def _check_arguments(self, sim, volume, domains, surfaces):
-		if type(sim) != RDMESimulation:
-			raise ValueError('volume must be a integer 3D np.ndarray.')
-		elif not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
+
+
+		try:
+		    import pyLM
+		    import pySTDLM
+		    import pySTDLM.StandardReactionSystems
+		    if type(sim) != RDMESimulation:
+		        raise ValueError('volume must be a integer 3D np.ndarray.')
+
+		except ImportError:
+		    pass
+
+		if not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(domains, dict) :
 			raise ValueError('domains must be a dict.')
