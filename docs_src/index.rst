@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+=================
 Lattice dendrites
 =================
 
@@ -13,8 +14,8 @@ Lattice Dendrites (LD) is an extension of LM that can incorporate morphologicall
 LD is licensed under the MIT license. The original LM is licensed under the University of Illinois Open Source License. More info on LM can be found at http://www.scs.illinois.edu/schulten/lm/.
 
 
-内容
-====
+Contents
+========
 .. toctree::
     :maxdepth: 1
     :numbered:
