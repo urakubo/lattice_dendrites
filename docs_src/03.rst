@@ -1,18 +1,18 @@
-=======================================
-Tutorial1: creation of a spiny dendrite
-=======================================
+========================================
+Tutorial: Simulation in a spiny dendrite
+========================================
 
-
-Steps
-==================
 They are steps how to simulate signals in LD/LM.
 
-* Generate a spiny dendrite.
-* Generate a LM model.
+Steps
+=====
+
+* Create a spiny dendrite.
+* Annotation using the UNI-EM annotator
+* Set reactions.
 * Run a simulation.
 * Visualization1: matplotlib
 * Visualization2: mayavi
-* Annotation using the UNI-EM annotator
 
 Sphinxプロジェクトを作りましょう
 =================================
