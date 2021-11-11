@@ -55,7 +55,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		print("input lm_filename must be str.")
 		return False
 
-	cyt = 1
+	#cyt = 1
 	NA  = 6.022e23
 	# num_voxels, volume_in_L, spacing, S = get_volume_info(lm_filename, cyt)
 	S = get_species_names(lm_filename)
@@ -64,7 +64,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 	ids_spine, nums_spine_voxels = np.unique(labels, return_counts=True)
 	ids_spine          = ids_spine[1:] #  0 was removed.
 	nums_spine_voxels  = nums_spine_voxels[1:]
-	vols_spine_in_L    = nums_spine_voxels * spacing * spacing * spacing * 1000
+#	vols_spine_in_L    = nums_spine_voxels * spacing * spacing * spacing * 1000
 
 	targ_spine_labels = []
 	labels_flat = np.ravel(labels)
@@ -112,7 +112,10 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 	uMs = {}
 	for Targ in S.keys():
 		num_molecules[Targ] = np.array(num_molecules[Targ])
-		uMs[Targ] = num_molecules[Targ] / NA * 1e6 / vols_spine_in_L
+		# uMs[Targ] = num_molecules[Targ] / (NA / 1e6) / vols_spine_in_L
+		uMs[Targ] = num_to_uM(num_molecules[Targ], nums_spine_voxels, spacing)
+
+
 
 	if output_filename == None:
 		return num_molecules, uMs, timepoints, ids_spine
@@ -122,13 +125,3 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		print('output_filename is not str.')
 		return False
 
-if __name__ == '__main__':
-    
-	input_lm_file    = 'lms900_2_4/_stimrun_00.lm'
-	#
-	input_label_file = "lm_annot/labels.hdf5"
-	with h5py.File(input_label_file,'r') as f:
-	    labels = f['dendrite'][()]
-	output_file = 'test.hdf5'
-
-	get_labeled_concs(input_lm_file, labels,  output_filename = output_file, monitor_species = 'Ca')

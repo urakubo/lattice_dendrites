@@ -252,6 +252,32 @@ volume (numpy[int/bool]): Target volume</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.connect_labeled_concs">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">connect_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.connect_labeled_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Connect the time developments of molecular numbers/concentrations in labeled conc files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from “get_labeled_concs”.</p></li>
+<li><p><strong>species</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>time (numpy[float]): Time in s</p></li>
+<li><p>concs (numpy[float]): Concentration in uM</p></li>
+<li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.create_surface">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">create_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'humphrey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.create_surface" title="Permalink to this definition"></a></dt>
 <dd><p>Create a smooth surface mesh of a volume.
@@ -304,34 +330,6 @@ method_smoothing(str): Smoothing method: ‘laplacian’, ‘humphrey’, ‘mut
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(list)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyLD.get_domain_concs">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_domain_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_domain_concs" title="Permalink to this definition"></a></dt>
-<dd><p>Obtain time development of molecular concentrations.</p>
-<p>A 3D image is padded to a multiple of 32 voxels,
-because LM only accepts the size of volume.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filenames</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Output filenames of LM</p></li>
-<li><p><strong>targs</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Target domains</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Tuple containing:</p>
-<ul class="simple">
-<li><p>time (numpy[float]): Time in s</p></li>
-<li><p>concs (numpy[float]): Concentration in uM</p></li>
-<li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(tuple)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -400,6 +398,34 @@ because LM only accepts the size of volume.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_total_concs">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_total_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_total_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Get time developments of the number and concentration of specified molecules.
+Note that concentrations are simply obtained by the total numbers of molecules divided by a specified domain(s) volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lm_filename</strong> (<em>str</em>) – Filename of lm simulation.</p></li>
+<li><p><strong>species</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified.</p></li>
+<li><p><strong>domain_ids</strong> (<em>int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Target domain ids. They are summed if multiple domains are specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>time (numpy[float]): Time in s</p></li>
+<li><p>concs (numpy[float]): Concentration in uM</p></li>
+<li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.get_volume_info">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_volume_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_volume_info" title="Permalink to this definition"></a></dt>
 <dd><p>Retrieve domain info from a LM/LM-output file.</p>
@@ -413,8 +439,8 @@ because LM only accepts the size of volume.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <ul class="simple">
-<li><p>num_voxels (int): Number of voxels of the target domain</p></li>
-<li><p>volume_in_L (float): Volume of the target domain</p></li>
+<li><p>num_voxels (int/list[int]): Number of voxels of the target domain(s)</p></li>
+<li><p>volume_in_L (float/list[float]): Volume of the target domain(s)</p></li>
 <li><p>spacing (float): Unit length (um)</p></li>
 <li><p>s: Pairs of molecular name and id</p></li>
 </ul>
@@ -439,6 +465,27 @@ because LM only accepts the size of volume.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(numpy)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.num_to_uM">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">num_to_uM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_molecules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_voxels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.num_to_uM" title="Permalink to this definition"></a></dt>
+<dd><p>Get concentration in uM from the number(s) of molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_molecules</strong> (<em>int/float/numpy</em><em>[</em><em>int/float</em><em>]</em>) – Number(s) of molecules</p></li>
+<li><p><strong>num_voxels</strong> (<em>int/float/numpy</em><em>[</em><em>int/float</em><em>]</em>) – Number(s) of voxels.</p></li>
+<li><p><strong>spacing</strong> (<em>int/float</em>) – Spacing per lattice.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Concentration in uM</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(int/float/numpy[int/float])</p>
 </dd>
 </dl>
 </dd></dl>

@@ -4,8 +4,11 @@ import numpy as np
 import os
 import random
 
+from .utils import num_to_uM
+
 NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
 	np.uint8, np.uint16, np.uint32, np.uint64]
+
 
 
 class BuildAnyShape:

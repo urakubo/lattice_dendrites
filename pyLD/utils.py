@@ -104,16 +104,82 @@ def lmpad(volume):
 	volume  = np.pad(volume, padding)
 	return volume
 
+def num_to_uM(num_molecules, num_voxels, spacing):
+	"""Get concentration in uM from the number(s) of molecules.
 
-def get_domain_concs(filenames, targs):
-	"""Obtain time development of molecular concentrations.
-	
-	A 3D image is padded to a multiple of 32 voxels,
-	because LM only accepts the size of volume.
+	Args:
+		num_molecules (int/float/numpy[int/float]): Number(s) of molecules
+		num_voxels (int/float/numpy[int/float]): Number(s) of voxels.
+		spacing (int/float): Spacing per lattice.
+	Returns:
+		(int/float/numpy[int/float]): Concentration in uM
+	"""
+	NA = 6.022e23
+	number_per_1umol = NA /(1e6)
+	volume_in_L = num_voxels * spacing * spacing * spacing * 1000
+	number_per_1uM = number_per_1umol * volume_in_L
+	conc = num_molecules / number_per_1uM
+	return conc
+
+
+def get_total_concs(lm_filename, species, domain_ids):
+	"""Get time developments of the number and concentration of specified molecules.
+	Note that concentrations are simply obtained by the total numbers of molecules divided by a specified domain(s) volume.
+
+	Args:
+		lm_filename (str): Filename of lm simulation.
+		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
+		domain_ids (int / list[int] / tuple[int]): Target domain ids. They are summed if multiple domains are specified.
+	Returns:
+		(tuple): Tuple containing:
+
+		- time (numpy[float]): Time in s
+		- concs (numpy[float]): Concentration in uM
+		- numbers (numpy[int]): Numbers of Molecules
+	"""
+
+	if not isinstance(lm_filename, str):
+		raise ValueError('lm_filename must be str.')
+
+	if isinstance(species, str):
+	    species = [species]
+	elif isinstance(species, list) | isinstance(species, tuple) :
+		pass
+	else:
+		raise ValueError('species must be str, list[str], or tuple[str].')
+
+	if isinstance(domain_ids, int):
+	    domain_ids = [domain_ids]
+	elif isinstance(domain_ids, list) | isinstance(domain_ids, tuple) :
+		pass
+	else:
+		raise ValueError('domain_ids must be int, list[int], or tuple[int].')
+
+	with h5py.File(lm_filename, 'r') as file:
+		timepoints = file['Simulations']['0000001']['LatticeTimes'][()]
+		num_molecules = file['Simulations']['0000001']['SpeciesCounts'][()]
+		spacing = file['Model']['Diffusion'].attrs['latticeSpacing']
+		mnames  = file['Parameters'].attrs['speciesNames'].decode().split(',')
+		volume  = file['Model']['Diffusion']['LatticeSites'][()]
+
+	ids = [i for i, key in enumerate(mnames) if key in species ]
+	num_molecules = np.sum(num_molecules[:, ids], axis = 1)
+
+	num_voxels  = 0
+	for domain_id in domain_ids:
+		num_voxels += np.count_nonzero(volume == domain_id)
+
+	concs = num_to_uM(num_molecules, num_voxels, spacing)
+
+	return timepoints, concs, num_molecules
+
+
+def connect_labeled_concs(filenames, species):
+	"""Connect the time developments of molecular numbers/concentrations in labeled conc files.
 	
 	Args:
-		filenames (list[str]): Output filenames of LM
-		targs (list[str]): Target domains
+		filenames (str / list[str] / tuple[str]): Generated labeled conc files from "get_labeled_concs".
+		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
 
 	Returns:
 		(tuple): Tuple containing:
@@ -122,6 +188,21 @@ def get_domain_concs(filenames, targs):
 		- concs (numpy[float]): Concentration in uM
 		- numbers (numpy[int]): Numbers of Molecules
 	"""
+
+	if isinstance(filenames, str):
+	    filenames = [filenames]
+	elif isinstance(filenames, list) | isinstance(filenames, tuple) :
+		pass
+	else:
+		raise ValueError('filenames must be str, list, or tuple.')
+
+	if isinstance(species, str):
+	    species = [species]
+	elif isinstance(species, list) | isinstance(species, tuple) :
+		pass
+	else:
+		raise ValueError('species must be str, list, or tuple.')
+
 
 	for i, fname in enumerate(filenames):
 	    with h5py.File(fname,'r') as f:
@@ -133,7 +214,7 @@ def get_domain_concs(filenames, targs):
 	        tmp1 = np.zeros_like( uM[ molecules[0] ][()] )
 	        tmp2 = np.zeros_like( number[ molecules[0] ][()] )
 	        # print('tmp.shape: ', tmp.shape)
-	        for targ in targs:
+	        for targ in species:
 	            tmp1 += uM[targ][()]
 	            tmp2 += number[targ][()]
 
@@ -197,8 +278,8 @@ def get_volume_info(filename, domain_ids):
 	Returns:
 		(tuple): Tuple containing:
 
-		- num_voxels (int): Number of voxels of the target domain
-		- volume_in_L (float): Volume of the target domain
+		- num_voxels (int/list[int]): Number of voxels of the target domain(s)
+		- volume_in_L (float/list[float]): Volume of the target domain(s)
 		- spacing (float): Unit length (um)
 		- s: Pairs of molecular name and id
 	"""
@@ -216,7 +297,7 @@ def get_volume_info(filename, domain_ids):
 	    volume_in_L = []
 	    for domain_id in domain_ids:
 	        tmp_num = np.count_nonzero(data == domain_id)
-	        tmp_vol = num_voxels * spacing * spacing * spacing * 1000
+	        tmp_vol = tmp_num * spacing * spacing * spacing * 1000
 	        num_voxels.append(tmp_num)
 	        volume_in_L.append(tmp_vol)
 	    
