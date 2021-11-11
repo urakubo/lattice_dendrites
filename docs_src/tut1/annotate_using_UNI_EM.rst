@@ -2,13 +2,7 @@
 Annotate a spine using the UNI-EM annotator
 ===========================================
 
-Open the annotator of UNI-EM.
-
-.. image:: imgs/UNI-EM_annot1.jpg
-   :scale: 50%
-   :align: center
-
-Label region-of-interests. Labeled areas are automatically saved.
+Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' in the pulldown menu 'Annotator'. Label region-of-interests in the UNI-EM annotator. Labeled areas are automatically saved.
 
 .. image:: imgs/UNI-EM_annot2.jpg
    :scale: 50%

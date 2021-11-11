@@ -7,7 +7,7 @@ They are steps how to simulate signals in LD/LM.
 .. toctree::
 
 	tut1/create_spiny_dendrite
-	tut1/annotation_using_UNI_EM
+	tut1/annotate_using_UNI_EM
 	tut1/set_reactions
 	tut1/run_simulation
 	tut1/visualization1_matplotlib

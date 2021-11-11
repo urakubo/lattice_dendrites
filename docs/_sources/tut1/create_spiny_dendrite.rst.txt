@@ -1,8 +1,8 @@
-==================================
-Create a shape of a spiny dendrite
-==================================
+================================
+Create a shape of spiny dendrite
+================================
 
-We first need to design of a schematics shape of a spiny dendrite.
+We first need to design of a schematics shape of spiny dendrite.
 
 .. image:: imgs/Scheme.jpg
    :scale: 60%
