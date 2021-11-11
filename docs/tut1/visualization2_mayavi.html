@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.6. Visualization 2: mayavi &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api_reference.html" />
+    <link rel="prev" title="3.5. Visualization 1: matplotlib" href="visualization1_matplotlib.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../03.html">3. Tutorial: Simulation in a spiny dendrite</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="create_spiny_dendrite.html">3.1. Create a spiny dendrite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotation_using_UNI_EM.html">3.2. Annotation using the UNI-EM annotator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set_reactions.html">3.3. Set reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_simulation.html">3.4. Run simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.6. Visualization 2: mayavi</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../03.html"><span class="section-number">3. </span>Tutorial: Simulation in a spiny dendrite</a> &raquo;</li>
+      <li><span class="section-number">3.6. </span>Visualization 2: mayavi</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tut1/visualization2_mayavi.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="visualization-2-mayavi">
+<h1><span class="section-number">3.6. </span>Visualization 2: mayavi<a class="headerlink" href="#visualization-2-mayavi" title="Permalink to this headline"></a></h1>
+<p>まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。</p>
+<p>以下では report というドキュメント名を指定して実行しています。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1"># Generate a spiny dendrite.</span>
+<span class="linenos">  2</span>
+<span class="linenos">  3</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="linenos">  4</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos">  5</span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="linenos">  6</span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">morphology</span>
+<span class="linenos">  7</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos">  8</span>
+<span class="linenos">  9</span><span class="k">def</span> <span class="nf">make_cylinder</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="linenos"> 10</span>        <span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">morphology</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">)]</span>
+<span class="linenos"> 11</span>        <span class="n">cylinder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 12</span>        <span class="n">cylinder</span> <span class="o">=</span> <span class="n">cylinder</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+<span class="linenos"> 13</span>        <span class="k">return</span> <span class="n">cylinder</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="k">def</span> <span class="nf">add_shape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">loc_center</span><span class="p">):</span>
+<span class="linenos"> 16</span>        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="linenos"> 17</span>        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="linenos"> 18</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">loc_center</span> <span class="o">-</span> <span class="n">c</span>
+<span class="linenos"> 19</span>        <span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">s</span>
+<span class="linenos"> 20</span>        <span class="n">volume</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">]</span> <span class="o">+=</span> <span class="nb">object</span>
+<span class="linenos"> 21</span>        <span class="n">volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos"> 22</span>        <span class="k">return</span> <span class="n">volume</span>
+<span class="linenos"> 23</span>
+<span class="linenos"> 24</span>
+<span class="linenos"> 25</span><span class="c1"># Spiny dendrite</span>
+<span class="linenos"> 26</span><span class="n">spine_head</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="linenos"> 27</span><span class="n">spine_neck</span> <span class="o">=</span> <span class="n">make_cylinder</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="linenos"> 28</span><span class="n">dendrite</span>   <span class="o">=</span> <span class="n">make_cylinder</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 29</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">110</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos"> 32</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">spine_head</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">25</span><span class="p">])</span>
+<span class="linenos"> 33</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">spine_neck</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>
+<span class="linenos"> 34</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">dendrite</span>  <span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">75</span><span class="p">])</span>
+<span class="linenos"> 35</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="c1"># PSD</span>
+<span class="linenos"> 38</span><span class="n">psd</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)</span>
+<span class="linenos"> 39</span><span class="n">vol_psd</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">),</span> <span class="n">psd</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">12</span><span class="p">])</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span>
+<span class="linenos"> 42</span><span class="c1"># Mito</span>
+<span class="linenos"> 43</span><span class="n">mito</span> <span class="o">=</span> <span class="n">make_cylinder</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 44</span><span class="n">vol_mito</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span>
+<span class="linenos"> 45</span><span class="n">vol_mito</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_mito</span><span class="p">,</span> <span class="n">mito</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">75</span><span class="p">])</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span>
+<span class="linenos"> 48</span><span class="c1"># ER</span>
+<span class="linenos"> 49</span><span class="n">er</span> <span class="o">=</span> <span class="n">make_cylinder</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 50</span><span class="n">vol_er</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span>
+<span class="linenos"> 51</span><span class="n">vol_er</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_er</span><span class="p">,</span> <span class="n">er</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">61</span><span class="p">])</span>
+<span class="linenos"> 52</span><span class="n">vol_er</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_er</span><span class="p">,</span> <span class="n">er</span><span class="p">,</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">105</span><span class="o">-</span><span class="mi">89</span><span class="p">])</span>
+<span class="linenos"> 53</span>
+<span class="linenos"> 54</span>
+<span class="linenos"> 55</span><span class="c1"># Arrangement</span>
+<span class="linenos"> 56</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span>
+<span class="linenos"> 57</span><span class="n">vol_mito</span> <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_mito</span><span class="p">)</span>
+<span class="linenos"> 58</span><span class="n">vol_psd</span>  <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span>
+<span class="linenos"> 59</span><span class="n">vol_er</span>   <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos"> 60</span>
+<span class="linenos"> 61</span><span class="n">vol_not_er</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_er</span> <span class="p">)</span>
+<span class="linenos"> 62</span><span class="n">vol_not_mito</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_mito</span> <span class="p">)</span>
+<span class="linenos"> 63</span><span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">vol_dend</span> <span class="o">^</span> <span class="p">(</span><span class="n">vol_mito</span> <span class="o">|</span> <span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos"> 64</span>
+<span class="linenos"> 65</span>
+<span class="linenos"> 66</span><span class="c1"># Create surface</span>
+<span class="linenos"> 67</span><span class="n">xyzpitch</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="linenos"> 68</span>
+<span class="linenos"> 69</span><span class="n">bound_verts</span><span class="p">,</span> <span class="n">bound_faces</span><span class="p">,</span> <span class="n">bound_area_per_face</span><span class="p">,</span> <span class="n">bound_areas</span><span class="p">,</span> <span class="n">id_face_psd</span> <span class="o">=</span> \
+<span class="linenos"> 70</span>        <span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_dend</span><span class="p">,</span> <span class="n">PSD</span> <span class="o">=</span> <span class="n">vol_psd</span><span class="p">,</span> <span class="n">num_smoothing</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">method_smoothing</span> <span class="o">=</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">)</span>
+<span class="linenos"> 71</span>
+<span class="linenos"> 72</span><span class="n">mito_verts</span><span class="p">,</span> <span class="n">mito_faces</span><span class="p">,</span> <span class="n">mito_area_per_face</span><span class="p">,</span> <span class="n">mito_areas</span> <span class="o">=</span> <span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_not_mito</span><span class="p">)</span>
+<span class="linenos"> 73</span><span class="n">er_verts</span><span class="p">,</span> <span class="n">er_faces</span><span class="p">,</span> <span class="n">er_area_per_face</span><span class="p">,</span> <span class="n">er_areas</span>         <span class="o">=</span> <span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_not_er</span><span class="p">)</span>
+<span class="linenos"> 74</span>
+<span class="linenos"> 75</span><span class="n">mito_areas</span>  <span class="o">=</span> <span class="n">mito_areas</span>  <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos"> 76</span><span class="n">er_areas</span>    <span class="o">=</span> <span class="n">er_areas</span>    <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos"> 77</span><span class="n">bound_areas</span> <span class="o">=</span> <span class="n">bound_areas</span> <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos"> 78</span>
+<span class="linenos"> 79</span><span class="c1"># Save UNI-EM annot</span>
+<span class="linenos"> 80</span><span class="n">annot_folder</span> <span class="o">=</span> <span class="s1">&#39;annot_ball_and_stick&#39;</span>
+<span class="linenos"> 81</span><span class="n">bound_color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">]</span>
+<span class="linenos"> 82</span><span class="n">mito_color</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">152</span><span class="p">]</span>
+<span class="linenos"> 83</span><span class="n">er_color</span>    <span class="o">=</span> <span class="p">[</span><span class="mi">179</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">179</span><span class="p">]</span>
+<span class="linenos"> 84</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="n">bound_verts</span><span class="p">,</span> <span class="n">bound_faces</span><span class="p">,</span> <span class="n">bound_color</span><span class="p">],</span>\
+<span class="linenos"> 85</span>                        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="n">mito_verts</span><span class="p">,</span> <span class="n">mito_faces</span><span class="p">,</span> <span class="n">mito_color</span><span class="p">],</span>\
+<span class="linenos"> 86</span>                        <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="n">er_verts</span><span class="p">,</span> <span class="n">er_faces</span><span class="p">,</span> <span class="n">er_color</span><span class="p">]}</span>
+<span class="linenos"> 87</span><span class="n">save_uniem_annotator</span><span class="p">(</span><span class="n">annot_folder</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="p">(</span><span class="n">vol_dend</span><span class="o">+</span><span class="n">vol_mito</span><span class="o">+</span><span class="n">vol_er</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">),</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos"> 88</span>
+<span class="linenos"> 89</span>
+<span class="linenos"> 90</span><span class="c1"># Save</span>
+<span class="linenos"> 91</span>
+<span class="linenos"> 92</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;ball_and_stick.h5&#39;</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+<span class="linenos"> 95</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;unit length per voxel (um)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyzpitch</span>
+<span class="linenos"> 96</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;dendrite&#39;</span><span class="p">]</span>                                       <span class="o">=</span> <span class="n">vol_dend</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos"> 97</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;PSD&#39;</span><span class="p">]</span>                                            <span class="o">=</span> <span class="n">vol_psd</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos"> 98</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion&#39;</span><span class="p">]</span>                  <span class="o">=</span> <span class="n">vol_mito</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos"> 99</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er&#39;</span><span class="p">]</span>                                             <span class="o">=</span> <span class="n">vol_er</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos">100</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">101</span>
+<span class="linenos">102</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary areas in volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">bound_areas</span>
+<span class="linenos">103</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary vertices&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">bound_verts</span>
+<span class="linenos">104</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary faces&#39;</span><span class="p">]</span>                 <span class="o">=</span> <span class="n">bound_faces</span>
+<span class="linenos">105</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;PSD ids in boundary faces&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">id_face_psd</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion areas in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mito_areas</span>
+<span class="linenos">108</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion vertices&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">mito_verts</span>
+<span class="linenos">109</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion faces&#39;</span><span class="p">]</span>         <span class="o">=</span> <span class="n">mito_faces</span>
+<span class="linenos">110</span>
+<span class="linenos">111</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er areas in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">er_areas</span>
+<span class="linenos">112</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">er_verts</span>
+<span class="linenos">113</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">er_faces</span>
+</pre></div>
+</div>
+<p>今回は、index.rstの中身は必要ないので、一旦全て削除します。</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="visualization1_matplotlib.html" class="btn btn-neutral float-left" title="3.5. Visualization 1: matplotlib" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api_reference.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

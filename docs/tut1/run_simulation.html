@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.4. Run simulation &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.5. Visualization 1: matplotlib" href="visualization1_matplotlib.html" />
+    <link rel="prev" title="3.3. Set reactions" href="set_reactions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../03.html">3. Tutorial 1: schematic spiny dendrite</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="create_spiny_dendrite.html">3.1. Create a spiny dendrite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annotation_using_UNI_EM.html">3.2. Annotation using the UNI-EM annotator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set_reactions.html">3.3. Set reactions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.4. Run simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../03.html"><span class="section-number">3. </span>Tutorial 1: schematic spiny dendrite</a> &raquo;</li>
+      <li><span class="section-number">3.4. </span>Run simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tut1/run_simulation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="run-simulation">
+<h1><span class="section-number">3.4. </span>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline"></a></h1>
+<p>The following code</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
+<span class="linenos"> 4</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="n">filename_lm</span>     <span class="o">=</span> <span class="s1">&#39;morph/ball_and_stick.lm&#39;</span>
+<span class="linenos"> 7</span><span class="n">filename_prerun</span> <span class="o">=</span> <span class="s1">&#39;results/prerun_ball_and_stick.lm&#39;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename_prerun</span><span class="p">):</span>
+<span class="linenos">10</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prerun file was removed.&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_prerun</span><span class="p">)</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create prerun file: &#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">)</span>
+<span class="linenos">14</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename_lm</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;-sp&#39;</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">]</span>
+<span class="linenos">17</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">com</span><span class="p">))</span>
+<span class="linenos">18</span><span class="n">s</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">gpu_id</span> <span class="o">=</span> <span class="s1">&#39;0,1&#39;</span>
+<span class="linenos">2</span><span class="n">num_GPUs</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
+<span class="linenos">3</span><span class="n">num_CPUs</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
+<span class="linenos">4</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="n">gpu_id</span><span class="p">,</span> <span class="s1">&#39;-gr&#39;</span><span class="p">,</span> <span class="n">num_GPUs</span><span class="p">,</span><span class="s1">&#39;-cr&#39;</span><span class="p">,</span> <span class="n">num_CPUs</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MGPUMpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>今回は、index.rstの中身は必要ないので、一旦全て削除します。</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="set_reactions.html" class="btn btn-neutral float-left" title="3.3. Set reactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="visualization1_matplotlib.html" class="btn btn-neutral float-right" title="3.5. Visualization 1: matplotlib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

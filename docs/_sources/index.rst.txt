@@ -17,9 +17,8 @@ LD is licensed under the MIT license. The original LM is licensed under the Univ
 Contents
 ========
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :numbered:
-    :glob:
 
     01
     02

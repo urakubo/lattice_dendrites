@@ -107,7 +107,7 @@ Also, confirm the successful import of LM/LD modules in python3:
 	>>> import pyLM
 	>>> import pySTDLM
 	>>> import pyLD
-	Imported pyLD files:
-	create_surface, save_uniem_annotator, BuildAnyShapeOrg, CreateVolumeFromReconstruct, GenerateClosedVolumesFromUniEM, BuildAnyShape, RotateVolume, utils, get_labeled_concs
+	Importing pyLD files:
+	create_surface, save_uniem_annotator, CreateVolumeFromReconstruct, GenerateClosedVolumesFromUniEM, BuildAnyShape, RotateVolume, utils, get_labeled_concs
 	>>>
 
