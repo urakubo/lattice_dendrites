@@ -72,7 +72,7 @@ Set environment paths. In the case of bash, add the following lines in $HOME/.ba
 	# Requirements in /lib/x86_64-linux-gnu:
 	# libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1
 
-and the execute the following command:
+and execute the following command:
 
 .. code-block:: bash
 
