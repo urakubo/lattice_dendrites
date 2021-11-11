@@ -2,15 +2,19 @@
 Annotation using the UNI-EM annotator
 =====================================
 
+Open the annotator of UNI-EM.
 
 .. image:: imgs/UNI-EM_annot1.jpg
    :scale: 50%
    :align: center
 
+Label region-of-interests. Labeled areas are automatically saved.
+
 .. image:: imgs/UNI-EM_annot2.jpg
-   :scale: 60%
+   :scale: 50%
    :align: center
 
+Convert the labeled areas to the voxel space.
 
 .. code-block:: python
 	:linenos:
@@ -37,6 +41,8 @@ Annotation using the UNI-EM annotator
    :scale: 50%
    :align: center
 
+
+Confirm the successful segmentation in the voxel space by visualizing it.
 
 .. code-block:: python
 	:linenos:
