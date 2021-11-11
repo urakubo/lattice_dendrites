@@ -103,16 +103,17 @@
 <section id="step-1-download-and-file-extraction">
 <h2><span class="section-number">2.3. </span>Step 1: download and file extraction<a class="headerlink" href="#step-1-download-and-file-extraction" title="Permalink to this headline"></a></h2>
 <p>On your terminal, download LD by executing the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/urakubo/lattice_dendrites.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
 <p>Then locate the</p>
 <p>We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
-cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
+$ cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+$ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 </pre></div>
 </div>
+<p>Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/bin:<span class="nv">$PATH</span>
 <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORYlib</span>/lm:<span class="nv">$PYTHONPATH</span>
@@ -136,10 +137,14 @@ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 <span class="c1"># libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1</span>
 </pre></div>
 </div>
+<p>and the execute the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> .bashrc
+</pre></div>
+</div>
 </section>
 <section id="step-3-test-execution">
 <h2><span class="section-number">2.4. </span>Step 3: test execution<a class="headerlink" href="#step-3-test-execution" title="Permalink to this headline"></a></h2>
-<p>Then execute ‘lm -l’ to confirm a successful open of the environmental paths:</p>
+<p>Then execute ‘lm -l’ to confirm successful settings. You will see the following message:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm -l
 Lattice Microbes <span class="m">2</span>.3a build by root on 1336a712b2ab at <span class="m">2021</span>-11-10 <span class="m">01</span>:18:56 <span class="k">in</span> <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
 Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2008</span>-2016 Luthey-Schulten Group,
@@ -151,7 +156,19 @@ Running with <span class="m">2</span>/2 processor<span class="o">(</span>s<span 
 202X-XX-XX XX:XX:XX<span class="o">)</span> Info: Program execution finished.
 </pre></div>
 </div>
-<p>とするか、virtualenvwrapperを使ったりしてください。</p>
+<p>Also, confirm the successful import of LM/LD modules in python3:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3
+Python <span class="m">3</span>.6.9 <span class="o">(</span>default, Jan <span class="m">26</span> <span class="m">2021</span>, <span class="m">15</span>:33:00<span class="o">)</span>
+<span class="o">[</span>GCC <span class="m">8</span>.4.0<span class="o">]</span> on linux
+Type <span class="s2">&quot;help&quot;</span>, <span class="s2">&quot;copyright&quot;</span>, <span class="s2">&quot;credits&quot;</span> or <span class="s2">&quot;license&quot;</span> <span class="k">for</span> more information.
+&gt;&gt;&gt; import pyLM
+&gt;&gt;&gt; import pySTDLM
+&gt;&gt;&gt; import pyLD
+Imported pyLD files:
+create_surface, save_uniem_annotator, BuildAnyShapeOrg, CreateVolumeFromReconstruct, GenerateClosedVolumesFromUniEM, BuildAnyShape, RotateVolume, utils, get_labeled_concs
+&gt;&gt;&gt;
+</pre></div>
+</div>
 </section>
 </section>
 

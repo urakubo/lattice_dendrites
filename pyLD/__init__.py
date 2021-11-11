@@ -33,7 +33,7 @@ for targ_name in targ_names:
 	__all__.extend(classes_funcs)
 	# print(', '.join(classes_funcs) )
 
-print('pyLD file: ', targ_name)
+print('Imported pyLD files:')
 print(', '.join(targ_names) )
 
 # https://stackoverflow.com/questions/46263274/how-can-i-prevent-sphinx-from-displaying-the-full-path-to-my-class

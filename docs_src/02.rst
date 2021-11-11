@@ -31,7 +31,7 @@ On your terminal, download LD by executing the following command:
 
 .. code-block:: bash
 
-    git clone https://github.com/urakubo/lattice_dendrites.git
+    $ git clone https://github.com/urakubo/lattice_dendrites.git
 
 
 Then locate the 
@@ -41,9 +41,12 @@ We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 
 .. code-block:: bash
 
-    cd $LD_INSTALL_DIRECTORY
-    cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-    tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+    $ cd $LD_INSTALL_DIRECTORY
+    $ cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+    $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+
+
+Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:
 
 .. code-block:: bash
 
@@ -69,12 +72,17 @@ We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 	# Requirements in /lib/x86_64-linux-gnu:
 	# libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1
 
+and the execute the following command:
+
+.. code-block:: bash
+
+    $ source .bashrc
 
 
 Step 3: test execution
 ======================
 
-Then execute 'lm -l' to confirm a successful open of the environmental paths:
+Then execute 'lm -l' to confirm successful settings. You will see the following message:
 
 .. code-block:: bash
 
@@ -88,5 +96,18 @@ Then execute 'lm -l' to confirm a successful open of the environmental paths:
 		1:n="GeForce RTX 2080 Ti",v=7.5,mt=11554717696,mf=11026366464,mc=65536,ms=49152,r=65536,w=32,c=1545000
 	202X-XX-XX XX:XX:XX) Info: Program execution finished.
 
+Also, confirm the successful import of LM/LD modules in python3:
 
-とするか、virtualenvwrapperを使ったりしてください。
+.. code-block:: bash
+
+	$ python3
+	Python 3.6.9 (default, Jan 26 2021, 15:33:00)
+	[GCC 8.4.0] on linux
+	Type "help", "copyright", "credits" or "license" for more information.
+	>>> import pyLM
+	>>> import pySTDLM
+	>>> import pyLD
+	Imported pyLD files:
+	create_surface, save_uniem_annotator, BuildAnyShapeOrg, CreateVolumeFromReconstruct, GenerateClosedVolumesFromUniEM, BuildAnyShape, RotateVolume, utils, get_labeled_concs
+	>>>
+
