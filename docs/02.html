@@ -41,7 +41,9 @@
 <li class="toctree-l1"><a class="reference internal" href="01.html">1. Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">2.1. Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-1">2.2. Step 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-preparation">2.2. Step 1: preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-download-and-file-extraction">2.3. Step 1: download and file extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-test-execution">2.4. Step 3: test execution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="03.html">3. ハンズオン：勉強会レポートを作成しよう</a></li>
@@ -85,17 +87,59 @@
 <li><p>(pip)</p></li>
 <li><p>(virtualenv)</p></li>
 </ul>
+<p>Morphological operations in LD also work on Microsoft Windows 10/11.</p>
 </section>
-<section id="step-1">
-<h2><span class="section-number">2.2. </span>Step 1<a class="headerlink" href="#step-1" title="Permalink to this headline"></a></h2>
-<p>terminalやコマンドプロンプトを起動します。</p>
+<section id="step-1-preparation">
+<h2><span class="section-number">2.2. </span>Step 1: preparation<a class="headerlink" href="#step-1-preparation" title="Permalink to this headline"></a></h2>
+<p>On your terminal</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install sphinx
 </pre></div>
 </div>
-<p>sphinx-quickstart というコマンドが使えるようになっていればインストール完了です。</p>
-<p>グローバル環境にインストールするのが嫌な人は、</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtualenv env
 <span class="nb">source</span> env/bin/activate
+</pre></div>
+</div>
+</section>
+<section id="step-1-download-and-file-extraction">
+<h2><span class="section-number">2.3. </span>Step 1: download and file extraction<a class="headerlink" href="#step-1-download-and-file-extraction" title="Permalink to this headline"></a></h2>
+<p>On your terminal, download LD by executing the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/urakubo/lattice_dendrites.git
+</pre></div>
+</div>
+<p>Then locate the</p>
+<p>We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
+$ cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+$ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/bin:<span class="nv">$PATH</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORYlib</span>/lm:<span class="nv">$PYTHONPATH</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib/python:<span class="nv">$PYTHONPATH</span>
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/hdf5_1.12.0_gcc8.4.0/lib:<span class="nv">$LD_INSTALL_DIRECTORY</span>
+
+<span class="c1"># CUDA paths</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="c1"># System paths</span>
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="c1"># Requirements in /usr/local/cuda/lib64:</span>
+<span class="c1"># libcudart.so.11.0</span>
+<span class="c1"># Requirements in /lib64:</span>
+<span class="c1"># ld-linux-x86-64.so.2</span>
+<span class="c1"># Requirements in /usr/lib/x86_64-linux-gnu:</span>
+<span class="c1"># libstdc++.so.6, libpython3.6m.so.1.0</span>
+<span class="c1"># Requirements in /lib/x86_64-linux-gnu:</span>
+<span class="c1"># libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-test-execution">
+<h2><span class="section-number">2.4. </span>Step 3: test execution<a class="headerlink" href="#step-3-test-execution" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm
 </pre></div>
 </div>
 <p>とするか、virtualenvwrapperを使ったりしてください。</p>

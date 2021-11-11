@@ -1,6 +1,6 @@
-=====================
+============
 Installation
-=====================
+============
 
 Requirements
 ============
@@ -10,24 +10,72 @@ Requirements
 * (pip)
 * (virtualenv)
 
+Morphological operations in LD also work on Microsoft Windows 10/11.
 
-Step 1
-======
-terminalやコマンドプロンプトを起動します。
+Step 1: preparation
+===================
+On your terminal
 
 .. code-block:: bash
 
     $ pip install sphinx
-
-
-sphinx-quickstart というコマンドが使えるようになっていればインストール完了です。
-
-グローバル環境にインストールするのが嫌な人は、
 
 .. code-block:: bash
 
     virtualenv env
     source env/bin/activate
 
+Step 1: download and file extraction
+====================================
+On your terminal, download LD by executing the following command:
+
+.. code-block:: bash
+
+    $ git clone https://github.com/urakubo/lattice_dendrites.git
+
+
+Then locate the 
+
+
+We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
+
+.. code-block:: bash
+
+    $ cd $LD_INSTALL_DIRECTORY
+    $ cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+    $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+
+.. code-block:: bash
+
+	# LM paths
+	export PATH=$LD_INSTALL_DIRECTORY/bin:$PATH
+	export PYTHONPATH=$LD_INSTALL_DIRECTORYlib/lm:$PYTHONPATH
+	export PYTHONPATH=$LD_INSTALL_DIRECTORY/lib/python:$PYTHONPATH
+	export LD_LIBRARY_PATH=$LD_INSTALL_DIRECTORY/hdf5_1.12.0_gcc8.4.0/lib:$LD_INSTALL_DIRECTORY
+
+	# CUDA paths
+	export PATH=/usr/local/cuda/bin:$PATH
+	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+	# System paths
+	export LD_LIBRARY_PATH=/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+	# Requirements in /usr/local/cuda/lib64:
+	# libcudart.so.11.0
+	# Requirements in /lib64:
+	# ld-linux-x86-64.so.2
+	# Requirements in /usr/lib/x86_64-linux-gnu:
+	# libstdc++.so.6, libpython3.6m.so.1.0
+	# Requirements in /lib/x86_64-linux-gnu:
+	# libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1
+
+
+
+Step 3: test execution
+======================
+
+.. code-block:: bash
+
+	$ lm
 
 とするか、virtualenvwrapperを使ったりしてください。
