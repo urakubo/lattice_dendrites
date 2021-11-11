@@ -32,13 +32,13 @@ Set reactions
 	print('\nLoad geometry data.\n')
 
 	with h5py.File(input_filename_morph,'r') as r:
-	    dendrite							= r['dendrite'][()]
-	    mitochondrion						= r['mitochondrion'][()]
+	    dendrite	= r['dendrite'][()]
+	    mitochondrion	= r['mitochondrion'][()]
 	    dendrite_not_mitochondrion_not_ER	= r['dendrite not mitochondrion not ER'][()]
-	    PSD									= r['PSD'][()]
-	    vol_bound							= r['boundary areas in volume'][()]
-	    pitch								= r['unit length per voxel (um)'][()]
-	    ER_area								= r['ER areas in volume'][()]
+	    PSD	= r['PSD'][()]
+	    vol_bound	= r['boundary areas in volume'][()]
+	    pitch	= r['unit length per voxel (um)'][()]
+	    ER_area	= r['ER areas in volume'][()]
 
 	volume = (dendrite_not_mitochondrion_not_ER > 0) * domains[cyt]
 	volume[mitochondrion > 0] = domains[mito]
