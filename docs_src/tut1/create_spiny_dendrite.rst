@@ -5,7 +5,7 @@ Create a shape of a spiny dendrite
 We first need to design of a schematics shape of a spiny dendrite.
 
 .. image:: imgs/Scheme.jpg
-   :scale: 100%
+   :scale: 50%
    :align: center
 
 
