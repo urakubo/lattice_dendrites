@@ -2,9 +2,12 @@
 Create a shape of a spiny dendrite
 ==================================
 
-まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。
+We first need to design of a schematics shape of a spiny dendrite.
 
-以下では report というドキュメント名を指定して実行しています。
+.. image:: imgs/Scheme.jpg
+   :scale: 100%
+   :align: center
+
 
 
 .. code-block:: python
@@ -33,34 +36,34 @@ Create a shape of a spiny dendrite
 		volume = (volume > 0).astype(np.uint8)
 		return volume
 
-
 	# Spiny dendrite
 	spine_head = morphology.ball(radius = 12)
 	spine_neck = make_cylinder(radius = 5, length = 50, direction = 2)
-	dendrite   = make_cylinder(radius = 25, length = 90, direction = 0)
+	dendrite = make_cylinder(radius = 25, length = 90, direction = 0)
 
-	vol_dend = np.zeros((100,60,110), dtype=np.uint8)
-	vol_dend = add_shape(vol_dend, spine_head, [50,30,105-25])
-	vol_dend = add_shape(vol_dend, spine_neck, [50,30,105-50])
-	vol_dend = add_shape(vol_dend, dendrite  , [50,30,105-75])
+
+	vol_dend = np.zeros((96,60,96), dtype=np.uint8)
+	vol_dend = add_shape(vol_dend, spine_head, [48,30,76])
+	vol_dend = add_shape(vol_dend, spine_neck, [48,30,51])
+	vol_dend = add_shape(vol_dend, dendrite  , [48,30,26])
 
 
 	# PSD
 	psd = morphology.ball(radius = 7)
-	vol_psd = add_shape(np.zeros_like(vol_dend), psd, [50,30,105-12])
+	vol_psd = add_shape(np.zeros_like(vol_dend), psd, [48,30,88])
 
 
 	# Mito
 	mito = make_cylinder(radius = 10, length = 90, direction = 0)
 	vol_mito = np.zeros_like(vol_dend)
-	vol_mito = add_shape(vol_mito, mito, [50,30,105-75])
+	vol_mito = add_shape(vol_mito, mito, [48,30,26])
 
 
 	# ER
 	er = make_cylinder(radius = 3, length = 90, direction = 0)
 	vol_er = np.zeros_like(vol_dend)
-	vol_er = add_shape(vol_er, er, [50,30,105-61])
-	vol_er = add_shape(vol_er, er, [50,30,105-89])
+	vol_er = add_shape(vol_er, er, [48,30,7])
+	vol_er = add_shape(vol_er, er, [48,30,45])
 
 
 	# Arrangement
