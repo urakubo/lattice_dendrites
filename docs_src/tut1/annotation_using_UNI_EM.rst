@@ -2,9 +2,14 @@
 Annotation using the UNI-EM annotator
 =====================================
 
-まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。
 
-以下では report というドキュメント名を指定して実行しています。
+.. image:: imgs/UNI-EM_annot1.jpg
+   :scale: 50%
+   :align: center
+
+.. image:: imgs/UNI-EM_annot2.jpg
+   :scale: 60%
+   :align: center
 
 
 .. code-block:: python
