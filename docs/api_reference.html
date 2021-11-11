@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="3. Set reactions" href="tut1/set_reactions.html" /> 
+    <link rel="prev" title="3.6. Visualization 2: mayavi" href="tut1/visualization2_mayavi.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,7 +39,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="01.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03.html">Tutorial: Simulation in a spiny dendrite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">3. Tutorial 1: schematic spiny dendrite</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a></li>
@@ -338,7 +338,7 @@ because LM only accepts the size of volume.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.get_labeled_concs">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ca'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_labeled_concs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_labeled_concs" title="Permalink to this definition"></a></dt>
 <dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -366,8 +366,25 @@ because LM only accepts the size of volume.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pyLD.get_species_name">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_species_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_species_name" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.get_spacing">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_spacing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_spacing" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve spacing from a LM/LM-output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Output filename of LM</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Unit length (um)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>spacing (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_species_names">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_species_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_species_names" title="Permalink to this definition"></a></dt>
 <dd><p>Retrieve species names from a LM/LM-output file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -398,7 +415,7 @@ because LM only accepts the size of volume.</p>
 <ul class="simple">
 <li><p>num_voxels (int): Number of voxels of the target domain</p></li>
 <li><p>volume_in_L (float): Volume of the target domain</p></li>
-<li><p>spacing: Unit length (um)</p></li>
+<li><p>spacing (float): Unit length (um)</p></li>
 <li><p>s: Pairs of molecular name and id</p></li>
 </ul>
 </p>
@@ -530,7 +547,7 @@ This is aimed to directly connect pyLD-generated surfaces with UNI-EM annotator.
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tut1/set_reactions.html" class="btn btn-neutral float-left" title="3. Set reactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tut1/visualization2_mayavi.html" class="btn btn-neutral float-left" title="3.6. Visualization 2: mayavi" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
