@@ -1,23 +1,18 @@
-======================================
-ハンズオン：勉強会レポートを作成しよう
-======================================
-
-では、実際にドキュメントを書いてみましょう。
-
-今回の勉強会のレポートを作っていきます。
-
-文章はみなさんで好きなように書いていただいて問題ありません。
+=======================================
+Tutorial1: creation of a spiny dendrite
+=======================================
 
 
-書く項目を決めます
+Steps
 ==================
-こんなことを書きましょうか
+They are steps how to simulate signals in LD/LM.
 
-* 勉強会のタイトル
-* 開催情報
-* 勉強会の内容
-* 資料
-
+* Generate a spiny dendrite.
+* Generate a LM model.
+* Run a simulation.
+* Visualization1: matplotlib
+* Visualization2: mayavi
+* Annotation using the UNI-EM annotator
 
 Sphinxプロジェクトを作りましょう
 =================================
@@ -28,7 +23,7 @@ Sphinxプロジェクトを作りましょう
 
 .. code-block:: python
 
-	# Generate a schematic of a spiny dendrite.
+	# Generate a spiny dendrite.
 
 	import sys, os
 	import numpy as np
