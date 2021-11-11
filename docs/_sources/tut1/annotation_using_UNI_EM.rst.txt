@@ -13,18 +13,11 @@ Annotation using the UNI-EM annotator
 	import sys, os, errno
 	import numpy as np
 	import h5py
-	main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))  # Dir of main
-	sys.path.append(os.path.join(main_dir, '..', 'github_pages'))
 	from pyLD import *
-
-	from skimage import measure
-	from skimage import morphology
 
 	folder    = 'annot_ball_and_stick'
 	volume_id = 1
 	output_filename = 'labels_ball_and_stick.h5'
-	output_image_filename = 'labels_ball_and_stick.png'
-
 
 	const = GenerateClosedVolumesFromUniEM(folder)
 	vol, ids, ref_vol = const.generate(volume_id)
@@ -38,8 +31,9 @@ Annotation using the UNI-EM annotator
 .. code-block:: python
 	:linenos:
 
-	xypitch = 0.02
+	output_image_filename = 'labels_ball_and_stick.png'
 
+	xypitch = 0.02
 	verts = []
 	faces = []
 
@@ -50,8 +44,6 @@ Annotation using the UNI-EM annotator
 
 
 	from mayavi import mlab
-	from mayavi.api import OffScreenEngine
-	import trimesh
 
 	mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
 	mlab.view(90, 90, 300, [ 50, 30, 50 ] )
