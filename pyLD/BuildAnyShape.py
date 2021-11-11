@@ -134,10 +134,8 @@ class BuildAnyShape:
 
 
 		try:
-		    import pyLM
-		    import pySTDLM
 		    import pySTDLM.StandardReactionSystems
-		    if type(sim) != RDMESimulation:
+		    if type(sim) != pySTDLM.StandardReactionSystems.RDMESimulation:
 		        raise ValueError('volume must be a integer 3D np.ndarray.')
 
 		except ImportError:

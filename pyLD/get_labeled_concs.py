@@ -1,7 +1,7 @@
 import numpy as np
 import h5py
 import os, sys
-from .utils import get_volume_info
+from .utils import get_species_names, get_spacing
 
 def count_molecules(particles, targ_spine_labels, S):
 	num_molecules_spine = {}
@@ -30,7 +30,7 @@ def save_labeled_concs(filename, num_molecules_spine, uMs, timepoints, S, ids_sp
 			f['conc in uM'].create_dataset(Targ, data=uMs[Targ])
 
 
-def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_species = 'Ca'):
+def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_species = None):
 
 	"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
@@ -57,8 +57,9 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 
 	cyt = 1
 	NA  = 6.022e23
-	num_voxels, volume_in_L, spacing, S = get_volume_info(lm_filename, cyt)
-
+	# num_voxels, volume_in_L, spacing, S = get_volume_info(lm_filename, cyt)
+	S = get_species_names(lm_filename)
+	spacing = get_spacing(lm_filename)
 	# Decode labels
 	ids_spine, nums_spine_voxels = np.unique(labels, return_counts=True)
 	ids_spine          = ids_spine[1:] #  0 was removed.
@@ -79,7 +80,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 
 	# Monitor messages
 	if monitor_species != None:
-	    print('file :', input_lm_file)
+	    print('file :', lm_filename)
 	    print('Label ids : ', ids_spine)
 	    print('Species    : ', ', '.join(list(S.keys())))
 
@@ -100,7 +101,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		    particles = file['Simulations']['0000001']['Lattice'][f][:,:,:,:]
 
 		#
-		num_molecules_time_i = _count_molecules(particles, targ_spine_labels, S)
+		num_molecules_time_i = count_molecules(particles, targ_spine_labels, S)
 		if isinstance(monitor_species, str) and monitor_species in S.keys():
 		    print('Monitor species:', monitor_species,', Number_at_time_i:', num_molecules_time_i[monitor_species] )
 
@@ -116,7 +117,7 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 	if output_filename == None:
 		return num_molecules, uMs, timepoints, ids_spine
 	elif isinstance(output_filename, str):
-		return _save_labeled_concs(output_filename, num_molecules, uMs, timepoints, S, ids_spine)
+		return save_labeled_concs(output_filename, num_molecules, uMs, timepoints, S, ids_spine)
 	else :
 		print('output_filename is not str.')
 		return False

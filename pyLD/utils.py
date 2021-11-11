@@ -155,7 +155,21 @@ def get_domain_concs(filenames, targs):
 	return time, concs, numbers
 
 
-def get_species_name(filename):
+def get_spacing(filename):
+	"""Retrieve spacing from a LM/LM-output file.
+
+	Args:
+		filename (str): Output filename of LM
+
+	Returns:
+		spacing (float): Unit length (um)
+	"""
+	with h5py.File(filename,'r') as f:
+	    spacing = f['Model']['Diffusion'].attrs['latticeSpacing']
+	return spacing
+
+
+def get_species_names(filename):
 	"""Retrieve species names from a LM/LM-output file.
 
 	Args:
@@ -185,7 +199,7 @@ def get_volume_info(filename, domain_ids):
 
 		- num_voxels (int): Number of voxels of the target domain
 		- volume_in_L (float): Volume of the target domain
-		- spacing: Unit length (um)
+		- spacing (float): Unit length (um)
 		- s: Pairs of molecular name and id
 	"""
 	with h5py.File(filename,'r') as f:
@@ -195,7 +209,7 @@ def get_volume_info(filename, domain_ids):
 
 	## Volume
 	if isinstance(domain_ids, int) | isinstance(domain_ids, bool) :
-	    num_voxels  = np.count_nonzero(data == id_domains)
+	    num_voxels  = np.count_nonzero(data == domain_ids)
 	    volume_in_L = num_voxels * spacing * spacing * spacing * 1000
 	elif isinstance(domain_ids, list) | isinstance(domain_ids, tuple) :
 	    num_voxels  = []
