@@ -1,6 +1,6 @@
-=====================================
-Annotation using the UNI-EM annotator
-=====================================
+===========================================
+Annotate a spine using the UNI-EM annotator
+===========================================
 
 Open the annotator of UNI-EM.
 
