@@ -31,7 +31,7 @@ On your terminal, download LD by executing the following command:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/urakubo/lattice_dendrites.git
+    git clone https://github.com/urakubo/lattice_dendrites.git
 
 
 Then locate the 
@@ -41,9 +41,9 @@ We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 
 .. code-block:: bash
 
-    $ cd $LD_INSTALL_DIRECTORY
-    $ cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-    $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+    cd $LD_INSTALL_DIRECTORY
+    cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+    tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 
 .. code-block:: bash
 
@@ -74,8 +74,19 @@ We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
 Step 3: test execution
 ======================
 
+Then execute 'lm -l' to confirm a successful open of the environmental paths:
+
 .. code-block:: bash
 
-	$ lm
+	$ lm -l
+	Lattice Microbes 2.3a build by root on 1336a712b2ab at 2021-11-10 01:18:56 in 64-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
+	Copyright (C) 2008-2016 Luthey-Schulten Group,
+	University of Illinois at Urbana-Champaign.
+
+	Running with 2/2 processor(s) and 2/2 CUDA device(s).
+  		0:n="GeForce RTX 2080 Ti",v=7.5,mt=11554717696,mf=9847767040,mc=65536,ms=49152,r=65536,w=32,c=1545000
+		1:n="GeForce RTX 2080 Ti",v=7.5,mt=11554717696,mf=11026366464,mc=65536,ms=49152,r=65536,w=32,c=1545000
+	202X-XX-XX XX:XX:XX) Info: Program execution finished.
+
 
 とするか、virtualenvwrapperを使ったりしてください。

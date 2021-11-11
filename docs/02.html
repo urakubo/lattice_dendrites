@@ -103,14 +103,14 @@
 <section id="step-1-download-and-file-extraction">
 <h2><span class="section-number">2.3. </span>Step 1: download and file extraction<a class="headerlink" href="#step-1-download-and-file-extraction" title="Permalink to this headline"></a></h2>
 <p>On your terminal, download LD by executing the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/urakubo/lattice_dendrites.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
 <p>Then locate the</p>
 <p>We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
-$ cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-$ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
+cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
+tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
@@ -139,7 +139,16 @@ $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 </section>
 <section id="step-3-test-execution">
 <h2><span class="section-number">2.4. </span>Step 3: test execution<a class="headerlink" href="#step-3-test-execution" title="Permalink to this headline"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm
+<p>Then execute ‘lm -l’ to confirm a successful open of the environmental paths:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm -l
+Lattice Microbes <span class="m">2</span>.3a build by root on 1336a712b2ab at <span class="m">2021</span>-11-10 <span class="m">01</span>:18:56 <span class="k">in</span> <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2008</span>-2016 Luthey-Schulten Group,
+University of Illinois at Urbana-Champaign.
+
+Running with <span class="m">2</span>/2 processor<span class="o">(</span>s<span class="o">)</span> and <span class="m">2</span>/2 CUDA device<span class="o">(</span>s<span class="o">)</span>.
+        <span class="m">0</span>:n<span class="o">=</span><span class="s2">&quot;GeForce RTX 2080 Ti&quot;</span>,v<span class="o">=</span><span class="m">7</span>.5,mt<span class="o">=</span><span class="m">11554717696</span>,mf<span class="o">=</span><span class="m">9847767040</span>,mc<span class="o">=</span><span class="m">65536</span>,ms<span class="o">=</span><span class="m">49152</span>,r<span class="o">=</span><span class="m">65536</span>,w<span class="o">=</span><span class="m">32</span>,c<span class="o">=</span><span class="m">1545000</span>
+        <span class="m">1</span>:n<span class="o">=</span><span class="s2">&quot;GeForce RTX 2080 Ti&quot;</span>,v<span class="o">=</span><span class="m">7</span>.5,mt<span class="o">=</span><span class="m">11554717696</span>,mf<span class="o">=</span><span class="m">11026366464</span>,mc<span class="o">=</span><span class="m">65536</span>,ms<span class="o">=</span><span class="m">49152</span>,r<span class="o">=</span><span class="m">65536</span>,w<span class="o">=</span><span class="m">32</span>,c<span class="o">=</span><span class="m">1545000</span>
+202X-XX-XX XX:XX:XX<span class="o">)</span> Info: Program execution finished.
 </pre></div>
 </div>
 <p>とするか、virtualenvwrapperを使ったりしてください。</p>
