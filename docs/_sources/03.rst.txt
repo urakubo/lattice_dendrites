@@ -26,81 +26,121 @@ Sphinxプロジェクトを作りましょう
 以下では report というドキュメント名を指定して実行しています。
 
 
-.. code-block:: bash
+.. code-block:: python
 
-    sphinx-quickstart report
+	# Generate a schematic of a spiny dendrite.
 
-    Welcome to the Sphinx 1.2 quickstart utility.
+	import sys, os
+	import numpy as np
+	import h5py
+	from skimage import morphology
+	from pyLD import *
 
-    Please enter values for the following settings (just press Enter to
-    accept a default value, if one is given in brackets).
+	def make_cylinder(radius, length, direction = 2):
+		arrays = [morphology.disk(radius) for _ in range(length)]
+		cylinder = np.stack(arrays, axis=0)
+		cylinder = cylinder.swapaxes(0, direction)
+		return cylinder
 
-    Selected root path: report
+	def add_shape(volume, object, loc_center):
+		s = np.array(object.shape)
+		c = np.floor(s/2).astype(int)
+		b = loc_center - c
+		e = b + s
+		volume[b[0]:e[0], b[1]:e[1], b[2]:e[2] ] += object
+		volume = (volume > 0).astype(np.uint8)
+		return volume
 
-    You have two options for placing the build directory for Sphinx output.
-    Either, you use a directory "_build" within the root path, or you separate
-    "source" and "build" directories within the root path.
-    > Separate source and build directories (y/N) [n]:
 
-    Inside the root directory, two more directories will be created; "_templates"
-    for custom HTML templates and "_static" for custom stylesheets and other static
-    files. You can enter another prefix (such as ".") to replace the underscore.
-    > Name prefix for templates and static dir [_]:
+	# Spiny dendrite
+	spine_head = morphology.ball(radius = 12)
+	spine_neck = make_cylinder(radius = 5, length = 50, direction = 2)
+	dendrite   = make_cylinder(radius = 25, length = 90, direction = 0)
 
-    The project name will occur in several places in the built documentation.
-    > Project name: Sphinx勉強会レポート
-    > Author name(s): 五十嵐大輔
 
-    Sphinx has the notion of a "version" and a "release" for the
-    software. Each version can have multiple releases. For example, for
-    Python the version is something like 2.5 or 3.0, while the release is
-    something like 2.5.1 or 3.0a1.  If you don't need this dual structure,
-    just set both to the same value.
-    > Project version: 1.0.0
-    > Project release [1.0.0]:
+	vol_dend = np.zeros((100,60,110), dtype=np.uint8)
+	vol_dend = add_shape(vol_dend, spine_head, [50,30,105-25])
+	vol_dend = add_shape(vol_dend, spine_neck, [50,30,105-50])
+	vol_dend = add_shape(vol_dend, dendrite  , [50,30,105-75])
 
-    The file name suffix for source files. Commonly, this is either ".txt"
-    or ".rst".  Only files with this suffix are considered documents.
-    > Source file suffix [.rst]:
 
-    One document is special in that it is considered the top node of the
-    "contents tree", that is, it is the root of the hierarchical structure
-    of the documents. Normally, this is "index", but if your "index"
-    document is a custom template, you can also set this to another filename.
-    > Name of your master document (without suffix) [index]:
+	# PSD
+	psd = morphology.ball(radius = 7)
+	vol_psd = add_shape(np.zeros_like(vol_dend), psd, [50,30,105-12])
 
-    Sphinx can also add configuration for epub output:
-    > Do you want to use the epub builder (y/N) [n]:
 
-    Please indicate if you want to use one of the following Sphinx extensions:
-    > autodoc: automatically insert docstrings from modules (y/N) [n]:
-    > doctest: automatically test code snippets in doctest blocks (y/N) [n]:
-    > intersphinx: link between Sphinx documentation of different projects (y/N) [n]:
-    > todo: write "todo" entries that can be shown or hidden on build (y/N) [n]:
-    > coverage: checks for documentation coverage (y/N) [n]:
-    > pngmath: include math, rendered as PNG images (y/N) [n]:
-    > mathjax: include math, rendered in the browser by MathJax (y/N) [n]:
-    > ifconfig: conditional inclusion of content based on config values (y/N) [n]:
-    > viewcode: include links to the source code of documented Python objects (y/N) [n]:
+	# Mito
+	mito = make_cylinder(radius = 10, length = 90, direction = 0)
+	vol_mito = np.zeros_like(vol_dend)
+	vol_mito = add_shape(vol_mito, mito, [50,30,105-75])
 
-    A Makefile and a Windows command file can be generated for you so that you
-    only have to run e.g. `make html' instead of invoking sphinx-build
-    directly.
-    > Create Makefile? (Y/n) [y]:
-    )
-    > Create Windows command file? (Y/n) [y]:
 
-    Creating file report/conf.py.
-    Creating file report/index.rst.
-    Creating file report/Makefile.
-    Creating file report/make.bat.
+	# ER
+	er = make_cylinder(radius = 3, length = 90, direction = 0)
+	vol_er = np.zeros_like(vol_dend)
+	vol_er = add_shape(vol_er, er, [50,30,105-61])
+	vol_er = add_shape(vol_er, er, [50,30,105-89])
 
-    Finished: An initial directory structure has been created.
 
-    You should now populate your master file report/index.rst and create other documentation
-    source files. Use the Makefile to build the docs, like so:
-    make builder
-    where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
+	# Arrangement
+	vol_dend = lmpad(vol_dend)
+	vol_mito = lmpad(vol_mito)
+	vol_psd  = lmpad(vol_psd)
+	vol_er   = lmpad(vol_er)
+
+	vol_not_er   = np.logical_not( vol_er )
+	vol_not_mito = np.logical_not( vol_mito )
+	vol_dend_not_mito_not_er = vol_dend ^ (vol_mito | vol_er)
+
+
+	# Create surface
+	xyzpitch = 0.02
+
+	bound_verts, bound_faces, bound_area_per_face, bound_areas, id_face_psd = \
+		create_surface(xyzpitch, vol_dend, PSD = vol_psd, num_smoothing = 5, method_smoothing = 'laplacian')
+
+	mito_verts, mito_faces, mito_area_per_face, mito_areas = create_surface(xyzpitch, vol_not_mito)
+	er_verts, er_faces, er_area_per_face, er_areas         = create_surface(xyzpitch, vol_not_er)
+
+	mito_areas  = mito_areas  * vol_dend_not_mito_not_er
+	er_areas    = er_areas    * vol_dend_not_mito_not_er
+	bound_areas = bound_areas * vol_dend_not_mito_not_er
+
+	# Save UNI-EM annot
+	annot_folder = 'annot_ball_and_stick'
+	bound_color = [192,192,192]
+	mito_color  = [255,255,152]
+	er_color    = [179,255,179]
+	surfaces = {1: [bound_verts, bound_faces, bound_color],\
+				2: [mito_verts, mito_faces, mito_color],\
+				3: [er_verts, er_faces, er_color]}
+	save_uniem_annotator(annot_folder, xyzpitch, (vol_dend+vol_mito+vol_er*2).astype('uint16'), surfaces)
+
+
+	# Save
+
+	filename = 'ball_and_stick.h5'
+
+	with h5py.File(filename,'w') as w:
+	    w['unit length per voxel (um)'] = xyzpitch
+	    w['dendrite'] 					= vol_dend.astype(np.uint8)
+	    w['PSD']      					= vol_psd.astype(np.uint8)
+	    w['mitochondrion']      		= vol_mito.astype(np.uint8)
+	    w['er']	      					= vol_er.astype(np.uint8)
+	    w['dendrite not mitochondrion not ER']  = vol_dend_not_mito_not_er
+
+	    w['boundary areas in volume']   = bound_areas
+	    w['boundary vertices']      	= bound_verts
+	    w['boundary faces']        		= bound_faces
+	    w['PSD ids in boundary faces'] 	= id_face_psd
+
+	    w['mitochondrion areas in volume'] = mito_areas
+	    w['mitochondrion vertices']      = mito_verts
+	    w['mitochondrion faces']         = mito_faces
+
+	    w['er areas in volume'] = er_areas
+	    w['er vertices']        = er_verts
+	    w['er faces']           = er_faces
 
 
 今回は、index.rstの中身は必要ないので、一旦全て削除します。
