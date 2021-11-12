@@ -44,11 +44,10 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 	Returns:
 		(tuple): Tuple containing:
 
-		- num_molecules (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-		- uMs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
 		- timepoints (numpy[float]): Timepoints (s)
+		- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+		- num_molecules (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
 		- ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
-
 	"""
 
     # Decode info
@@ -110,18 +109,18 @@ def get_labeled_concs(lm_filename, labels, output_filename = None, monitor_speci
 		for Targ in S.keys():
 			num_molecules[Targ].append(num_molecules_time_i[Targ])
 
-	uMs = {}
+	concs = {}
 	for Targ in S.keys():
 		num_molecules[Targ] = np.array(num_molecules[Targ])
 		# uMs[Targ] = num_molecules[Targ] / (NA / 1e6) / vols_spine_in_L
-		uMs[Targ] = num_to_uM(num_molecules[Targ], nums_spine_voxels, spacing)
+		concs[Targ] = num_to_uM(num_molecules[Targ], nums_spine_voxels, spacing)
 
 
 
 	if output_filename == None:
-		return num_molecules, uMs, timepoints, ids_spine
+		return timepoints, concs, num_molecules, ids_spine
 	elif isinstance(output_filename, str):
-		return save_labeled_concs(output_filename, num_molecules, uMs, timepoints, S, ids_spine)
+		return save_labeled_concs(output_filename, num_molecules, concs, timepoints, S, ids_spine)
 	else :
 		print('output_filename is not str.')
 		return False
