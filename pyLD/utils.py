@@ -124,7 +124,7 @@ def num_to_uM(num_molecules, num_voxels, spacing):
 
 def get_total_concs(lm_filename, species, domain_ids):
 	"""Get time developments of the number and concentration of specified molecules.
-	Note that concentrations are simply obtained by the total numbers of molecules divided by a specified domain(s) volume.
+	Note that concentrations are simply obtained by the total numbers of molecules divided by the volume of a specified domain(s).
 
 	Args:
 		lm_filename (str): Filename of lm simulation.

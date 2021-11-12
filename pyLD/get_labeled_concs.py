@@ -1,7 +1,8 @@
 import numpy as np
 import h5py
 import os, sys
-from .utils import get_species_names, get_spacing
+from .utils import get_species_names, get_spacing, num_to_uM
+
 
 def count_molecules(particles, targ_spine_labels, S):
 	num_molecules_spine = {}
