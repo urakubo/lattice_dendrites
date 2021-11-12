@@ -130,6 +130,7 @@ def get_total_concs(lm_filename, species, domain_ids):
 		lm_filename (str): Filename of lm simulation.
 		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
 		domain_ids (int / list[int] / tuple[int]): Target domain ids. They are summed if multiple domains are specified.
+
 	Returns:
 		(tuple): Tuple containing:
 

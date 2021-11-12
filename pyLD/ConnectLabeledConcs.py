@@ -12,28 +12,16 @@ class ConnectLabeledConcs:
 	
 	Args:
 		label_conc_filenames (str / list[str] / tuple[str]): Generated labeled conc files from "get_labeled_concs".
-		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
 
 	Returns:
 		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object that includes the follwing instances:
 
 		- timepoints (numpy[float]): Timepoints (s)
-		- concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_spine]).
-		- numbers (numpy[float]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_spine]).
-		- ids_label (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+		- concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).
+		- numbers (numpy[float]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_label]).
+		- ids_label (numpy[int]): Labels. It has [label1, label2, ...].
 	"""
 
-	"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
-
-	Args:
-		sim (obj): RDMESimulation object
-		volume (numpy[int]): 3D array that specifies volume_ids
-		domains (dict): {'domain name', volume_id}
-		surfaces (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
-
-	Returns:
-		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object
-	"""
 	def  __init__(self, label_conc_filenames):
 		# Check arguments
 		if isinstance(label_conc_filenames, str):
@@ -66,11 +54,24 @@ class ConnectLabeledConcs:
 
 
 	def get_concs(self, species=None, ids_label=None):
+		"""Get time developments of the concentration(s) of specified specie(s) within label(s).
+
+		Args:
+			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
+			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
+
+		Returns:
+			(numpy[float]): Time developments of concentrations (1D/2D/3D array)
+		"""
 
 		species_id, label_id = self._check_arguments(species, ids_label)
 
 		if (species != None) and (ids_label != None):
-			concs = np.sum(self.concs[:,species_id,label_id], axis=(1,2))
+			concs = self.concs[:,species_id,label_id]
+			if concs.ndim == 3:
+				concs = np.sum(concs, axis=(1,2))
+			elif concs.ndim == 2:
+				concs = np.sum(concs, axis=1)
 		elif (species != None):
 			concs = np.sum(self.concs[:,species_id,:], axis=(1))
 		elif (ids_label != None):
@@ -82,11 +83,24 @@ class ConnectLabeledConcs:
 
 
 	def get_numbers(self, species=None, ids_label=None):
+		"""Get time developments of the number(s) of specified specie(s) within label(s).
+
+		Args:
+			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
+			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
+
+		Returns:
+			(numpy[int]): Time developments of number (1D/2D/3D array)
+		"""
 
 		species_id, label_id = self._check_arguments(species, ids_label)
 
 		if (species != None) and (ids_label != None):
-			numbers = np.sum(self.numbers[:,species_id,label_id], axis=(1,2))
+			numbers = self.numbers[:,species_id,label_id]
+			if numbers.ndim == 3:
+				numbers = np.sum(numbers, axis=(1,2))
+			elif numbers.ndim == 2:
+				numbers = np.sum(numbers, axis=1)
 		elif (species != None):
 			numbers = np.sum(self.numbers[:,species_id,:], axis=(1))
 		elif (ids_label != None):
@@ -125,8 +139,8 @@ class ConnectLabeledConcs:
 		else:
 			label_id = None
 
-		print('species_id: ', species_id)
-		print('label_id  : ', label_id)
+		# print('species_id: ', species_id)
+		# print('label_id  : ', label_id)
 		return species_id, label_id
 
 

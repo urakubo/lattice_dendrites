@@ -86,10 +86,10 @@
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>buildAnyShape object</p>
+<dd class="field-even"><p>BuildAnyShape object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(pyLD.buildAnyShape)</p>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.BuildAnyShape" title="pyLD.BuildAnyShape">pyLD.BuildAnyShape</a>)</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -130,6 +130,70 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.ConnectLabeledConcs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectLabeledConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_conc_filenames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectLabeledConcs" title="Permalink to this definition"></a></dt>
+<dd><p>Connect the time developments of molecular numbers/concentrations in labeled conc files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from “get_labeled_concs”.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>ConnectLabeledConcs object that includes the follwing instances:</p>
+<ul class="simple">
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).</p></li>
+<li><p>numbers (numpy[float]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_label]).</p></li>
+<li><p>ids_label (numpy[int]): Labels. It has [label1, label2, …].</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.ConnectLabeledConcs" title="pyLD.ConnectLabeledConcs">pyLD.ConnectLabeledConcs</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.ConnectLabeledConcs.get_concs">
+<span class="sig-name descname"><span class="pre">get_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectLabeledConcs.get_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Get time developments of the concentration(s) of specified specie(s) within label(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>species</strong> (<em>None / str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.</p></li>
+<li><p><strong>ids_label</strong> (<em>None / int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time developments of concentrations (1D/2D/3D array)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.ConnectLabeledConcs.get_numbers">
+<span class="sig-name descname"><span class="pre">get_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectLabeledConcs.get_numbers" title="Permalink to this definition"></a></dt>
+<dd><p>Get time developments of the number(s) of specified specie(s) within label(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>species</strong> (<em>None / str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.</p></li>
+<li><p><strong>ids_label</strong> (<em>None / int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time developments of number (1D/2D/3D array)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[int])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -178,9 +242,9 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyLD.GenerateClosedVolumesFromUniEM">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">GenerateClosedVolumesFromUniEM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_annot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateClosedVolumesFromUniEM" title="Permalink to this definition"></a></dt>
-<dd><p>Generate volumes from the painted areas in UNI-EM annotator.</p>
+<dt class="sig sig-object py" id="pyLD.GenerateLabeledVolumesFromUniEM">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">GenerateLabeledVolumesFromUniEM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_annot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateLabeledVolumesFromUniEM" title="Permalink to this definition"></a></dt>
+<dd><p>Generate labeled volumes from the painted areas in UNI-EM annotator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>folder_annot</strong> (<em>str</em>) – UNI-EM annotator folder</p>
@@ -193,27 +257,147 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.GenerateClosedVolumesFromUniEM.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateClosedVolumesFromUniEM.generate" title="Permalink to this definition"></a></dt>
-<dd><p>Generate volumes.</p>
+<dt class="sig sig-object py" id="pyLD.GenerateLabeledVolumesFromUniEM.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateLabeledVolumesFromUniEM.generate" title="Permalink to this definition"></a></dt>
+<dd><p>Generate label volumes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mesh_id</strong> (<em>int</em>) – Target mesh id</p></li>
+<li><p><strong>domain_id</strong> (<em>int</em>) – Target domain id</p></li>
 <li><p><strong>dilation_radius</strong> (<em>int</em>) – dilation radius</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <ul class="simple">
-<li><p>new_labels (numpy[int]): Generated labels in voxel space (3D array)</p></li>
-<li><p>ids_new_labels (numpy[int]): Ids of new labels (1D array)</p></li>
+<li><p>label_volume (numpy[int]): Generated labels in voxel space (3D array)</p></li>
+<li><p>label_ids (numpy[int]): Ids of new labels (1D array)</p></li>
 <li><p>ref_volume (numpy[bool]): Referred id in voxel space (3D array)</p></li>
 </ul>
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.GenerateLabeledVolumesFromUniEM.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GenerateLabeledVolumesFromUniEM.save" title="Permalink to this definition"></a></dt>
+<dd><p>save most recently generated info of labeled volumes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>h5_filename</strong> (<em>str</em>) – Output filename in h5</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>h5 file containing:</p>
+<ul class="simple">
+<li><p>’label volume’ (numpy[int]): Generated labels in voxel space (3D array)</p></li>
+<li><p>’label ids’ (numpy[int]): Ids of new labels (1D array)</p></li>
+<li><p>’ref volume’ (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(file)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">GetLabeledConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs" title="Permalink to this definition"></a></dt>
+<dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim</strong> (<em>obj</em>) – RDMESimulation object</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em><em>[</em><em>int</em><em>]</em>) – 3D array that specifies volume_ids</p></li>
+<li><p><strong>domains</strong> (<em>dict</em>) – {‘domain name’, volume_id}</p></li>
+<li><p><strong>surfaces</strong> (<em>dict</em>) – {‘surface_name’, numpy[float]} : Surface areas in voxel space (3D array)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GetLabeledConcs object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.GetLabeledConcs" title="pyLD.GetLabeledConcs">pyLD.GetLabeledConcs</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_label_file">
+<span class="sig-name descname"><span class="pre">exec_label_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_label_file" title="Permalink to this definition"></a></dt>
+<dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_filename</strong> (<em>str</em>) – Filename of label. label_filename or label_volume must be specified.</p></li>
+<li><p><strong>output_filename</strong> (<em>none/str</em>) – If None, get_labeled_concs will give returns below. If specified, it will save a hdf5 file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Instance variables containing:</p>
+<ul class="simple">
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
+<li><p>numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
+<li><p>ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(obj)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_label_volume">
+<span class="sig-name descname"><span class="pre">exec_label_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_label_volume" title="Permalink to this definition"></a></dt>
+<dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label_volume</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Label volume (3D array). id=0 will be ignored. label_filename or label_volume must be specified.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Instance variables containing:</p>
+<ul class="simple">
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
+<li><p>numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
+<li><p>ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(obj)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save time series of moleuclar numbers/concentrations within labeled volumes.
+:param filename: hdf5 filename.
+:type filename: none/str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>Following variables are saved into a hdf5 file.:</p>
+<ul class="simple">
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>species (numpy[obj]): Names of species</p></li>
+<li><p>ids_label (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
+<li><p>number (numpy[int]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_spine]).</p></li>
+<li><p>conc in uM (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_spine]).</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(file)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,32 +433,6 @@ volume (numpy[int/bool]): Target volume</p>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyLD.connect_labeled_concs">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">connect_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.connect_labeled_concs" title="Permalink to this definition"></a></dt>
-<dd><p>Connect the time developments of molecular numbers/concentrations in labeled conc files.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from “get_labeled_concs”.</p></li>
-<li><p><strong>species</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Tuple containing:</p>
-<ul class="simple">
-<li><p>time (numpy[float]): Time in s</p></li>
-<li><p>concs (numpy[float]): Concentration in uM</p></li>
-<li><p>numbers (numpy[int]): Numbers of Molecules</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(tuple)</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -330,35 +488,6 @@ method_smoothing(str): Smoothing method: ‘laplacian’, ‘humphrey’, ‘mut
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(list)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyLD.get_labeled_concs">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_labeled_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_labeled_concs" title="Permalink to this definition"></a></dt>
-<dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lm_filename</strong> (<em>str</em>) – Filename of lm simulation.</p></li>
-<li><p><strong>labels</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Label volume (3D array). id=0 will be ignored.</p></li>
-<li><p><strong>output_filename</strong> (<em>none/str</em>) – If None, get_labeled_concs will give returns below. If specified, it will save a hdf5 file.</p></li>
-<li><p><strong>monitor_species</strong> (<em>none/str</em>) – If None, get_labeled_concs will give no messages in the console. If a moleuclar species is specified, it will show a example result.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Tuple containing:</p>
-<ul class="simple">
-<li><p>num_molecules (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
-<li><p>uMs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
-<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
-<li><p>ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(tuple)</p>
 </dd>
 </dl>
 </dd></dl>
