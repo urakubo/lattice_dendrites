@@ -89,12 +89,12 @@ class BuildAnyShape:
 		#print("len(locs['cytoplasm']) : ", len(self.locs['cytoplasm']))
 		#print("len(locs['psd'])       : ", len(self.locs['psd']))                           
 
-	def add_solute_molecules(self, molecular_name, molecular_number, domain_name):
+	def add_solute_molecules(self, molecular_name, number, domain_name):
 		"""Add solute molecules.
 
 		Args:
 			molecular_name (str): Molecular name
-			molecular_number (int): Number of molecules
+			number (int): Number of molecules
 			domain_name (str): Domain name
 
 		Returns:
@@ -102,9 +102,9 @@ class BuildAnyShape:
 		"""
 
 		particleNum=self.sim.particleMap[molecular_name]
-		for i in random.sample(self.locs[domain_name], molecular_number):
+		for i in random.sample(self.locs[domain_name], number):
 		    self.sim.lattice.addParticle(i[0], i[1], i[2], int(particleNum))
-		self.sim.customAddedParticleList.append((molecular_name, molecular_number))
+		self.sim.customAddedParticleList.append((molecular_name, number))
 		return True
 
 
