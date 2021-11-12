@@ -5,8 +5,9 @@ from .RotateVolume import *
 from .create_surface import *
 from .save_uniem_annotator import *
 
-from .get_labeled_concs import *
-from .GenerateClosedVolumesFromUniEM import *
+from .GetLabeledConcs import *
+from .ConnectLabeledConcs import *
+from .GenerateLabeledVolumesFromUniEM import *
 
 """
 __all__ = ['buildAnyShape','calcSurfaceArea','createVolumeFromReconstruct','rotateVolume']

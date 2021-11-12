@@ -174,68 +174,6 @@ def get_total_concs(lm_filename, species, domain_ids):
 	return timepoints, concs, num_molecules
 
 
-def connect_labeled_concs(filenames, species):
-	"""Connect the time developments of molecular numbers/concentrations in labeled conc files.
-	
-	Args:
-		filenames (str / list[str] / tuple[str]): Generated labeled conc files from "get_labeled_concs".
-		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
-
-	Returns:
-		(tuple): Tuple containing:
-
-		- time (numpy[float]): Time in s
-		- concs (numpy[float]): Concentration in uM
-		- numbers (numpy[int]): Numbers of Molecules
-	"""
-
-	if isinstance(filenames, str):
-	    filenames = [filenames]
-	elif isinstance(filenames, list) | isinstance(filenames, tuple) :
-		pass
-	else:
-		raise ValueError('filenames must be str, list, or tuple.')
-
-	if isinstance(species, str):
-	    species = [species]
-	elif isinstance(species, list) | isinstance(species, tuple) :
-		pass
-	else:
-		raise ValueError('species must be str, list, or tuple.')
-
-
-	for i, fname in enumerate(filenames):
-	    with h5py.File(fname,'r') as f:
-	        t  = np.array( f['t'][()] )
-	        uM = f['conc in uM']
-	        number = f['number']
-	        molecules = list(uM.keys())
-	        # Conc
-	        tmp1 = np.zeros_like( uM[ molecules[0] ][()] )
-	        tmp2 = np.zeros_like( number[ molecules[0] ][()] )
-	        # print('tmp.shape: ', tmp.shape)
-	        for targ in species:
-	            tmp1 += uM[targ][()]
-	            tmp2 += number[targ][()]
-
-	    # Connect
-	    if i == 0:
-	        #print('molecules: ', molecules)
-	        concs   = tmp1
-	        numbers = tmp2
-	        #t[-1] = 10.0
-	        time = t
-	        #print('t: ', t)
-	    else:
-	        #print('uMs.shape : ', uMs.shape)
-	        #print('tmp.shape: ', tmp.shape)
-	        concs   = np.vstack( (concs, tmp1[1:,:]) )
-	        numbers = np.vstack( (numbers, tmp2[1:,:]) )
-	        time    = np.hstack( (time, t[1:]+Ts[-1]) )     
-	    # print('No', i, ', Filename: ', fname)
-	return time, concs, numbers
-
-
 def get_spacing(filename):
 	"""Retrieve spacing from a LM/LM-output file.
 

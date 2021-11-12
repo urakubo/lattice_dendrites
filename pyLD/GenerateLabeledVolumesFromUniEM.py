@@ -13,9 +13,9 @@ from .utils import Params
 
 main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 ##
-class GenerateClosedVolumesFromUniEM():
+class GenerateLabeledVolumesFromUniEM():
 
-	"""Generate volumes from the painted areas in UNI-EM annotator.
+	"""Generate labeled volumes from the painted areas in UNI-EM annotator.
 
 	Args:
 	    folder_annot (str): UNI-EM annotator folder
@@ -28,6 +28,11 @@ class GenerateClosedVolumesFromUniEM():
 			print('folder_annot is not a annotation folder: ', folder_annot)
 			return False
 		self._load_info()
+
+		self.label_volume = []
+		self.label_ids = []
+		self.ref_volume = []
+
 
 	def _check_annot_folder(self):
 		if  os.path.exists(self.annot.skeletons_whole_path) and \
@@ -54,29 +59,29 @@ class GenerateClosedVolumesFromUniEM():
 		print('Existent surface(s): ', ', '.join( self.whole_mesh_names_wo_ext ) )
 		print()
 
-	def generate(self, mesh_id, dilation_radius = 1):
-		"""Generate volumes.
+	def generate(self, domain_id, dilation_radius = 1):
+		"""Generate label volumes.
 
 		Args:
-		    mesh_id (int): Target mesh id
+		    domain_id (int): Target domain id
 		    dilation_radius (int): dilation radius
 
 		Returns:
 			(tuple): Tuple containing:
 
-			- new_labels (numpy[int]): Generated labels in voxel space (3D array) 
-			- ids_new_labels (numpy[int]): Ids of new labels (1D array)
+			- label_volume (numpy[int]): Generated labels in voxel space (3D array) 
+			- label_ids (numpy[int]): Ids of new labels (1D array)
 			- ref_volume (numpy[bool]): Referred id in voxel space (3D array)
 		"""
 
 		# Load volume
 		with h5py.File( self.annot.volume_file, 'r') as f:	
-			volume = f['volume'][()]
-		ref_volume = ( volume == int(mesh_id) ).astype('bool')
-		new_labels = np.zeros_like( ref_volume ).astype(np.int)
+			volume   = f['volume'][()]
+		ref_volume   = ( volume == int(domain_id) ).astype('bool')
+		label_volume = np.zeros_like( ref_volume ).astype(np.int)
 
 		# Generate filenames of surface meshes
-		whole_mesh_filename     = os.path.join(self.annot.surfaces_whole_path, str(mesh_id).zfill(10)+".stl")
+		whole_mesh_filename     = os.path.join(self.annot.surfaces_whole_path, str(domain_id).zfill(10)+".stl")
 		whole_mesh_name_wo_ext  = os.path.splitext(os.path.basename(whole_mesh_filename))[0]
 
 		# Check painted meshes
@@ -99,7 +104,7 @@ class GenerateClosedVolumesFromUniEM():
 		whole_mesh.vertices[:,1] /= self.ph
 		whole_mesh.vertices[:,2] /= self.pz
 
-		ids_new_labels = []
+		label_ids = []
 		for part_mesh_filename, part_mesh_id in zip(part_mesh_filenames, part_mesh_ids) :
 			with open(part_mesh_filename, 'rb') as file:
 				data = pickle.load(file)
@@ -107,7 +112,7 @@ class GenerateClosedVolumesFromUniEM():
 			if closed_mesh.volume is None :
 				continue
 			#
-			ids_new_labels.append(part_mesh_id)
+			label_ids.append(part_mesh_id)
 			v = self._get_volume(closed_mesh)
 
 			# Embed it into a whole gridspace
@@ -126,11 +131,39 @@ class GenerateClosedVolumesFromUniEM():
 			tmp_labels = np.zeros_like( ref_volume, dtype='bool' )
 			tmp_labels[wmin:wmin+wnum , hmin:hmin+hnum, zmin:zmin+znum] = v.astype('bool')
 			tmp_labels = morphology.binary_dilation(tmp_labels, morphology.ball( dilation_radius, dtype='bool' ) )
-			new_labels[tmp_labels & ref_volume] = part_mesh_id
+			label_volume[tmp_labels & ref_volume] = part_mesh_id
 			# new_labels[tmp_labels > 0] = part_mesh_id
 
-		return new_labels, ids_new_labels, ref_volume
+			self.label_volume = label_volume
+			self.label_ids = label_ids
+			self.ref_volume = ref_volume
 
+		return label_volume, label_ids, ref_volume
+
+
+	def save(self, h5_filename):
+		"""save most recently generated info of labeled volumes.
+
+		Args:
+		    h5_filename (str): Output filename in h5
+
+		Returns:
+			(file): h5 file containing:
+
+			- 'label volume' (numpy[int]): Generated labels in voxel space (3D array) 
+			- 'label ids' (numpy[int]): Ids of new labels (1D array)
+			- 'ref volume' (numpy[bool]): Referred id in voxel space (3D array)
+		"""
+
+		if (self.label_volume == []) or (self.label_ids == []) or (self.ref_volume == []):
+			printf('Label volume has not been created.')
+			return False
+
+		with h5py.File(h5_filename, 'w') as f:
+			f['label volume'] = self.label_volume
+			f['label ids']    = self.label_ids
+			f['ref volume']   = self.ref_volume
+		return
 
 
 	def _get_closed_mesh(self, mesh, data):

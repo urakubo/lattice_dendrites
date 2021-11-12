@@ -21,7 +21,7 @@ class BuildAnyShape:
 		surfaces (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
 
 	Returns:
-		(pyLD.buildAnyShape): buildAnyShape object
+		(pyLD.BuildAnyShape): BuildAnyShape object
 	"""
 
 	def __init__(self, sim, volume, domains, surfaces = {}):
