@@ -1,8 +1,8 @@
-===========================================
-Annotate a spine using the UNI-EM annotator
-===========================================
+=============
+Label a spine
+=============
 
-Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' in the pulldown menu 'Annotator'. Label region-of-interests in the UNI-EM annotator. Labeled areas are automatically saved.
+Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label region-of-interests in the UNI-EM annotator. Labeled areas are automatically saved.
 
 .. image:: imgs/UNI-EM_annot2.jpg
    :scale: 50%
@@ -68,4 +68,52 @@ Confirm the successful segmentation in the voxel space by visualizing it.
    :align: center
 
 
+Not using the UNI-EM annotator, you can make the spine-label file by the following script:
+
+.. code-block:: python
+	:linenos:
+	
+	import os
+	import numpy as np
+	import h5py
+	from skimage import morphology
+	from pyLD import *
+
+
+	input_morpho_filename = 'ball_and_stick.h5'
+	output_label_filename = 'labels_ball_and_stick.h5'
+
+
+	def add_shape(volume, object, loc_center):
+		s = np.array(object.shape)
+		c = np.floor(s/2).astype(int)
+		b = loc_center - c
+		e = b + s
+		volume[b[0]:e[0], b[1]:e[1], b[2]:e[2] ] += object
+		volume = (volume > 0).astype(np.uint8)
+		return volume
+
+
+	print('Load morpho file')
+	with h5py.File( input_morpho_filename,'r' ) as f:
+	    vol_dend_not_mito_not_er = f['dendrite not mitochondrion not ER'][()]
+
+
+	print('Label spine')
+	spine_head   = morphology.ball(radius = 12)
+	label_volume = np.zeros_like(vol_dend_not_mito_not_er)
+	label_volume = add_shape(label_volume, spine_head, [48,30,76])
+
+	label_ids     = np.array([1])
+	label_volume = (label_volume > 0) * label_ids[0]
+	ref_volume   = vol_dend_not_mito_not_er ^ label_volume
+
+
+	print('Save label')
+	with h5py.File(output_label_filename, 'a') as f:
+		f['label volume'] = label_volume
+		f['label ids']    = label_ids
+		f['ref volume']   = ref_volume
+
+	
 That is all for annotation.

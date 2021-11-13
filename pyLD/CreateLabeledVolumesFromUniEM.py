@@ -13,9 +13,9 @@ from .utils import Params
 
 main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 ##
-class GenerateLabeledVolumesFromUniEM():
+class CreateLabeledVolumesFromUniEM():
 
-	"""Generate labeled volumes from the painted areas in UNI-EM annotator.
+	"""Create labeled volumes from the painted areas in UNI-EM annotator.
 
 	Args:
 	    folder_annot (str): UNI-EM annotator folder
