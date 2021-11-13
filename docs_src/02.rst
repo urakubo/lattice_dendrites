@@ -5,7 +5,6 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Ubuntu18.04 or Ubuntu20.04
 * Python3.6/Ubuntu18.04 or Python3.8/Ubuntu20.04
 * (pip)
 * (virtualenv)
@@ -27,7 +26,7 @@ On your terminal
 
 Download and file extraction
 ============================
-On your terminal, download LD by executing the following command:
+Download LD to your computer through a command prompt:
 
 .. code-block:: bash
 
@@ -37,7 +36,7 @@ On your terminal, download LD by executing the following command:
 Then locate the 
 
 
-We parepared LM for py3.6/CUDA11.0/ubuntu18.04, you can retrieve it by
+Retrieve LM for py3.6/CUDA11.0/ubuntu18.04 as follows:
 
 .. code-block:: bash
 
