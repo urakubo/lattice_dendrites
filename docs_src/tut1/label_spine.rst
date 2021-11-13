@@ -2,7 +2,8 @@
 Label a spine
 =============
 
-Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label region-of-interests in the UNI-EM annotator. Labeled areas are automatically saved.
+We would like to label a spine to obtain the concentration of a molecule. HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects.
+Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.
 
 .. image:: imgs/UNI-EM_annot2.jpg
    :scale: 50%
@@ -68,7 +69,7 @@ Confirm the successful segmentation in the voxel space by visualizing it.
    :align: center
 
 
-Not using the UNI-EM annotator, you can make the spine-label file by the following script:
+The spiny dendrite has a geometric shape. We can thus programmably label the spine, not using the UNI-EM annotator, as follows.
 
 .. code-block:: python
 	:linenos:

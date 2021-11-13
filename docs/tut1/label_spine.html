@@ -81,7 +81,8 @@
              
   <section id="label-a-spine">
 <h1><span class="section-number">3.2. </span>Label a spine<a class="headerlink" href="#label-a-spine" title="Permalink to this headline"></a></h1>
-<p>Launch UNI-EM and open the ‘annot_ball_and_stick’ folder from ‘Open Annotator Folder’ of the pulldown menu ‘Annotator’. Label region-of-interests in the UNI-EM annotator. Labeled areas are automatically saved.</p>
+<p>We would like to label a spine to obtain the concentration of a molecule. HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects.
+Launch UNI-EM and open the ‘annot_ball_and_stick’ folder from ‘Open Annotator Folder’ of the pulldown menu ‘Annotator’. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.</p>
 <a class="reference internal image-reference" href="../_images/UNI-EM_annot2.jpg"><img alt="../_images/UNI-EM_annot2.jpg" class="align-center" src="../_images/UNI-EM_annot2.jpg" style="width: 599.5px; height: 415.0px;" /></a>
 <p>Convert the labeled areas to the voxel space.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">errno</span>
@@ -127,7 +128,7 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/labels_ball_and_stick.png"><img alt="../_images/labels_ball_and_stick.png" class="align-center" src="../_images/labels_ball_and_stick.png" style="width: 350.0px; height: 329.0px;" /></a>
-<p>Not using the UNI-EM annotator, you can make the spine-label file by the following script:</p>
+<p>The spiny dendrite has a geometric shape. We can thus programmably label the spine, not using the UNI-EM annotator, as follows.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
