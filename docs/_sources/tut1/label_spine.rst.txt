@@ -70,7 +70,7 @@ Confirm the successful segmentation in the voxel space by visualizing it.
    :align: center
 
 
-The spiny dendrite has a geometric shape. We can thus programmably label the spine, not using the UNI-EM annotator, as follows.
+The spine has a geometric shape. We can thus programmably label it, not using the UNI-EM annotator, as follows.
 
 .. code-block:: python
 	:linenos:
