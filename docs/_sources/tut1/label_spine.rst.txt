@@ -20,13 +20,13 @@ Convert the labeled areas to the voxel space.
 	import h5py
 	from pyLD import *
 
-	folder    = 'annot_ball_and_stick'
-	domain_id = 1
+	annot_folder    = 'annot_ball_and_stick'
+	object_id = 1
 	output_label_filename = 'labels_ball_and_stick.h5'
 	output_image_filename = 'labels_ball_and_stick.png'
 
-	c = CreateLabeledVolumesFromUniEM(folder)
-	c.exec(domain_id)
+	c = CreateLabeledVolumesFromUniEM(annot_folder)
+	c.exec(object_id)
 	c.save(output_label_filename)
 
 

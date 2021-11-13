@@ -20,13 +20,12 @@ Convert the labeled areas to the voxel space.
 	import h5py
 	from pyLD import *
 
-	folder    = 'annot_ball_and_stick'
-	domain_id = 1
+	annot_folder    = 'annot_ball_and_stick'
+	object_id = 1
 	output_label_filename = 'labels_ball_and_stick.h5'
-	output_image_filename = 'labels_ball_and_stick.png'
 
-	c = CreateLabeledVolumesFromUniEM(folder)
-	c.exec(domain_id)
+	c = CreateLabeledVolumesFromUniEM(annot_folder)
+	c.exec(object_id)
 	c.save(output_label_filename)
 
 
@@ -44,6 +43,7 @@ Confirm the successful segmentation in the voxel space by visualizing it.
 	from mayavi.api import OffScreenEngine
 	from pyLD import *
 
+	output_image_filename = 'labels_ball_and_stick.png'
 	mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
 	mlab.view(90, 90, 300, [ 50, 30, 50 ] )
 
