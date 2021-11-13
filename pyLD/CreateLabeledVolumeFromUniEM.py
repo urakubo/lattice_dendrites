@@ -13,25 +13,76 @@ from .utils import Params
 
 main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 ##
-class CreateLabeledVolumesFromUniEM():
+##
+class LoadLabeledVolume():
+
+	"""Load labeled volumes. A utility class.
+
+	Args:
+	    h5_filename (str): filename in h5
+
+	Returns:
+		(pyLD.LoadLabeledVolumes): LoadLabeledVolumes object containing:
+
+		- 'label_volume' (numpy[int]): Generated labels in voxel space (3D array) 
+		- 'label_ids' (numpy[int]): Ids of new labels (1D array)
+		- 'ref_volume' (numpy[bool]): Referred id in voxel space (3D array)
+	"""
+	def __init__(self, h5_filename):
+		if not isinstance(h5_filename, str):
+			raise ValueError('h5_filename must be str.')
+		self._load(h5_filename)
+
+
+	def _load(self, h5_filename):
+		with h5py.File(h5_filename, 'r') as f:
+			self.label_volume = f['label volume'][()]
+			self.label_ids    = f['label ids'][()]
+			self.ref_volume   = f['ref volume'][()]
+
+##
+class CreateLabeledVolumeFromUniEM():
 
 	"""Create labeled volumes from the painted areas in UNI-EM annotator.
 
 	Args:
 	    folder_annot (str): UNI-EM annotator folder
 	Returns:
-		(pyLD. GenerateClosedVolumesFromUniEM):  GenerateClosedVolumesFromUniEM object
+		(pyLD.GenerateClosedVolumesFromUniEM):  GenerateClosedVolumesFromUniEM object
 	"""
 	def __init__(self, folder_annot):
 		self.annot = Params(folder_annot)
 		if self._check_annot_folder() == False:
-			print('folder_annot is not a annotation folder: ', folder_annot)
-			return False
+			raise ValueError('folder_annot is not a annotation folder.')
 		self._load_info()
 
 		self.label_volume = []
 		self.label_ids = []
 		self.ref_volume = []
+
+
+	def save(self, h5_filename):
+		"""save most recently generated info of labeled volumes.
+
+		Args:
+		    h5_filename (str): Output filename in h5
+
+		Returns:
+			(file): h5 file containing:
+
+			- 'label volume' (numpy[int]): Generated labels in voxel space (3D array) 
+			- 'label ids' (numpy[int]): Ids of new labels (1D array)
+			- 'ref volume' (numpy[bool]): Referred id in voxel space (3D array)
+		"""
+
+		if (self.label_volume == []) or (self.label_ids == []) or (self.ref_volume == []):
+			raise ValueError('Label volume has not been created.')
+
+		with h5py.File(h5_filename, 'w') as f:
+			f['label volume'] = self.label_volume
+			f['label ids']    = self.label_ids
+			f['ref volume']   = self.ref_volume
+		return
 
 
 	def _check_annot_folder(self):
@@ -138,30 +189,6 @@ class CreateLabeledVolumesFromUniEM():
 		self.label_ids = label_ids
 		self.ref_volume = ref_volume
 
-
-	def save(self, h5_filename):
-		"""save most recently generated info of labeled volumes.
-
-		Args:
-		    h5_filename (str): Output filename in h5
-
-		Returns:
-			(file): h5 file containing:
-
-			- 'label volume' (numpy[int]): Generated labels in voxel space (3D array) 
-			- 'label ids' (numpy[int]): Ids of new labels (1D array)
-			- 'ref volume' (numpy[bool]): Referred id in voxel space (3D array)
-		"""
-
-		if (self.label_volume == []) or (self.label_ids == []) or (self.ref_volume == []):
-			printf('Label volume has not been created.')
-			return False
-
-		with h5py.File(h5_filename, 'w') as f:
-			f['label volume'] = self.label_volume
-			f['label ids']    = self.label_ids
-			f['ref volume']   = self.ref_volume
-		return
 
 
 	def _get_closed_mesh(self, mesh, data):

@@ -201,8 +201,8 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumesFromUniEM">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">CreateLabeledVolumesFromUniEM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_annot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumesFromUniEM" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumeFromUniEM">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">CreateLabeledVolumeFromUniEM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_annot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumeFromUniEM" title="Permalink to this definition"></a></dt>
 <dd><p>Create labeled volumes from the painted areas in UNI-EM annotator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -212,12 +212,12 @@
 <dd class="field-even"><p>GenerateClosedVolumesFromUniEM object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(pyLD. GenerateClosedVolumesFromUniEM)</p>
+<dd class="field-odd"><p>(pyLD.GenerateClosedVolumesFromUniEM)</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumesFromUniEM.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumesFromUniEM.exec" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumeFromUniEM.exec">
+<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumeFromUniEM.exec" title="Permalink to this definition"></a></dt>
 <dd><p>Generate label volumes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -242,8 +242,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumesFromUniEM.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumesFromUniEM.save" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.CreateLabeledVolumeFromUniEM.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabeledVolumeFromUniEM.save" title="Permalink to this definition"></a></dt>
 <dd><p>save most recently generated info of labeled volumes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -402,6 +402,29 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.LoadLabeledVolume">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">LoadLabeledVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h5_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.LoadLabeledVolume" title="Permalink to this definition"></a></dt>
+<dd><p>Load labeled volumes. A utility class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>h5_filename</strong> (<em>str</em>) – filename in h5</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>LoadLabeledVolumes object containing:</p>
+<ul class="simple">
+<li><p>’label_volume’ (numpy[int]): Generated labels in voxel space (3D array)</p></li>
+<li><p>’label_ids’ (numpy[int]): Ids of new labels (1D array)</p></li>
+<li><p>’ref_volume’ (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(pyLD.LoadLabeledVolumes)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">

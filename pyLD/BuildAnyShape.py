@@ -145,9 +145,9 @@ class BuildAnyShape:
 		if not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(domains, dict) :
-			raise ValueError('domains must be a dict.')
+			raise ValueError('domains must be dict.')
 		elif not isinstance(surfaces, dict) :
-			raise ValueError('surfaces must be a dict.')
+			raise ValueError('surfaces must be dict.')
 		else:
 			return True
 
