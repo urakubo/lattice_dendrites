@@ -81,7 +81,7 @@
              
   <section id="label-a-spine">
 <h1><span class="section-number">3.2. </span>Label a spine<a class="headerlink" href="#label-a-spine" title="Permalink to this headline"></a></h1>
-<p>We would like to label a spine volume to obtain molecular concentration of this region. HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions.</p>
+<p>We would like to label a spine volume to obtain molecular concentration of this region. To enable it, HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions.</p>
 <p>Launch UNI-EM and open the ‘annot_ball_and_stick’ folder from ‘Open Annotator Folder’ of the pulldown menu ‘Annotator’. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.</p>
 <a class="reference internal image-reference" href="../_images/UNI-EM_annot2.jpg"><img alt="../_images/UNI-EM_annot2.jpg" class="align-center" src="../_images/UNI-EM_annot2.jpg" style="width: 599.5px; height: 415.0px;" /></a>
 <p>Convert the labeled areas to the voxel space.</p>
@@ -128,48 +128,47 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/labels_ball_and_stick.png"><img alt="../_images/labels_ball_and_stick.png" class="align-center" src="../_images/labels_ball_and_stick.png" style="width: 350.0px; height: 329.0px;" /></a>
-<p>The spine has a geometric shape. We can thus programmably label it, not using the UNI-EM annotator, as follows.</p>
+<p>The spine has a geometric shape. We can thus programmably label the spine volume, not using the UNI-EM annotator, as follows.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
 <span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">morphology</span>
-<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 5</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span>
-<span class="linenos"> 8</span><span class="n">input_morpho_filename</span> <span class="o">=</span> <span class="s1">&#39;ball_and_stick.h5&#39;</span>
-<span class="linenos"> 9</span><span class="n">output_label_filename</span> <span class="o">=</span> <span class="s1">&#39;labels_ball_and_stick.h5&#39;</span>
+<span class="linenos"> 7</span><span class="n">input_morpho_filename</span> <span class="o">=</span> <span class="s1">&#39;ball_and_stick.h5&#39;</span>
+<span class="linenos"> 8</span><span class="n">output_label_filename</span> <span class="o">=</span> <span class="s1">&#39;labels_ball_and_stick.h5&#39;</span>
+<span class="linenos"> 9</span>
 <span class="linenos">10</span>
-<span class="linenos">11</span>
-<span class="linenos">12</span><span class="k">def</span> <span class="nf">add_shape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">loc_center</span><span class="p">):</span>
-<span class="linenos">13</span>        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="linenos">14</span>        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="linenos">15</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">loc_center</span> <span class="o">-</span> <span class="n">c</span>
-<span class="linenos">16</span>        <span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">s</span>
-<span class="linenos">17</span>        <span class="n">volume</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">]</span> <span class="o">+=</span> <span class="nb">object</span>
-<span class="linenos">18</span>        <span class="n">volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">19</span>        <span class="k">return</span> <span class="n">volume</span>
+<span class="linenos">11</span><span class="k">def</span> <span class="nf">add_shape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">loc_center</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">s</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">loc_center</span> <span class="o">-</span> <span class="n">c</span>
+<span class="linenos">15</span>        <span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">s</span>
+<span class="linenos">16</span>        <span class="n">volume</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">]</span> <span class="o">+=</span> <span class="nb">object</span>
+<span class="linenos">17</span>        <span class="n">volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos">18</span>        <span class="k">return</span> <span class="n">volume</span>
+<span class="linenos">19</span>
 <span class="linenos">20</span>
-<span class="linenos">21</span>
-<span class="linenos">22</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Load morpho file&#39;</span><span class="p">)</span>
-<span class="linenos">23</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span> <span class="n">input_morpho_filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span> <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">24</span>    <span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">21</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Load morpho file&#39;</span><span class="p">)</span>
+<span class="linenos">22</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span> <span class="n">input_morpho_filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span> <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos">23</span>    <span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">24</span>
 <span class="linenos">25</span>
-<span class="linenos">26</span>
-<span class="linenos">27</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Label spine&#39;</span><span class="p">)</span>
-<span class="linenos">28</span><span class="n">spine_head</span>   <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
-<span class="linenos">29</span><span class="n">label_volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend_not_mito_not_er</span><span class="p">)</span>
-<span class="linenos">30</span><span class="n">label_volume</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">label_volume</span><span class="p">,</span> <span class="n">spine_head</span><span class="p">,</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">76</span><span class="p">])</span>
-<span class="linenos">31</span>
-<span class="linenos">32</span><span class="n">label_ids</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
-<span class="linenos">33</span><span class="n">label_volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">label_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos">34</span><span class="n">ref_volume</span>   <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span> <span class="o">^</span> <span class="n">label_volume</span>
+<span class="linenos">26</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Label spine&#39;</span><span class="p">)</span>
+<span class="linenos">27</span><span class="n">spine_head</span>   <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="linenos">28</span><span class="n">label_volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend_not_mito_not_er</span><span class="p">)</span>
+<span class="linenos">29</span><span class="n">label_volume</span> <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">label_volume</span><span class="p">,</span> <span class="n">spine_head</span><span class="p">,</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">76</span><span class="p">])</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="n">label_ids</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+<span class="linenos">32</span><span class="n">label_volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">label_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">33</span><span class="n">ref_volume</span>   <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span> <span class="o">^</span> <span class="n">label_volume</span>
+<span class="linenos">34</span>
 <span class="linenos">35</span>
-<span class="linenos">36</span>
-<span class="linenos">37</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Save label&#39;</span><span class="p">)</span>
-<span class="linenos">38</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output_label_filename</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">39</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_volume</span>
-<span class="linenos">40</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">label_ids</span>
-<span class="linenos">41</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ref volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">ref_volume</span>
+<span class="linenos">36</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Save label&#39;</span><span class="p">)</span>
+<span class="linenos">37</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output_label_filename</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos">38</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_volume</span>
+<span class="linenos">39</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">label_ids</span>
+<span class="linenos">40</span>        <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ref volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">ref_volume</span>
 </pre></div>
 </div>
 <p>That is all for annotation.</p>

@@ -2,7 +2,7 @@
 Label a spine
 =============
 
-We would like to label a spine volume to obtain molecular concentration of this region. HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions. 
+We would like to label a spine volume to obtain molecular concentration of this region. To enable it, HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions. 
 
 Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.
 
@@ -70,7 +70,7 @@ Confirm the successful segmentation in the voxel space by visualizing it.
    :align: center
 
 
-The spine has a geometric shape. We can thus programmably label it, not using the UNI-EM annotator, as follows.
+The spine has a geometric shape. We can thus programmably label the spine volume, not using the UNI-EM annotator, as follows.
 
 .. code-block:: python
 	:linenos:
@@ -79,7 +79,6 @@ The spine has a geometric shape. We can thus programmably label it, not using th
 	import numpy as np
 	import h5py
 	from skimage import morphology
-	from pyLD import *
 
 
 	input_morpho_filename = 'ball_and_stick.h5'
