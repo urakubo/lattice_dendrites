@@ -2,7 +2,7 @@
 Label a spine
 =============
 
-We would like to label a spine volume to obtain molecular concentration of this region. To enable it, HU also developed software, UNI-EM annotator, to label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions. 
+We would like to label a spine volume to obtain molecular concentration of this region. To enable it, HU also developed software, UNI-EM annotator, to manually label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions. 
 
 Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.
 
