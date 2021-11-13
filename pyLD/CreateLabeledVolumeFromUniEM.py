@@ -144,8 +144,7 @@ class CreateLabeledVolumeFromUniEM():
 
 		part_mesh_filenames = glob.glob(part_mesh_name_wildcard)
 		if part_mesh_filenames == [] :
-			print('No paint areas found.')
-			return False
+			raise ValueError('No paint areas found.')
 		part_meshes_wo_ext = [ os.path.splitext(os.path.basename(text))[0] for text in part_mesh_filenames ]
 		part_mesh_ids      = [ int( text.split('-')[1] ) for text in part_meshes_wo_ext ]
 
@@ -175,9 +174,9 @@ class CreateLabeledVolumeFromUniEM():
 			hnum = v.shape[1]
 			znum = v.shape[2]
 
-			print('ID: ', part_mesh_id,' Volume:', closed_mesh.volume)
+			print('ID: ', part_mesh_id,' Volume:', -closed_mesh.volume)
 			print('wnum, hnum, znum : ', wnum, hnum, znum)
-			print('Volume v: ', np.sum(v.astype('int')))
+			print('Volume v: ', np.sum(v.astype('bool')))
 
 			tmp_labels = np.zeros_like( ref_volume, dtype='bool' )
 			tmp_labels[wmin:wmin+wnum , hmin:hmin+hnum, zmin:zmin+znum] = v.astype('bool')
@@ -244,7 +243,7 @@ class CreateLabeledVolumeFromUniEM():
 		grid = pv.StructuredGrid(x, y, z)
 		ugrid = pv.UnstructuredGrid(grid)
 		selection = ugrid.select_enclosed_points(surf, tolerance=0.0, check_surface=False)
-		mask = selection.point_arrays['SelectedPoints'].view(np.bool)
+		mask = selection.point_data['SelectedPoints'].view(np.bool)
 		voxels = mask.reshape([iz.shape[0] , ix.shape[0], iy.shape[0] ])
 		voxels = voxels.transpose((1, 2, 0))
 		return voxels

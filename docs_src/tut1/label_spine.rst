@@ -115,4 +115,4 @@ The spine has a geometric shape. We can thus programmably label the spine volume
 		f['ref volume']   = ref_volume
 
 	
-That is all for annotation.
+That is all for labeling.
