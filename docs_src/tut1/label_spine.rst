@@ -105,7 +105,7 @@ The spine has a geometric shape. We can thus programmably label the spine volume
 	label_volume = np.zeros_like(vol_dend_not_mito_not_er)
 	label_volume = add_shape(label_volume, spine_head, [48,30,76])
 
-	label_ids     = np.array([1])
+	label_ids    = np.array([1])
 	label_volume = (label_volume > 0) * label_ids[0]
 	ref_volume   = vol_dend_not_mito_not_er ^ label_volume
 
