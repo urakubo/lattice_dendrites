@@ -26,7 +26,7 @@ class LoadLabeledVolume():
 
 		- 'label_volume' (numpy[int]): Generated labels in voxel space (3D array) 
 		- 'label_ids' (numpy[int]): Ids of new labels (1D array)
-		- 'ref_volume' (numpy[bool]): Referred id in voxel space (3D array)
+		- 'ref_volume' (numpy[bool]): Reference domain volume in voxel space (3D array)
 	"""
 	def __init__(self, h5_filename):
 		if not isinstance(h5_filename, str):
@@ -72,7 +72,7 @@ class CreateLabeledVolumeFromUniEM():
 
 			- 'label volume' (numpy[int]): Generated labels in voxel space (3D array) 
 			- 'label ids' (numpy[int]): Ids of new labels (1D array)
-			- 'ref volume' (numpy[bool]): Referred id in voxel space (3D array)
+			- 'ref volume' (numpy[bool]): Reference domain volume in voxel space (3D array)
 		"""
 
 		if (self.label_volume == []) or (self.label_ids == []) or (self.ref_volume == []):
@@ -122,7 +122,7 @@ class CreateLabeledVolumeFromUniEM():
 
 			- label_volume (numpy[int]): Generated labels in voxel space (3D array) 
 			- label_ids (numpy[int]): Ids of new labels (1D array)
-			- ref_volume (numpy[bool]): Referred id in voxel space (3D array)
+			- ref_volume (numpy[bool]): Reference domain volume in voxel space (3D array)
 		"""
 
 		# Load volume

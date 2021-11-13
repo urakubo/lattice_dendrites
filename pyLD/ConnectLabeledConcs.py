@@ -11,7 +11,7 @@ class ConnectLabeledConcs:
 	"""Connect the time developments of molecular numbers/concentrations in labeled conc files.
 	
 	Args:
-		label_conc_filenames (str / list[str] / tuple[str]): Generated labeled conc files from "get_labeled_concs".
+		label_conc_filenames (str / list[str] / tuple[str]): Generated labeled conc files from the GetLabeledConcs class.
 
 	Returns:
 		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object that includes the follwing instances:
@@ -57,8 +57,8 @@ class ConnectLabeledConcs:
 		"""Get time developments of the concentration(s) of specified specie(s) within label(s).
 
 		Args:
-			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
-			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
+			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if unspecified.
+			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if unspecified.
 
 		Returns:
 			(numpy[float]): Time developments of concentrations (1D/2D/3D array)

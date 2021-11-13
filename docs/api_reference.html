@@ -142,7 +142,7 @@
 <dd><p>Connect the time developments of molecular numbers/concentrations in labeled conc files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from “get_labeled_concs”.</p>
+<dd class="field-odd"><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from the GetLabeledConcs class.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>ConnectLabeledConcs object that includes the follwing instances:</p>
@@ -165,8 +165,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>species</strong> (<em>None / str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.</p></li>
-<li><p><strong>ids_label</strong> (<em>None / int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.</p></li>
+<li><p><strong>species</strong> (<em>None / str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Molecular species. They are summed if multiple species are specified, and unsummed if unspecified.</p></li>
+<li><p><strong>ids_label</strong> (<em>None / int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Label ids. They are summed if multiple labels are specified, and unsummed if unspecified.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -231,7 +231,7 @@
 <ul class="simple">
 <li><p>label_volume (numpy[int]): Generated labels in voxel space (3D array)</p></li>
 <li><p>label_ids (numpy[int]): Ids of new labels (1D array)</p></li>
-<li><p>ref_volume (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+<li><p>ref_volume (numpy[bool]): Reference domain volume in voxel space (3D array)</p></li>
 </ul>
 </p>
 </dd>
@@ -254,7 +254,7 @@
 <ul class="simple">
 <li><p>’label volume’ (numpy[int]): Generated labels in voxel space (3D array)</p></li>
 <li><p>’label ids’ (numpy[int]): Ids of new labels (1D array)</p></li>
-<li><p>’ref volume’ (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+<li><p>’ref volume’ (numpy[bool]): Reference domain volume in voxel space (3D array)</p></li>
 </ul>
 </p>
 </dd>
@@ -328,15 +328,12 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_label_file">
-<span class="sig-name descname"><span class="pre">exec_label_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_label_file" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_file">
+<span class="sig-name descname"><span class="pre">exec_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_file" title="Permalink to this definition"></a></dt>
 <dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>label_filename</strong> (<em>str</em>) – Filename of label. label_filename or label_volume must be specified.</p></li>
-<li><p><strong>output_filename</strong> (<em>none/str</em>) – If None, get_labeled_concs will give returns below. If specified, it will save a hdf5 file.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>label_filename</strong> (<em>str</em>) – Filename of label. label_filename or label_volume must be specified.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Instance variables containing:</p>
@@ -355,8 +352,8 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_label_volume">
-<span class="sig-name descname"><span class="pre">exec_label_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_label_volume" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec_volume">
+<span class="sig-name descname"><span class="pre">exec_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec_volume" title="Permalink to this definition"></a></dt>
 <dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -417,7 +414,7 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 <ul class="simple">
 <li><p>’label_volume’ (numpy[int]): Generated labels in voxel space (3D array)</p></li>
 <li><p>’label_ids’ (numpy[int]): Ids of new labels (1D array)</p></li>
-<li><p>’ref_volume’ (numpy[bool]): Referred id in voxel space (3D array)</p></li>
+<li><p>’ref_volume’ (numpy[bool]): Reference domain volume in voxel space (3D array)</p></li>
 </ul>
 </p>
 </dd>

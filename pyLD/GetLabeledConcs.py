@@ -90,7 +90,7 @@ class GetLabeledConcs:
 			f['concs in uM'] = data_concs
 
 
-	def exec_label_volume(self, label_volume):
+	def exec_volume(self, label_volume):
 		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
 		Args:
@@ -107,13 +107,12 @@ class GetLabeledConcs:
 		self._exec(label_volume)
 
 
-	def exec_label_file(self, label_filename):
+	def exec_file(self, label_filename):
 
 		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
 		Args:
 			label_filename (str): Filename of label. label_filename or label_volume must be specified.
-			output_filename (none/str): If None, get_labeled_concs will give returns below. If specified, it will save a hdf5 file.
 
 		Returns:
 			(obj): Instance variables containing:

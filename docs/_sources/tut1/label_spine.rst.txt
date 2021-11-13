@@ -10,7 +10,7 @@ Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Fo
    :scale: 50%
    :align: center
 
-Convert the labeled areas to the voxel space.
+Convert the labeled areas to labeled volumes, and save them.
 
 .. code-block:: python
 	:linenos:
