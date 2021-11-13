@@ -59,7 +59,7 @@ class CreateLabeledVolumesFromUniEM():
 		print('Existent surface(s): ', ', '.join( self.whole_mesh_names_wo_ext ) )
 		print()
 
-	def generate(self, domain_id, dilation_radius = 1):
+	def exec(self, domain_id, dilation_radius = 1):
 		"""Generate label volumes.
 
 		Args:
@@ -134,11 +134,9 @@ class CreateLabeledVolumesFromUniEM():
 			label_volume[tmp_labels & ref_volume] = part_mesh_id
 			# new_labels[tmp_labels > 0] = part_mesh_id
 
-			self.label_volume = label_volume
-			self.label_ids = label_ids
-			self.ref_volume = ref_volume
-
-		return label_volume, label_ids, ref_volume
+		self.label_volume = label_volume
+		self.label_ids = label_ids
+		self.ref_volume = ref_volume
 
 
 	def save(self, h5_filename):

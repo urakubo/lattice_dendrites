@@ -21,16 +21,13 @@ Convert the labeled areas to the voxel space.
 	from pyLD import *
 
 	folder    = 'annot_ball_and_stick'
-	volume_id = 1
-	output_filename = 'labels_ball_and_stick.h5'
+	domain_id = 1
+	output_label_filename = 'labels_ball_and_stick.h5'
+	output_image_filename = 'labels_ball_and_stick.png'
 
-	const = GenerateClosedVolumesFromUniEM(folder)
-	vol, ids, ref_vol = const.generate(volume_id)
-	with h5py.File(output_filename, 'w') as f:
-		f.create_dataset('labels', data=vol)
-		f['vol'] = vol
-		f['ids'] = ids
-		f['ref_vol'] = ref_vol
+	c = CreateLabeledVolumesFromUniEM(folder)
+	c.exec(domain_id)
+	c.save(output_label_filename)
 
 
 .. image:: imgs/painted.jpg
@@ -43,23 +40,21 @@ Confirm the successful segmentation in the voxel space by visualizing it.
 .. code-block:: python
 	:linenos:
 
-	output_image_filename = 'labels_ball_and_stick.png'
-	xypitch = 0.02
-
 	from mayavi import mlab
 	from mayavi.api import OffScreenEngine
-	import trimesh
+	from pyLD import *
 
 	mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
 	mlab.view(90, 90, 300, [ 50, 30, 50 ] )
 
-	for id in ids:
-		vert, face,_ ,_ = create_surface(xypitch, vol == id)
-		vert = vert / xypitch
+	pitch = 1
+	for id in c.label_ids:
+		vert, face,_ ,_ = create_surface(pitch, c.label_volume == id)
+		vert = vert
 		mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=tuple(np.random.rand(3))  , opacity=0.3)
 
-	vert, face, _, _ = create_surface(xypitch, ref_vol ^ (vol > 0))
-	vert = vert / xypitch
+	vert, face, _, _ = create_surface(pitch, c.ref_volume ^ (c.label_volume > 0))
+	vert = vert
 	mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=(0.8,0.8,0.8)  , opacity=0.3)
 	mlab.savefig(output_image_filename)
 	mlab.show()
@@ -107,7 +102,7 @@ The spine has a geometric shape. We can thus programmably label the spine volume
 
 	label_ids    = np.array([1])
 	label_volume = (label_volume > 0) * label_ids[0]
-	ref_volume   = vol_dend_not_mito_not_er ^ label_volume
+	ref_volume   = vol_dend_not_mito_not_er
 
 
 	print('Save label')
