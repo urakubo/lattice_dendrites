@@ -2,96 +2,114 @@ import numpy as np
 import h5py
 import os, sys, shutil, errno
 import subprocess as s
-import configparser
-import json
+from .utils import get_species_names, get_spacing
 
-ABSOLUTE_PATH    = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_INI_FILE = os.path.join(ABSOLUTE_PATH, 'repeat_default.ini')
+
+def null_event(lattice, sys_param, usr_params):
+	return lattice, usr_params
+
+
+def activate(lattice, sys_param, usr_param):
+	s    = sys_param['species']
+	label_volume = sys_param['label volume']
+	src  = usr_param['source species']
+	dst  = usr_param['destination species']
+	prob = usr_param['probability']
+	ids  = usr_param['target label ids']
+
+	# lattice, source_molecule, dest_molecule, probability, domain = None, label_volume=):
+	lattice[lattice == s[src]] = s[dst]
+	return lattice, usr_params
+
 
 class RepeatRun:
 
-	def __init__(self, config_filename):
-		if not os.path.exists(config_filename):
-			raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_filename)
+	def __init__(self,
+		template_lm_file=None,\
+		lm_option    = ['-r', '1', '-sp', '-sl','lm::rdme::MpdRdmeSolver']
+		exec_periods = [1]
+		exec_events  = [null_event]
+		usr_params   = None
+		output_dir='results',\
+		output_prefix=None,\
+		output_num_zero_padding=4, \
+		labeled_volume_file=None\
+		):
 
-		# Load
-		# https://stackoverflow.com/questions/6107149/how-can-i-set-default-values-for-safeconfigparser
-		# self.c = configparser.ConfigParser()
-		c = configparser.SafeConfigParser()
-		c.read(DEFAULT_INI_FILE, encoding='utf-8')
-		c.read(config_filename , encoding='utf-8')
+		self.template_lm_file = template_lm_file
+		self.lm_option        = lm_option
+		self.exec_periods     = exec_periods
+		self.exec_events      = exec_actions
+		self.usr_params       = usr_params
+		self.output_dir       = output_lmfile_dir
+		self.output_prefix    = output_prefix
+		self.output_num_zero_padding = output_num_zero_padding
+		self.labeled_volume_file = labeled_volume_file
 
-		self.template_lm_file = c['Input']['template_lm_file']
-		self.directory        = c['Output']['directory']
-		self.lmfile_prefix    = c['Output']['lmfile_prefix']
-		self.num_zero_padding = c.getint('Output', 'num_zero_padding')
-		self.num_repeats      = c.getint('Fixed repeat', 'number')
-		self.period           = c.getfloat('Fixed repeat', 'period')
-		self.periods          = np.array( json.loads(c.get("Variable repeat","periods")) )
-		self.command          = json.loads(c.get("Simulation setting","command").replace("'", '"'))
+
+	def _load_label_file(self, sys_param):
+		with h5py.File(self.labeled_volume_file, 'r') as f:
+			sys_param['label volume'] = f['label volume'][()]
+			sys_param['label ids']    = f['label ids'][()]
+		return sys_param
+
 
 	def exec(self):
-
+		self.exec_periods     = list(self.exec_periods)
+		self.exec_events      = list(self.exec_events)
+		self.usr_params       = list(self.usr_params)
 		if not os.path.isfile(self.template_lm_file):
-			raise ValueError('No lm file.')
-		elif (np.all(self.periods > 0)):
-			periods = self.periods
-		elif (self.period > 0) and (self.num_repeats > 0):
-			periods = np.ones(self.num_repeats) * self.period
-		else :
-			raise ValueError('Invalid num_repeats/period/periods.')
+			raise ValueError('No template lm file.')
+		elif len(self.exec_periods) != len(self.exec_events):
+			raise ValueError('Num of exec_periods must be the same as the num of exec_events.')
+		elif not isinstance(self.usr_params, dict) or (len(self.usr_params) != len(self.exec_events)):
+			raise ValueError('usr_params must be dict or a list of dict that has the same length with exec_events.')
 
-		os.makedirs(self.directory, exist_ok=True)
+		# Set system params
+		sys_param = {}
+		sys_param['time'] = 0.0
+		sys_param['s']    = get_species_names(self.template_lm_file)
+		if self.labeled_volume_file != None:
+			sys_param = self._load_label_file(sys_param)
 
+		os.makedirs(self.output_dir, exist_ok=True)
 		filename = ''
 		filename_prerun = ''
-		for i, period in enumerate(list(periods)):
+		for i, (period, event) in enumerate(zip(self.exec_periods, self.exec_events)):
 
 			# Make lm file from a original template
-			filename = os.path.join(self.directory, self.lmfile_prefix + str(i).zfill(self.num_zero_padding)+'.lm')
+			file = self.output_prefix + str(i).zfill(self.output_num_zero_padding)+'.lm'
+			filename = os.path.join(self.output_dir, file)
 			shutil.copy(self.template_lm_file, filename)
 
 			# Copy results from the previous run
-			if i != 0:
+			sys_param['i'] = i
+			if i > 0:
+				sys_param['time'] += self.exec_periods[i-1]
 				with h5py.File(filename_prerun,'r') as f:
 				    TimePoints = f['Simulations']['0000001']['Lattice'].keys()
 				    TimePoints.sort()
-				    print('Time ID: ', TimePoints[-1])
-				    Lattice = f['Simulations']['0000001']['Lattice'][TimePoints[-1]][()]
-				    SpeciesCount = f['Simulations']['0000001']['SpeciesCounts'][-1,:]
-				with h5py.File(filename,'a') as g:
-					g['Model']['Diffusion']['Lattice'][()] = Lattice
-					g['Model']['Reaction']['InitialSpeciesCounts'][()] = SpeciesCount
+				    lattice = f['Simulations']['0000001']['Lattice'][TimePoints[-1]][()]
+				    species_count = f['Simulations']['0000001']['SpeciesCounts'][-1,:]
+			else:
+				with h5py.File(filename,'r') as f:
+					lattice = f['Model']['Diffusion']['Lattice'][()]
+					species_count = f['Model']['Reaction']['InitialSpeciesCounts'][()] = SpeciesCount
 
 			# Modify the lm file
-			t = str(period) + '     '
-			t = t[:4]
+			if isinstance(self.usr_params, dict):
+				lattice, self.usr_params = event(lattice, sys_param, self.usr_params )
+			else:
+				lattice, _ = event(lattice, sys_param, self.usr_params[i] )
+
 			with h5py.File(filename,'a') as f:
-				f['Parameters'].attrs['maxTime'] = t
+				f['Parameters'].attrs['maxTime'] = str(period).ljust(4)[:4]
+				f['Model']['Diffusion']['Lattice'][()] = lattice
+				f['Model']['Reaction']['InitialSpeciesCounts'][()] = SpeciesCount
 
-
-#        Lattice[Lattice == S['NR']] = S['NR_Glu']
-#        SpeciesCount[S['NR_Glu']-1] = SpeciesCount[S['NR_Glu']-1]\
-#                                      + SpeciesCount[S['NR']-1]
-#        SpeciesCount[S['NR']-1]     = 0
-
-
-# (Remove, add, replace) in (domains, surfaces)
-# Manual operation
-
-# f = h5py.File(filename_prerun[-1],'r')
-# mnames  = f['Parameters'].attrs['speciesNames'].decode().split(',')
-# S = {}
-# for i in range(len(mnames)):
-#    S[mnames[i]] = i+1
-# test = f['Parameters'].attrs['maxTime']
-# f.close()
-
-
-
-			command = self.command + ['-f', filename]
+			command = ['lm', '-f', filename]
+			command.extend(self.lm_option)
 			print(' '.join(command))
 			s.call(command)
-
 			filename_prerun = filename
 
