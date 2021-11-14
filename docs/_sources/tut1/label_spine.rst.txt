@@ -12,19 +12,10 @@ Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Fo
 
 Convert the labeled areas to labeled volumes, and save them.
 
-.. code-block:: python
-	:linenos:
 
-	import sys, os
-	from pyLD import *
-
-	annot_folder      = 'annot_ball_and_stick'
-	object_id         = 1
-	output_label_file = 'labels_ball_and_stick.h5'
-
-	c = CreateLabeledVolumeFromUniEM(annot_folder)
-	c.exec(object_id)
-	c.save(output_label_file)
+.. literalinclude:: ../../tutorial/1/main2_label_spine1.py
+   :language: python
+   :linenos:
 
 
 .. image:: imgs/painted.jpg
@@ -34,33 +25,10 @@ Convert the labeled areas to labeled volumes, and save them.
 
 Confirm the successful segmentation in the voxel space by visualizing it.
 
-.. code-block:: python
-	:linenos:
 
-	import sys, os
-	import numpy as np
-	from mayavi import mlab
-	from pyLD import *
-
-	input_label_file  = 'labels_ball_and_stick.h5'
-	output_image_file = 'labels_ball_and_stick.png'
-
-	c = LoadLabeledVolume(input_label_file)
-
-	mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
-	mlab.view(90, 90, 300, [ 50, 30, 50 ] )
-
-	pitch = 1
-	for id in c.label_ids:
-		vert, face,_ ,_ = create_surface(pitch, c.label_volume == id)
-		vert = vert
-		mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=tuple(np.random.rand(3)), opacity=0.3)
-
-	vert, face, _, _ = create_surface(pitch, c.ref_volume ^ (c.label_volume > 0))
-	vert = vert
-	mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=(0.8,0.8,0.8), opacity=0.3)
-	mlab.savefig(output_image_file)
-	mlab.show()
+.. literalinclude:: ../../tutorial/1/main2_label_spine2.py
+   :language: python
+   :linenos:
 
 
 .. image:: imgs/labels_ball_and_stick.png
@@ -70,49 +38,10 @@ Confirm the successful segmentation in the voxel space by visualizing it.
 
 The spine has a geometric shape. We can thus programmably label the spine volume, not using the UNI-EM annotator, as follows.
 
-.. code-block:: python
-	:linenos:
-	
-	import os
-	import numpy as np
-	import h5py
-	from skimage import morphology
+
+.. literalinclude:: ../../tutorial/1/main2_label_spine3.py
+   :language: python
+   :linenos:
 
 
-	input_morpho_filename = 'ball_and_stick.h5'
-	output_label_filename = 'labels_ball_and_stick.h5'
-
-
-	def add_shape(volume, object, loc_center):
-		s = np.array(object.shape)
-		c = np.floor(s/2).astype(int)
-		b = loc_center - c
-		e = b + s
-		volume[b[0]:e[0], b[1]:e[1], b[2]:e[2] ] += object
-		volume = (volume > 0).astype(np.uint8)
-		return volume
-
-
-	print('Load morpho file')
-	with h5py.File( input_morpho_filename,'r' ) as f:
-	    vol_dend_not_mito_not_er = f['dendrite not mitochondrion not ER'][()]
-
-
-	print('Label spine')
-	spine_head   = morphology.ball(radius = 12)
-	label_volume = np.zeros_like(vol_dend_not_mito_not_er)
-	label_volume = add_shape(label_volume, spine_head, [48,30,76])
-
-	label_ids    = np.array([1])
-	label_volume = (label_volume > 0) * label_ids[0]
-	ref_volume   = vol_dend_not_mito_not_er
-
-
-	print('Save label')
-	with h5py.File(output_label_filename, 'a') as f:
-		f['label volume'] = label_volume
-		f['label ids']    = label_ids
-		f['ref volume']   = ref_volume
-
-	
 That is all for labeling.

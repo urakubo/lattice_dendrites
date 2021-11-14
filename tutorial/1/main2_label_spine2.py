@@ -2,13 +2,10 @@ import sys, os
 import numpy as np
 from mayavi import mlab
 from mayavi.api import OffScreenEngine
-
-main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(os.path.join(main_dir, '..', 'github_pages'))
 from pyLD import *
 
-input_label_file  = 'labels_ball_and_stick.h5'
-output_image_file = 'labels_ball_and_stick.png'
+input_label_file  = 'files/labels_ball_and_stick.h5'
+output_image_file = 'imgs/labels_ball_and_stick.png'
 
 c = LoadLabeledVolume(input_label_file)
 
@@ -26,5 +23,3 @@ vert = vert
 mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=(0.8,0.8,0.8)  , opacity=0.3)
 mlab.savefig(output_image_file)
 mlab.show()
-
-

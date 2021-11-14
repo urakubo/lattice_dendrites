@@ -1,12 +1,11 @@
-
 import sys, os
 import numpy as np
 import h5py
 from skimage import morphology
 
 
-input_morpho_filename = 'ball_and_stick.h5'
-output_label_filename = 'labels_ball_and_stick.h5'
+input_morpho_filename = 'files/ball_and_stick.h5'
+output_label_filename = 'files/labels_ball_and_stick.h5'
 
 
 def add_shape(volume, object, loc_center):
@@ -39,4 +38,3 @@ with h5py.File(output_label_filename, 'a') as f:
 	f['label volume'] = label_volume
 	f['label ids']    = label_ids
 	f['ref volume']   = ref_volume
-
