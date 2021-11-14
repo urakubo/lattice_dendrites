@@ -4,8 +4,8 @@ Overview
 
 Morphologically realistics shapes of cellular structures, in particular, dendrites.
 
+LM is orignally designed for Python2, and reconfigured for Python3.
+
 LD is designed to work together with UNI-EM annotator.
 
 
-
-Sphinxのよくある利用例
