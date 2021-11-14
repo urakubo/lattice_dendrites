@@ -76,7 +76,6 @@ bound_areas = bound_areas * vol_dend_not_mito_not_er
 
 
 # Save
-
 filename = 'files/ball_and_stick.h5'
 
 with h5py.File(filename,'w') as w:
