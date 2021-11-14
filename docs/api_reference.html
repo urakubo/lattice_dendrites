@@ -410,7 +410,7 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 <dd class="field-odd"><p><strong>h5_filename</strong> (<em>str</em>) – filename in h5</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>LoadLabeledVolumes object containing:</p>
+<dd class="field-even"><p><p>LoadLabeledVolumes object that contains the following instance variables:</p>
 <ul class="simple">
 <li><p>’label_volume’ (numpy[int]): Generated labels in voxel space (3D array)</p></li>
 <li><p>’label_ids’ (numpy[int]): Ids of new labels (1D array)</p></li>
@@ -422,6 +422,45 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 <dd class="field-odd"><p>(pyLD.LoadLabeledVolumes)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.RepeatRun">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">RepeatRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">usr_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix=None,</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">labeled_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RepeatRun" title="Permalink to this definition"></a></dt>
+<dd><p>Repeat simulation runs. Output of each run is set to be a inital state of the next run.
+Users can modify the initial state (4D array; 3D volume + 16 species space),
+which can be considered as event function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>RepeatRun object that contains the following instance variables:</p>
+<ul class="simple">
+<li><p>’template_lm_file’ (str): Template lm file</p></li>
+<li><p>’lm_option’ (list): Optional arguments passing to lm</p></li>
+<li><p>’exec_periods’ (list[float]): Simulation period in each run</p></li>
+<li><p>’exec_events’ (list[obj]): Event function to modify the lattice space before each run</p></li>
+<li><p>’usr_params’ (dict/list[dict]): Usr parameters passing to each event function</p></li>
+<li><p>’output_dir’ (str): Directory that stores simulation results</p></li>
+<li><p>’output_prefix’ (str): Prefix of output lm filenames that stores simulation results</p></li>
+<li><p>’output_num_zero_padding’ (int): Number of zero padding in output lm filenames</p></li>
+<li><p>’labeled_volume_file’ (str): labeled volume file (optional)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<a class="reference internal" href="#pyLD.RepeatRun" title="pyLD.RepeatRun">pyLD.RepeatRun</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.RepeatRun.exec">
+<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RepeatRun.exec" title="Permalink to this definition"></a></dt>
+<dd><p>Execute repeat runs,</p>
+<p>Args:</p>
+<dl class="simple">
+<dt>Returns: bool</dt><dd><p>(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

@@ -22,7 +22,7 @@ class LoadLabeledVolume():
 	    h5_filename (str): filename in h5
 
 	Returns:
-		(pyLD.LoadLabeledVolumes): LoadLabeledVolumes object containing:
+		(pyLD.LoadLabeledVolumes): LoadLabeledVolumes object that contains the following instance variables:
 
 		- 'label_volume' (numpy[int]): Generated labels in voxel space (3D array) 
 		- 'label_ids' (numpy[int]): Ids of new labels (1D array)
