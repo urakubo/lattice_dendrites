@@ -6,6 +6,25 @@ from .utils import get_species_names, get_spacing
 
 
 def null_event(lattice, sys_param, event_param):
+	"""Null event function in RepeatRun. Any operation will not be executed.
+	Initial state of molelcules can be modified in (lattice; 4D array, 3D volume + 16 species space).
+
+	Args:
+		lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
+		sys_param (dict): System parameters that contains
+			- 'i' (int): Exec id,
+			- 'time' (float): Start time
+			- 'species' (dict): Connection between a molecular name and its id
+			- 'label volume' (numpy[int]): Label volume if specified (3D array)
+			- 'label ids' (numpy[int]): Label ids if specified (1D array)
+		event_param (dict):  It contains user-defined parameters for event function
+
+	Returns: Tuple containing:
+
+		- lattice: (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
+		- event_param: (dict): User-defined values can be passed to the next event
+	"""
+
 	i    = sys_param['i']
 	time = sys_param['time']
 	print('\nNull event at: {:g}, Current time: {:.3f}\n'.format(i, time))

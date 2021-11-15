@@ -31,7 +31,7 @@ class ConnectLabeledConcs:
 		else:
 			raise ValueError('label_conc_filenames must be str, list, or tuple.')
 
-		# Species names, ids_spine
+		# Species names, label_ids
 		self.filenames = label_conc_filenames
 		with h5py.File(self.filenames[0],'r') as f:
 			self.species   = list(f['species'][()])

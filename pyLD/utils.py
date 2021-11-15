@@ -122,6 +122,46 @@ def num_to_uM(num_molecules, num_voxels, spacing):
 	return conc
 
 
+def connect_total_concs(lm_filenames, species, domain_ids):
+	"""Connect time developments of the number and concentration of specified molecules.
+	Note that concentrations are simply obtained by the total numbers of molecules divided by the volume of a specified domain(s).
+
+	Args:
+		lm_filenames (str / list[str] / tuple[str]): Filename(s) of lm simulation.
+		species (str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified.
+		domain_ids (int / list[int] / tuple[int]): Target domain ids. They are summed if multiple domains are specified.
+
+	Returns:
+		(tuple): Tuple containing:
+
+		- timepoints (numpy[float]): Time in s
+		- concs (numpy[float]): Concentration in uM
+		- numbers (numpy[int]): Numbers of Molecules
+	"""
+	# Check arguments
+	if isinstance(lm_filenames, str):
+	    label_conc_filenames = [label_conc_filenames]
+	elif isinstance(lm_filenames, list) | isinstance(lm_filenames, tuple) :
+		pass
+	else:
+		raise ValueError('lm_filenames must be str, list, or tuple.')
+
+
+	# Timepoints
+	for i, fname in enumerate(lm_filenames):
+	    t, c, n = get_total_concs(fname, species=species, domain_ids=domain_ids)
+	    if i == 0:
+	        timepoints = t
+	        concs      = c
+	        numbers    = n
+	    else:
+	        timepoints = np.hstack( (timepoints, t[1:]+timepoints[-1]) )
+	        concs      = np.concatenate([concs   , c[1:] ], axis=0)
+	        numbers    = np.concatenate([numbers , n[1:] ], axis=0)
+
+	return timepoints, concs, numbers
+
+
 def get_total_concs(lm_filename, species, domain_ids):
 	"""Get time developments of the number and concentration of specified molecules.
 	Note that concentrations are simply obtained by the total numbers of molecules divided by the volume of a specified domain(s).
@@ -134,7 +174,7 @@ def get_total_concs(lm_filename, species, domain_ids):
 	Returns:
 		(tuple): Tuple containing:
 
-		- time (numpy[float]): Time in s
+		- timepoints (numpy[float]): Time in s
 		- concs (numpy[float]): Concentration in uM
 		- numbers (numpy[int]): Numbers of Molecules
 	"""
@@ -158,21 +198,21 @@ def get_total_concs(lm_filename, species, domain_ids):
 
 	with h5py.File(lm_filename, 'r') as file:
 		timepoints = file['Simulations']['0000001']['LatticeTimes'][()]
-		num_molecules = file['Simulations']['0000001']['SpeciesCounts'][()]
+		numbers = file['Simulations']['0000001']['SpeciesCounts'][()]
 		spacing = file['Model']['Diffusion'].attrs['latticeSpacing']
 		mnames  = file['Parameters'].attrs['speciesNames'].decode().split(',')
 		volume  = file['Model']['Diffusion']['LatticeSites'][()]
 
 	ids = [i for i, key in enumerate(mnames) if key in species ]
-	num_molecules = np.sum(num_molecules[:, ids], axis = 1)
+	numbers = np.sum(numbers[:, ids], axis = 1)
 
 	num_voxels  = 0
 	for domain_id in domain_ids:
 		num_voxels += np.count_nonzero(volume == domain_id)
 
-	concs = num_to_uM(num_molecules, num_voxels, spacing)
+	concs = num_to_uM(numbers, num_voxels, spacing)
 
-	return timepoints, concs, num_molecules
+	return timepoints, concs, numbers
 
 
 def get_spacing(filename):
