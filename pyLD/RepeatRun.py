@@ -5,11 +5,11 @@ import subprocess as s
 from .utils import get_species_names, get_spacing
 
 
-def null_event(lattice, sys_param, event_params):
+def null_event(lattice, sys_param, event_param):
 	i    = sys_param['i']
 	time = sys_param['time']
 	print('\nNull event at: {:g}, Current time: {:.3f}\n'.format(i, time))
-	return lattice, usr_params
+	return lattice, event_param
 
 
 def activate(lattice, sys_param, event_param):
@@ -17,8 +17,9 @@ def activate(lattice, sys_param, event_param):
 	time = sys_param['time']
 	print('\nActivate event at: {:g}, Current time: {:.3f}\n'.format(i, time))
 
-	s    = event_param['species']
+	s    = sys_param['species']
 	label_volume = sys_param['label volume']
+
 	src  = event_param['source species']
 	dst  = event_param['destination species']
 	prob = event_param['probability']
