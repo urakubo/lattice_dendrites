@@ -132,26 +132,26 @@ class GetLabeledConcs:
 		self.s = get_species_names(self.lm_file)
 		self.spacing = get_spacing(self.lm_file)
 
-		label_ids, nums_label_voxels = np.unique(label_volume, return_counts=True)
+		label_ids, nums_label_voxels = np.unique(self.label_volume, return_counts=True)
 		label_ids          = label_ids[1:] #  0 was removed.
 		nums_label_voxels  = nums_label_voxels[1:]
 
 		targ_spine_labels = []
-		labels_flat = np.ravel(label_volume)
+		labels_flat = np.ravel(self.label_volume)
 		for label_id in label_ids:
 		    targ_spine_label = np.where( (labels_flat == label_id) )
 		    targ_spine_labels.append( targ_spine_label )
 
 		# Time frames
-		with h5py.File(self.lm_filename,'r') as file:
+		with h5py.File(self.lm_file,'r') as file:
 			timepoints = file['Simulations']['0000001']['LatticeTimes'][()]
 			frames = [key for key in file['Simulations']['0000001']['Lattice'].keys()]
 		frames.sort()
 
 		# Monitor messages
 		if self.monitor_species != None:
-		    print('file :', lm_filename)
-		    print('Label ids : ', label_ids)
+		    print('file :', self.lm_file)
+		    print('Label ids : ', self.label_ids)
 		    print('Species    : ', ', '.join(list(self.s.keys())))
 
 
@@ -167,7 +167,7 @@ class GetLabeledConcs:
 			    num_molecules_time_i[Targ] = [0 for i in range(max(label_ids)+1)]
 
 			#
-			with h5py.File(self.lm_filename,'r') as file:
+			with h5py.File(self.lm_file,'r') as file:
 			    particles = file['Simulations']['0000001']['Lattice'][f][:,:,:,:]
 
 			#

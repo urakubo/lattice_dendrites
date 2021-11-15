@@ -87,7 +87,7 @@ class RepeatRun:
 			raise ValueError('No template lm file.')
 		elif len(self.exec_periods) != len(self.exec_events):
 			raise ValueError('Num of exec_periods must be the same as the num of exec_events.')
-		elif not isinstance(self.usr_params, dict) and (len(self.usr_params) != len(self.exec_events)):
+		elif not isinstance(self.event_params, dict) and (len(self.event_params) != len(self.exec_events)):
 			raise ValueError('usr_params must be dict or a list/tuple of dict that has the same length with exe_events')
 
 		# Set system params
