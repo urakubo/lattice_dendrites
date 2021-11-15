@@ -11,29 +11,29 @@ class GetLabeledConcs:
 	"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
 	Args:
-		sim (obj): RDMESimulation object
-		volume (numpy[int]): 3D array that specifies volume_ids
-		domains (dict): {'domain name', volume_id}
-		surfaces (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
+		lm_file (str): Target lm file
+		monitor_species (str): Target molecule to monitor
 
 	Returns:
-		(pyLD.GetLabeledConcs): GetLabeledConcs object
+		(pyLD.GetLabeledConcs): GetLabeledConcs object that contains the instance variables
+		
+			(obj): Instance variables containing:
+
+		- timepoints (numpy[float]): Timepoints (s)
+		- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+		- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
+		- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
 	"""
-	def  __init__(self,lm_filename, monitor_species = None):
+	def  __init__(self, lm_file = None, monitor_species = None):
 
-		# Check arguments
-		if not isinstance(lm_filename, str) :
-			raise ValueError("lm_filename must be str.")
-
-		self.lm_filename = lm_filename
+		self.lm_file = lm_file
 		self.monitor_species = monitor_species
-		self.s = get_species_names(lm_filename)
-		self.spacing = get_spacing(lm_filename)
 
 		self.timepoints = []
 		self.concs = []
-		self.num_molecules = []
-		self.ids_label = []
+		self.numbers = []
+		self.label_ids = []
+		self.label_volume = None
 
 
 	def _count_molecules(self, particles, targ_spine_labels, s):
@@ -61,13 +61,13 @@ class GetLabeledConcs:
 			- timepoints (numpy[float]): Timepoints (s)
 			- species (numpy[obj]): Names of species
 			- ids_label (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
-			- number (numpy[int]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_spine]).
-			- conc in uM (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_spine]).
+			- number (numpy[int]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, label_ids]).
+			- conc in uM (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, label_ids]).
 		"""
 		if not isinstance(filename, str):
 			raise ValueError('filename is not str.')
-		elif (self.timepoints == []) or (self.concs == []) or (self.numbers == []) or (self.ids_label == []):
-			raise ValueError('No labeled concs. exec_label_volume or exec_label_file.')
+		elif (self.timepoints == []) or (self.concs == []) or (self.numbers == []) or (self.label_ids == []):
+			raise ValueError('No labeled volume info.')
 
 		data_numbers = []
 		data_concs  = []
@@ -84,67 +84,62 @@ class GetLabeledConcs:
 		print('Savefile : ', filename)
 		with h5py.File(filename, 'w') as f:
 			f['timepoints'] = self.timepoints
-			f['ids_label']  = self.ids_label
+			f['label_ids']  = self.label_ids
 			f['species']    = species
 			f['numbers']    = data_numbers
 			f['concs in uM'] = data_concs
 
 
-	def exec_volume(self, label_volume):
-		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
-
-		Args:
-			label_volume (numpy[int/bool]): Label volume (3D array). id=0 will be ignored. label_filename or label_volume must be specified.
-
-		Returns:
-			(obj): Instance variables containing:
-
-			- timepoints (numpy[float]): Timepoints (s)
-			- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
-			- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-			- ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
-		"""
-		self._exec(label_volume)
-
-
-	def exec_file(self, label_filename):
+	def load_label_volume(self, label_file):
 
 		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 
 		Args:
-			label_filename (str): Filename of label. label_filename or label_volume must be specified.
+			label_file (str): Filename of label. label_filename or label_volume must be specified.
 
 		Returns:
-			(obj): Instance variables containing:
-
-			- timepoints (numpy[float]): Timepoints (s)
-			- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
-			- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-			- ids_spine (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+			(bool): True or False
 		"""
-		if isinstance(label_filename, str) :
-			with h5py.File(label_filename,'r') as f:
-				label_volume = f['label volume'][()]
+		if isinstance(label_file, str) :
+			with h5py.File(label_file,'r') as f:
+				self.label_volume = f['label volume'][()]
 		else:
-			print('label_filename must be str.')
-			return False
+			raise ValueError('label_file must be str.')
 
-		self._exec(label_volume)
+		return True
 
-	def _exec(self, label_volume):
+
+	def exec(self):
+		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
+
+		Args:
+
+		Returns:
+			(obj): Instance variables:
+
+			- timepoints (numpy[float]): Timepoints (s)
+			- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+			- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
+			- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+		"""
 
 		# Check arguments
-		if not isinstance(label_volume, np.ndarray) or (label_volume.ndim != 3) or (label_volume.dtype not in NUMPY_INTEGERS):
+		if not isinstance(self.lm_file, str) :
+			raise ValueError("lm_file must be str.")
+		elif not isinstance(self.label_volume, np.ndarray) or (self.label_volume.ndim != 3) or (self.label_volume.dtype not in NUMPY_INTEGERS):
 			raise ValueError('label_volume must be a integer 3D np.ndarray.')
 
-		ids_label, nums_label_voxels = np.unique(label_volume, return_counts=True)
-		ids_label          = ids_label[1:] #  0 was removed.
+		self.s = get_species_names(self.lm_file)
+		self.spacing = get_spacing(self.lm_file)
+
+		label_ids, nums_label_voxels = np.unique(label_volume, return_counts=True)
+		label_ids          = label_ids[1:] #  0 was removed.
 		nums_label_voxels  = nums_label_voxels[1:]
 
 		targ_spine_labels = []
 		labels_flat = np.ravel(label_volume)
-		for id_label in ids_label:
-		    targ_spine_label = np.where( (labels_flat == id_label) )
+		for label_id in label_ids:
+		    targ_spine_label = np.where( (labels_flat == label_id) )
 		    targ_spine_labels.append( targ_spine_label )
 
 		# Time frames
@@ -156,8 +151,8 @@ class GetLabeledConcs:
 		# Monitor messages
 		if self.monitor_species != None:
 		    print('file :', lm_filename)
-		    print('Label ids : ', ids_label)
-		    print('Species    : ', ', '.join(list(S.keys())))
+		    print('Label ids : ', label_ids)
+		    print('Species    : ', ', '.join(list(self.s.keys())))
 
 
 		# Get molecules in labeled volumes at each timepoint
@@ -169,7 +164,7 @@ class GetLabeledConcs:
 			#
 			num_molecules_time_i = {}
 			for Targ in self.s.keys():
-			    num_molecules_time_i[Targ] = [0 for i in range(max(ids_label)+1)]
+			    num_molecules_time_i[Targ] = [0 for i in range(max(label_ids)+1)]
 
 			#
 			with h5py.File(self.lm_filename,'r') as file:
@@ -192,6 +187,6 @@ class GetLabeledConcs:
 		self.timepoints = timepoints
 		self.concs = concs
 		self.numbers = numbers
-		self.ids_label = ids_label
+		self.label_ids = label_ids
 
 

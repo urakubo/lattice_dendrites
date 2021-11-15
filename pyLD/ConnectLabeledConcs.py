@@ -35,7 +35,7 @@ class ConnectLabeledConcs:
 		self.filenames = label_conc_filenames
 		with h5py.File(self.filenames[0],'r') as f:
 			self.species   = list(f['species'][()])
-			self.ids_label = f['ids_label'][()]
+			self.label_ids = f['label_ids'][()]
 
 		# Timepoints
 		for i, fname in enumerate(self.filenames):
@@ -53,20 +53,20 @@ class ConnectLabeledConcs:
 		        self.numbers    = np.concatenate([self.numbers , n[1:,:,:] ], axis=0)
 
 
-	def get_concs(self, species=None, ids_label=None):
+	def get_concs(self, species=None, label_ids=None):
 		"""Get time developments of the concentration(s) of specified specie(s) within label(s).
 
 		Args:
-			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if unspecified.
-			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if unspecified.
+			species (None / str / list[str] / tuple[str]): Target molecular species. They are summed if multiple species are specified, and unsummed if unspecified.
+			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are summed if multiple labels are specified, and unsummed if unspecified.
 
 		Returns:
 			(numpy[float]): Time developments of concentrations (1D/2D/3D array)
 		"""
 
-		species_id, label_id = self._check_arguments(species, ids_label)
+		species_id, label_id = self._check_arguments(species, label_ids)
 
-		if (species != None) and (ids_label != None):
+		if (species != None) and (label_ids != None):
 			concs = self.concs[:,species_id,label_id]
 			if concs.ndim == 3:
 				concs = np.sum(concs, axis=(1,2))
@@ -74,7 +74,7 @@ class ConnectLabeledConcs:
 				concs = np.sum(concs, axis=1)
 		elif (species != None):
 			concs = np.sum(self.concs[:,species_id,:], axis=(1))
-		elif (ids_label != None):
+		elif (label_ids != None):
 			concs = np.sum(self.concs[:,:,label_id], axis=(2))
 		else:
 			concs = self.concs
@@ -82,20 +82,20 @@ class ConnectLabeledConcs:
 		return concs
 
 
-	def get_numbers(self, species=None, ids_label=None):
+	def get_numbers(self, species=None, label_ids=None):
 		"""Get time developments of the number(s) of specified specie(s) within label(s).
 
 		Args:
-			species (None / str / list[str] / tuple[str]): Molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
-			ids_label (None / int / list[int] / tuple[int]): Label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
+			species (None / str / list[str] / tuple[str]): Target molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
+			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
 
 		Returns:
 			(numpy[int]): Time developments of number (1D/2D/3D array)
 		"""
 
-		species_id, label_id = self._check_arguments(species, ids_label)
+		species_id, label_id = self._check_arguments(species, label_ids)
 
-		if (species != None) and (ids_label != None):
+		if (species != None) and (label_ids != None):
 			numbers = self.numbers[:,species_id,label_id]
 			if numbers.ndim == 3:
 				numbers = np.sum(numbers, axis=(1,2))
@@ -103,7 +103,7 @@ class ConnectLabeledConcs:
 				numbers = np.sum(numbers, axis=1)
 		elif (species != None):
 			numbers = np.sum(self.numbers[:,species_id,:], axis=(1))
-		elif (ids_label != None):
+		elif (label_ids != None):
 			numbers = np.sum(self.numbers[:,:,label_id], axis=(2))
 		else:
 			numbers = self.numbers
@@ -111,7 +111,7 @@ class ConnectLabeledConcs:
 		return numbers
 
 
-	def _check_arguments(self, species, ids_label):
+	def _check_arguments(self, species, label_ids):
 
 		# Check arguments
 		if isinstance(species, str):
@@ -121,12 +121,12 @@ class ConnectLabeledConcs:
 		else:
 			raise ValueError('species must be None, str, list, or tuple.')
 
-		if isinstance(ids_label, int):
-		    ids_label = [ids_label]
-		elif (ids_label == None) or isinstance(ids_label, list) or isinstance(ids_label, tuple) :
+		if isinstance(label_ids, int):
+		    label_ids = [label_ids]
+		elif (label_ids == None) or isinstance(label_ids, list) or isinstance(label_ids, tuple) :
 			pass
 		else:
-			raise ValueError('ids_label must be None, int, list, or tuple.')
+			raise ValueError('label_ids must be None, int, list, or tuple.')
 
 
 		if (species != None):
@@ -134,8 +134,8 @@ class ConnectLabeledConcs:
 		else:
 			species_id = None
 
-		if (ids_label != None):
-			label_id = [id for id, i in enumerate(self.ids_label) if i in ids_label ]
+		if (label_ids != None):
+			label_id = [id for id, i in enumerate(self.label_ids) if i in label_ids ]
 		else:
 			label_id = None
 
