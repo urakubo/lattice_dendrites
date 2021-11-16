@@ -3,7 +3,7 @@ Tutorial 2: realistic dendrite
 ==============================
 
 We utilized a schematic shape of spiny dendrite in tutorial 1,
-but any shape can be incorpolated through LD.
+but can incorporate any shape.
 In pariticular, LD has utility functions to incorporate
 morphologically realistic shapes of cell from Reconstruct [1]_ .
 
