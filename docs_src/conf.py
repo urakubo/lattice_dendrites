@@ -79,3 +79,12 @@ napoleon_attr_annotations = True
 # https://stackoverflow.com/questions/46263274/how-can-i-prevent-sphinx-from-displaying-the-full-path-to-my-class
 #add_module_names = False
 
+# https://github.com/sphinx-contrib/video/issues
+# Video must be located at docs\tut1\_static\photobleach.mp4
+from distutils.dir_util import copy_tree
+copy_tree("./tut1/_static", "../docs/tut1/_static")
+
+# import shutil
+# shutil.copytree("./test1", "./test2")
+# 新しくフォルダを作成してコピーする場合
+# すでにあるフォルダにコピーしようとするとエラーがでる
