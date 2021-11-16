@@ -15,6 +15,5 @@ Visualization 2: mayavi
 
 .. video:: _static/photobleach.mp4
    :autoplay:
-   :nocontrols:
 
 That is all for visualzation 2.
