@@ -13,7 +13,7 @@ Visualization 2: mayavi
    :caption: 61_video_photobleach.py
 
 
-.. video:: imgs/photobleach.mp4
+.. video:: _static/photobleach.mp4
    :width: 500
    :height: 300
    :autoplay:
