@@ -104,7 +104,7 @@ def lmpad(volume):
 	volume  = np.pad(volume, padding)
 	return volume
 
-def num_to_uM(num_molecules, num_voxels, spacing):
+def num_to_uM(num_molecules, num_voxels, spacing_in_m):
 	"""Get concentration in uM from the number(s) of molecules.
 
 	Args:
@@ -116,11 +116,29 @@ def num_to_uM(num_molecules, num_voxels, spacing):
 	"""
 	NA = 6.022e23
 	number_per_1umol = NA /(1e6)
-	volume_in_L = num_voxels * spacing * spacing * spacing * 1000
+	volume_in_L = num_voxels * spacing_in_m * spacing_in_m * spacing_in_m * 1000
 	number_per_1uM = number_per_1umol * volume_in_L
 	conc = num_molecules / number_per_1uM
 	return conc
 
+
+def uM_to_num(conc_in_uM, num_voxels, spacing_in_m):
+	"""Get the number(s) of molecules from the concentration(s) in uM.
+
+	Args:
+		conc_in_uM (int/float/numpy[int/float]): Conc(s) of molecules
+		num_voxels (int/float/numpy[int/float]): Number(s) of voxels.
+		spacing_in_m (int/float): Spacing per lattice.
+	Returns:
+		(int/numpy[int]): number of molecules
+	"""
+	NA = 6.022e23
+	number_per_1umol = NA /(1e6)
+	volume_in_L = num_voxels * spacing_in_m * spacing_in_m * spacing_in_m * 1000
+	number_per_1uM = number_per_1umol * volume_in_L
+	number = conc_in_uM * number_per_1uM
+	number = np.int(np.floor(number))
+	return number
 
 def connect_total_concs(lm_filenames, species, domain_ids):
 	"""Connect time developments of the number and concentration of specified molecules.

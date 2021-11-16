@@ -14,7 +14,7 @@ class ConnectLabeledConcs:
 		label_conc_filenames (str / list[str] / tuple[str]): Generated labeled conc files from the GetLabeledConcs class.
 
 	Returns:
-		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object that includes the follwing instances:
+		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object that has the follwing instances:
 
 		- timepoints (numpy[float]): Timepoints (s)
 		- concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).

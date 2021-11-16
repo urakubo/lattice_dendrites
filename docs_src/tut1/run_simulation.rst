@@ -2,37 +2,30 @@
 Run simulation
 ==============
 
-The following code 
+We would lienk to keep "models/ball_and_stick.lm" as a template, and store the simulation reults in "results/run_ball_and_stick.lm". We can realize it from the command prompt as follows.
 
-.. code-block:: python
-	:linenos:
+.. code-block:: bash
 
-	import h5py
-	import numpy as np
-	import os, sys, shutil
-	import subprocess as s
-
-	filename_lm     = 'morph/ball_and_stick.lm'
-	filename_prerun = 'results/prerun_ball_and_stick.lm'
-
-	if os.path.isfile(filename_prerun):
-	    print('Prerun file was removed.')
-	    os.remove(filename_prerun)
-
-	print('Create prerun file: ', filename_prerun)
-	shutil.copy(filename_lm, filename_prerun)
-
-	com = ['lm','-r', '1', '-sp', '-sl','lm::rdme::MpdRdmeSolver','-f', filename_prerun]
-	print(' '.join(com))
-	s.call(com)
+	$ mkdir results
+	$ cp models/ball_and_stick.lm results/run_ball_and_stick.lm
+	$ lm -r 1 -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
 
 
-.. code-block:: python
-	:linenos:
+We can also arrage the above as a Python script as follows.
 
-	gpu_id = '0,1'
-	num_GPUs = '2'
-	num_CPUs = '2'
-	com = ['lm','-g', gpu_id, '-gr', num_GPUs,'-cr', num_CPUs, '-sl','lm::rdme::MGPUMpdRdmeSolver','-f', filename_prerun]
+.. literalinclude:: ../../tutorial/1/41_single_run.py
+   :language: python
+   :linenos:
+   :caption: 41_single_run.py
 
-今回は、index.rstの中身は必要ないので、一旦全て削除します。
+
+In many cases, such a single run would not satisfy the aim of simulation. The repeat of runs is wrapped in the following code.
+
+
+.. literalinclude:: ../../tutorial/1/42_repeat_run.py
+   :language: python
+   :linenos:
+   :caption: 42_repeat_run.py
+
+
+That is all for simulation run.

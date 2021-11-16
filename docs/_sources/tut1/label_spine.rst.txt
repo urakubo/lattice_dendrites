@@ -13,9 +13,10 @@ Launch UNI-EM and open the 'annot_ball_and_stick' folder from 'Open Annotator Fo
 Convert the labeled areas to labeled volumes, and save them.
 
 
-.. literalinclude:: ../../tutorial/1/main2_label_spine1.py
+.. literalinclude:: ../../tutorial/1/21_convert_label.py
    :language: python
    :linenos:
+   :caption: 21_convert_label.py
 
 
 .. image:: imgs/painted.jpg
@@ -26,9 +27,10 @@ Convert the labeled areas to labeled volumes, and save them.
 Confirm the successful segmentation in the voxel space by visualizing it.
 
 
-.. literalinclude:: ../../tutorial/1/main2_label_spine2.py
+.. literalinclude:: ../../tutorial/1/22_show_label.py
    :language: python
    :linenos:
+   :caption: 22_show_label.py
 
 
 .. image:: imgs/labels_ball_and_stick.png
@@ -39,9 +41,10 @@ Confirm the successful segmentation in the voxel space by visualizing it.
 The spine has a geometric shape. We can thus programmably label the spine volume, not using the UNI-EM annotator, as follows.
 
 
-.. literalinclude:: ../../tutorial/1/main2_label_spine3.py
+.. literalinclude:: ../../tutorial/1/23_create_label.py
    :language: python
    :linenos:
+   :caption: 23_create_label.py
 
 
 That is all for labeling.

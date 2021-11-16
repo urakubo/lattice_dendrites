@@ -67,7 +67,7 @@ class RepeatRun:
 		- 'output_dir' (str): Directory that stores simulation results
 		- 'output_prefix' (str): Prefix of output lm filenames that stores simulation results
 		- 'output_num_zero_padding' (int): Number of zero padding in output lm filenames
-		- 'labeled_volume_file' (str): labeled volume file (optional)
+		- 'label_volume_file' (str): labeled volume file (optional)
 	"""
 	def __init__(self,
 		template_lm_file = None,
@@ -78,7 +78,7 @@ class RepeatRun:
 		output_dir    = 'results',
 		output_prefix = '',
 		output_num_zero_padding = 4,
-		labeled_volume_file = None
+		label_volume_file = None
 		):
 
 		self.template_lm_file = template_lm_file
@@ -89,7 +89,7 @@ class RepeatRun:
 		self.output_dir       = output_dir
 		self.output_prefix    = output_prefix
 		self.output_num_zero_padding = output_num_zero_padding
-		self.labeled_volume_file = labeled_volume_file
+		self.label_volume_file = label_volume_file
 
 
 	def exec(self):
@@ -114,7 +114,7 @@ class RepeatRun:
 		sys_param = {}
 		sys_param['time'] = 0.0
 		sys_param['species'] = get_species_names(self.template_lm_file)
-		if self.labeled_volume_file != None:
+		if self.label_volume_file != None:
 			sys_param = self._load_label_file(sys_param)
 
 		os.makedirs(self.output_dir, exist_ok=True)
@@ -179,7 +179,7 @@ class RepeatRun:
 
 
 	def _load_label_file(self, sys_param):
-		with h5py.File(self.labeled_volume_file, 'r') as f:
+		with h5py.File(self.label_volume_file, 'r') as f:
 			sys_param['label volume'] = f['label volume'][()]
 			sys_param['label ids']    = f['label ids'][()]
 		return sys_param

@@ -145,7 +145,7 @@
 <dd class="field-odd"><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Generated labeled conc files from the GetLabeledConcs class.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>ConnectLabeledConcs object that includes the follwing instances:</p>
+<dd class="field-even"><p><p>ConnectLabeledConcs object that has the follwing instances:</p>
 <ul class="simple">
 <li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
 <li><p>concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).</p></li>
@@ -191,6 +191,67 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Time developments of number (1D/2D/3D array)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.ConnectTotalConcs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectTotalConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectTotalConcs" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain time developments of the total numbers/concentrations of target molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Simulated lm files.</p></li>
+<li><p><strong>domain_ids</strong> (<em>int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Target domain ids. They are summed if multiple domains are specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>ConnectTotalConcs object that has the follwing instances:</p>
+<ul class="simple">
+<li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
+<li><p>concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).</p></li>
+<li><p>numbers (numpy[float]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_label]).</p></li>
+<li><p>ids_label (numpy[int]): Labels. It has [label1, label2, …].</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.ConnectTotalConcs" title="pyLD.ConnectTotalConcs">pyLD.ConnectTotalConcs</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.ConnectTotalConcs.get_concs">
+<span class="sig-name descname"><span class="pre">get_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectTotalConcs.get_concs" title="Permalink to this definition"></a></dt>
+<dd><p>Get time developments of the concentration(s) of specified specie(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>species</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Target molecular species. They are summed if multiple species are specified.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time developments of concentrations (1D array)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(numpy[float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.ConnectTotalConcs.get_numbers">
+<span class="sig-name descname"><span class="pre">get_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectTotalConcs.get_numbers" title="Permalink to this definition"></a></dt>
+<dd><p>Get time developments of the number(s) of specified specie(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>species</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Target molecular species. They are summed if multiple species are specified.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time developments of number (1D array)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(numpy[int])</p>
@@ -425,7 +486,7 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.RepeatRun">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">RepeatRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">labeled_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RepeatRun" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">RepeatRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RepeatRun" title="Permalink to this definition"></a></dt>
 <dd><p>Repeat simulation runs. Output of each run is set to be a inital state of the next run.
 Users can modify the initial state (4D array; 3D volume + 16 species space),
 which can be considered as event function.</p>
@@ -441,7 +502,7 @@ which can be considered as event function.</p>
 <li><p>’output_dir’ (str): Directory that stores simulation results</p></li>
 <li><p>’output_prefix’ (str): Prefix of output lm filenames that stores simulation results</p></li>
 <li><p>’output_num_zero_padding’ (int): Number of zero padding in output lm filenames</p></li>
-<li><p>’labeled_volume_file’ (str): labeled volume file (optional)</p></li>
+<li><p>’label_volume_file’ (str): labeled volume file (optional)</p></li>
 </ul>
 </p>
 </dd>
@@ -714,7 +775,7 @@ Initial state of molelcules can be modified in (lattice; 4D array, 3D volume + 1
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.num_to_uM">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">num_to_uM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_molecules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_voxels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.num_to_uM" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">num_to_uM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_molecules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_voxels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing_in_m</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.num_to_uM" title="Permalink to this definition"></a></dt>
 <dd><p>Get concentration in uM from the number(s) of molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -827,6 +888,27 @@ This is aimed to directly connect pyLD-generated surfaces with UNI-EM annotator.
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(numpy[bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.uM_to_num">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">uM_to_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conc_in_uM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_voxels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing_in_m</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.uM_to_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number(s) of molecules from the concentration(s) in uM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conc_in_uM</strong> (<em>int/float/numpy</em><em>[</em><em>int/float</em><em>]</em>) – Conc(s) of molecules</p></li>
+<li><p><strong>num_voxels</strong> (<em>int/float/numpy</em><em>[</em><em>int/float</em><em>]</em>) – Number(s) of voxels.</p></li>
+<li><p><strong>spacing_in_m</strong> (<em>int/float</em>) – Spacing per lattice.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of molecules</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(int/numpy[int])</p>
 </dd>
 </dl>
 </dd></dl>

@@ -81,34 +81,74 @@
              
   <section id="run-simulation">
 <h1><span class="section-number">3.4. </span>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline"></a></h1>
-<p>The following code</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">h5py</span>
+<p>We would lienk to keep “models/ball_and_stick.lm” as a template, and store the simulation reults in “results/run_ball_and_stick.lm”. We can realize it from the command prompt as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir results
+$ cp models/ball_and_stick.lm results/run_ball_and_stick.lm
+$ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
+</pre></div>
+</div>
+<p>We can also arrage the above as a Python script as follows.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">41_single_run.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">filename_lm</span>     <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.lm&#39;</span>
+<span class="linenos"> 5</span><span class="n">filename_run</span>    <span class="o">=</span> <span class="s1">&#39;results/run_ball_and_stick.lm&#39;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename_run</span><span class="p">):</span>
+<span class="linenos"> 8</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_run</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Run file was removed.&#39;</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create run file: &#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">13</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename_lm</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;-sp&#39;</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">]</span>
+<span class="linenos">16</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">com</span><span class="p">))</span>
+<span class="linenos">17</span><span class="n">s</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>In many cases, such a single run would not satisfy the aim of simulation. The repeat of runs is wrapped in the following code.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">42_repeat_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
-<span class="linenos"> 4</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 4</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="n">filename_lm</span>     <span class="o">=</span> <span class="s1">&#39;morph/ball_and_stick.lm&#39;</span>
-<span class="linenos"> 7</span><span class="n">filename_prerun</span> <span class="o">=</span> <span class="s1">&#39;results/prerun_ball_and_stick.lm&#39;</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename_prerun</span><span class="p">):</span>
-<span class="linenos">10</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prerun file was removed.&#39;</span><span class="p">)</span>
-<span class="linenos">11</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_prerun</span><span class="p">)</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create prerun file: &#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">)</span>
-<span class="linenos">14</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename_lm</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">)</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;-sp&#39;</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">]</span>
-<span class="linenos">17</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">com</span><span class="p">))</span>
-<span class="linenos">18</span><span class="n">s</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">sys_param</span><span class="p">,</span> <span class="n">event_param</span><span class="p">):</span>
+<span class="linenos"> 7</span>	<span class="n">i</span>    <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">]</span>
+<span class="linenos"> 8</span>	<span class="n">time</span> <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+<span class="linenos"> 9</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Remove event at: </span><span class="si">{:g}</span><span class="s1">, Current time: </span><span class="si">{:.3f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>	<span class="n">target_volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">event_param</span><span class="p">[</span><span class="s1">&#39;target label id&#39;</span><span class="p">]</span> <span class="p">)</span>
+<span class="linenos">12</span>	<span class="n">tmp_lattice</span> <span class="o">=</span> <span class="n">lattice</span>
+<span class="linenos">13</span>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lattice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]):</span>
+<span class="linenos">14</span>		<span class="n">tmp_lattice</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,:,:,</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">15</span>		<span class="n">tmp_lattice</span><span class="p">[</span><span class="n">target_volume</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">16</span>		<span class="n">lattice</span><span class="p">[:,:,:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_lattice</span>
+<span class="linenos">17</span>	<span class="k">return</span> <span class="n">lattice</span><span class="p">,</span> <span class="n">event_param</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="n">r</span> <span class="o">=</span> <span class="n">RepeatRun</span><span class="p">()</span>
+<span class="linenos">21</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span> <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
+<span class="linenos">22</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>  <span class="o">=</span> <span class="p">[</span><span class="n">null_event</span><span class="p">,</span> <span class="n">remove</span><span class="p">]</span>
+<span class="linenos">23</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;species&#39;</span><span class="p">:</span> <span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;target label id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="linenos">24</span><span class="n">r</span><span class="o">.</span><span class="n">template_lm_file</span>    <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick_YFP.lm&#39;</span>
+<span class="linenos">25</span><span class="n">r</span><span class="o">.</span><span class="n">labeled_volume_file</span> <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
+<span class="linenos">26</span><span class="n">r</span><span class="o">.</span><span class="n">output_dir</span>          <span class="o">=</span> <span class="s1">&#39;results_photobleach&#39;</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c1">#GPU_ids  = &#39;0,1&#39;</span>
+<span class="linenos">29</span><span class="c1">#num_GPUs = &#39;2&#39;</span>
+<span class="linenos">30</span><span class="c1">#num_CPUs = &#39;2&#39;</span>
+<span class="linenos">31</span><span class="c1">#r.lm_option   = [&#39;-g&#39;, GPU_ids, &#39;-gr&#39;, num_GPUs,&#39;-cr&#39;, num_CPUs, &#39;-sl&#39;,&#39;lm::rdme::MGPUMpdRdmeSolver&#39;]</span>
+<span class="linenos">32</span><span class="n">r</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">gpu_id</span> <span class="o">=</span> <span class="s1">&#39;0,1&#39;</span>
-<span class="linenos">2</span><span class="n">num_GPUs</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
-<span class="linenos">3</span><span class="n">num_CPUs</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
-<span class="linenos">4</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="n">gpu_id</span><span class="p">,</span> <span class="s1">&#39;-gr&#39;</span><span class="p">,</span> <span class="n">num_GPUs</span><span class="p">,</span><span class="s1">&#39;-cr&#39;</span><span class="p">,</span> <span class="n">num_CPUs</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MGPUMpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_prerun</span><span class="p">]</span>
-</pre></div>
 </div>
-<p>今回は、index.rstの中身は必要ないので、一旦全て削除します。</p>
+<p>That is all for simulation run.</p>
 </section>
 
 

@@ -12,3 +12,12 @@ They are steps how to simulate signals in LD/LM.
 	tut1/run_simulation
 	tut1/visualization1_matplotlib
 	tut1/visualization2_mayavi
+
+
+Please prepare the following script beforehand.
+
+.. literalinclude:: ../tutorial/1/tut1_functions.py
+   :language: python
+   :linenos:
+   :caption: tut1_functions.py
+

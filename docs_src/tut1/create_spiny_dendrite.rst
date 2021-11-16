@@ -9,15 +9,15 @@ We first designed a schematics shape of spiny dendrite.
    :align: center
 
 
-.. literalinclude:: ../../tutorial/1/main1_create_dend1.py
+.. literalinclude:: ../../tutorial/1/11_create_dend.py
    :language: python
    :linenos:
+   :caption: 11_create_dend.py
 
-
-.. literalinclude:: ../../tutorial/1/main1_create_dend2.py
+.. literalinclude:: ../../tutorial/1/12_show_dend.py
    :language: python
    :linenos:
-
+   :caption: 12_show_dend.py
 
 .. image:: imgs/ball_and_stick.png
    :scale: 50%
