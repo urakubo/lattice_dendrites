@@ -12,11 +12,13 @@ def null_event(lattice, sys_param, event_param):
 	Args:
 		lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
 		sys_param (dict): System parameters that contains
+
 			- 'i' (int): Exec id,
 			- 'time' (float): Start time
-			- 'species' (dict): Connection between a molecular name and its id
-			- 'label volume' (numpy[int]): Label volume if specified (3D array)
-			- 'label ids' (numpy[int]): Label ids if specified (1D array)
+			- 'species' (dict): Molecular names that have their own ids
+			- 'label volume' (numpy[int]): Label volume if specified (3D array, optional)
+			- 'label ids' (numpy[int]): Label ids if specified (1D array, optional)
+
 		event_param (dict):  It contains user-defined parameters for event function
 
 	Returns: Tuple containing:

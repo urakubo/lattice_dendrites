@@ -9,7 +9,8 @@ from .GetLabeledConcs import *
 from .ConnectLabeledConcs import *
 from .ConnectAnalysis import *
 from .ConnectTotalConcs import *
-from .CreateLabeledVolumeFromUniEM import *
+from .CreateLabelVolumeFromUniEM import *
+from .LoadLabelVolume import *
 from .RepeatRun import *
 
 """

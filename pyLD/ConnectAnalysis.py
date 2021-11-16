@@ -1,11 +1,11 @@
 import numpy as np
 import h5py
 import os, sys
-from .utils import get_species_names, get_spacing, num_to_uM
+from .utils import get_species_names
 
 
 class ConnectAnalysis:
-	"""Enable user-defined analyses on the time developments of molecules from a series of lm files.
+	"""Enable user-defined analyses on the spatio-temporal dynamics of molecules from a series of lm files.
 	
 	Args:
 		lm_files (str / list[str] / tuple[str]): Simulated lm files.
@@ -43,12 +43,27 @@ class ConnectAnalysis:
 		self.start_time        = 0.0
 
 	def exec(self):
-		"""Execute repeats
+		"""Trace the time development of voxel space.
+		At each time step, the 4D variable "lattice" (3D + 16 slots) is passed to a user defined function "event",
+		and users can analyze the lattice on their own use. The parameter file "event_param" is 
 
 		Args:
 
+			lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
+			sys_param (dict): System parameters that contains
+
+			- 'id' (int): Timepoint id
+			- 'time' (float): Current time
+			- 'species' (dict): Molecular names that have their own ids
+			- 'timepoints' (int): Total timepoints (1D array)
+			- 'numbers' (float): Total numbers of molecules
+			- 'label volume' (numpy[int]): Label volume if specified (3D array, optional)
+			- 'label ids' (numpy[int]): Label ids if specified (1D array, optional)
+
+			event_param (dict):  It contains user-defined parameters for event function
+
 		Returns: bool 
-			(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.
+			(bool): True if succeeded.
 		"""
 		sys_param = {}
 		sys_param['species']    = self.species

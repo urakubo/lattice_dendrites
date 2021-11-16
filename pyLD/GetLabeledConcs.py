@@ -15,14 +15,7 @@ class GetLabeledConcs:
 		monitor_species (str): Target molecule to monitor
 
 	Returns:
-		(pyLD.GetLabeledConcs): GetLabeledConcs object that contains the instance variables
-		
-			(obj): Instance variables containing:
-
-		- timepoints (numpy[float]): Timepoints (s)
-		- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
-		- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-		- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+		(pyLD.GetLabeledConcs): GetLabeledConcs object
 	"""
 	def  __init__(self, lm_file = None, monitor_species = None):
 
@@ -92,10 +85,10 @@ class GetLabeledConcs:
 
 	def load_label_volume(self, label_file):
 
-		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
+		"""Load a label volume from a label volume file.
 
 		Args:
-			label_file (str): Filename of label. label_filename or label_volume must be specified.
+			label_file (str): Filename of the label volume file.
 
 		Returns:
 			(bool): True or False
@@ -111,16 +104,15 @@ class GetLabeledConcs:
 
 	def exec(self):
 		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
-
-		Args:
+		label_volume must be specified, which also can be obtained by "load_label_volume".
 
 		Returns:
-			(obj): Instance variables:
+			(pyLD.GetLabeledConcs): GetLabeledConcs object that contains the following instance variables
 
-			- timepoints (numpy[float]): Timepoints (s)
-			- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
-			- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-			- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+		- timepoints (numpy[float]): Timepoints (s)
+		- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+		- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
+		- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
 		"""
 
 		# Check arguments

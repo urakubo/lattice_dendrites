@@ -1,5 +1,3 @@
-
-
 import sys, os, glob, pickle
 import json
 import h5py
@@ -11,37 +9,8 @@ import pymeshfix
 import pyvista as pv
 from .utils import Params
 
-main_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
-##
-##
-class LoadLabeledVolume():
 
-	"""A utility class to load label info from a label volumes file.
-
-	Args:
-	    h5_filename (str): HDF5 filename
-
-	Returns:
-		(pyLD.LoadLabeledVolumes): LoadLabeledVolumes object that contains the following instance variables:
-
-		- 'label_volume' (numpy[int]): Loaded label volume (3D array) 
-		- 'label_ids' (numpy[int]): Ids of new labels (1D array)
-		- 'ref_volume' (numpy[bool]): Reference domain volume  (3D array)
-	"""
-	def __init__(self, h5_filename):
-		if not isinstance(h5_filename, str):
-			raise ValueError('h5_filename must be str.')
-		self._load(h5_filename)
-
-
-	def _load(self, h5_filename):
-		with h5py.File(h5_filename, 'r') as f:
-			self.label_volume = f['label volume'][()]
-			self.label_ids    = f['label ids'][()]
-			self.ref_volume   = f['ref volume'][()]
-
-##
-class CreateLabeledVolumeFromUniEM():
+class CreateLabelVolumeFromUniEM():
 
 	"""Create labeled volumes from the painted areas in UNI-EM annotator.
 
@@ -247,7 +216,5 @@ class CreateLabeledVolumeFromUniEM():
 		voxels = mask.reshape([iz.shape[0] , ix.shape[0], iy.shape[0] ])
 		voxels = voxels.transpose((1, 2, 0))
 		return voxels
-
-
 
 

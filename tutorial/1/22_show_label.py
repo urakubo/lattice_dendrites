@@ -6,7 +6,7 @@ from pyLD import *
 input_label_file  = 'models/labels_ball_and_stick.h5'
 output_image_file = 'imgs/labels_ball_and_stick.png'
 
-c = LoadLabeledVolume(input_label_file)
+c = LoadLabelVolume(input_label_file)
 
 mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
 mlab.view(90, 90, 300, [ 50, 30, 50 ] )
