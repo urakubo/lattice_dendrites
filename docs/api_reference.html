@@ -439,12 +439,14 @@ label_volume must be specified, which also can be obtained by “load_label_volu
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><p>GetLabeledConcs object that contains the following instance variables</p>
-<ul class="simple">
+<blockquote>
+<div><ul class="simple">
 <li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
 <li><p>concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
 <li><p>numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
 <li><p>label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
 </ul>
+</div></blockquote>
 </p>
 </dd>
 <dt class="field-even">Return type</dt>

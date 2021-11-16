@@ -109,10 +109,10 @@ class GetLabeledConcs:
 		Returns:
 			(pyLD.GetLabeledConcs): GetLabeledConcs object that contains the following instance variables
 
-			- timepoints (numpy[float]): Timepoints (s)
-			- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
-			- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
-			- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
+				- timepoints (numpy[float]): Timepoints (s)
+				- concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {'species1': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], 'Species2': [[conc_label1_t1, conc_label2_t1, ...], [conc_label1_t2, conc_label2_t2, ...], ...], ... }.
+				- numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {'species1': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], 'Species2': [[num_label1_t1, num_label2_t1, ...], [num_label1_t2, num_label2_t2, ...], ...], ... }.
+				- label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, ...].
 		"""
 
 		# Check arguments
