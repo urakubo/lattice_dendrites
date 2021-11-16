@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 
 m  = 'YFP'
 input_label_file = 'models/labels_ball_and_stick.h5'
-lm_files         = ['results_photobleach/0000.lm','results_photobleach/0001.lm']
-conc_files       = ['results_photobleach/c0000.h5', 'results_photobleach/c0001.h5']
+output_plot_file = 'imgs/timecourse_photobleach.png'
+lm_files         = ['results_photobleach/0000.lm'  ,'results_photobleach/0001.lm']
+conc_files       = ['results_photobleach/c0000.h5' ,'results_photobleach/c0001.h5']
 
 # Save and connect concs of labeled spines
 s = GetLabeledConcs()
@@ -46,5 +47,5 @@ plt.xlabel('Time (s)')
 plt.ylabel('Conc (uM)')
 hans, labs = ax.get_legend_handles_labels()
 ax.legend(handles=hans, labels=labs, frameon=False)
-
+plt.savefig(output_plot_file, dpi=150)
 plt.show()

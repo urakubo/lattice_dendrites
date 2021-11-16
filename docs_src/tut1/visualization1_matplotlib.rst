@@ -11,4 +11,10 @@ The numbers/concs of molecules in labeled volumes (such as the spine) first need
    :linenos:
    :caption: 51_plot_photobleach.py
 
+
+.. image:: imgs/timecourse_photobleach.png
+   :scale: 50%
+   :align: center
+
+
 That is all for visulaization 1.
