@@ -1,0 +1,13 @@
+==============================
+Tutorial 2: realistic dendrite
+==============================
+
+We utilized a schematic shape of spiny dendrite in tutorial 1,
+but any shape can be incorpolated through LD.
+In pariticular, LD has utility functions to incorporate
+morphologically realistic shapes of cell from Reconstruct [1]_ .
+
+We would like to introduce how to do it.
+
+
+.. [1] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy. J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
