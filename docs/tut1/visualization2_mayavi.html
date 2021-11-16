@@ -81,8 +81,7 @@
              
   <section id="visualization-2-mayavi">
 <h1><span class="section-number">3.6. </span>Visualization 2: mayavi<a class="headerlink" href="#visualization-2-mayavi" title="Permalink to this headline"></a></h1>
-<p>まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。</p>
-<p>以下では report というドキュメント名を指定して実行しています。</p>
+<p>Some users need to further analyze simulation results in a spatio-temporal manner, e.g., for 3D visualization. The class ConnectAnalysis allows to use user-defined function for a time series of 4D images (3D space + 16 slots for molecules).</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">61_video_photobleach.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
@@ -146,8 +145,9 @@
 </pre></div>
 </div>
 </div>
+<p>ConnectAnalysis calls the function “event” at each time of recording, and a mayavi-based video was produced as follows:</p>
 
-    <video   controls autoplay>
+    <video   controls >
     <source src="_static/photobleach.mp4" type="video/mp4">
     Video
     </video>
