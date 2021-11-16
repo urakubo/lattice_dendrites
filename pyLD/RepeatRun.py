@@ -56,20 +56,22 @@ def activate(lattice, sys_param, event_param):
 class RepeatRun:
 	"""Repeat simulation runs. Output of each run is set to be a inital state of the next run.
 	Users can modify the initial state (4D array; 3D volume + 16 species space),
-	which can be considered as event function.
+	which can be considered as event function. All argments below are assigned as instance varibles.
+	Thus, users can set those parameters anytime before "exec".
+
+	Args:
+		template_lm_file (str): Template lm file
+		lm_option (list): Optional arguments passing to lm
+		exec_periods (list[float]): Simulation period in each run
+		exec_events (list[obj]): Event function to modify the lattice space before each run
+		event_params (dict/list[dict]/tuple[dict]): Parameters passing to event function
+		output_dir (str): Directory that stores simulation results
+		output_prefix (str): Prefix of output lm filenames that stores simulation results
+		output_num_zero_padding (int): Number of zero padding in output lm filenames
+		label_volume_file (str): labeled volume file (optional)
 
 	Returns:
-		(pyLD.RepeatRun): RepeatRun object that contains the following instance variables:
-
-		- 'template_lm_file' (str): Template lm file
-		- 'lm_option' (list): Optional arguments passing to lm
-		- 'exec_periods' (list[float]): Simulation period in each run
-		- 'exec_events' (list[obj]): Event function to modify the lattice space before each run
-		- 'event_params' (dict/list[dict]/tuple[dict]): Parameters passing to event function
-		- 'output_dir' (str): Directory that stores simulation results
-		- 'output_prefix' (str): Prefix of output lm filenames that stores simulation results
-		- 'output_num_zero_padding' (int): Number of zero padding in output lm filenames
-		- 'label_volume_file' (str): labeled volume file (optional)
+		(pyLD.RepeatRun): RepeatRun object that contains the above instance variables
 	"""
 	def __init__(self,
 		template_lm_file = None,
@@ -102,7 +104,6 @@ class RepeatRun:
 		Returns: bool 
 			(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.
 		"""
-
 		self.exec_periods     = list(self.exec_periods)
 		self.exec_events      = list(self.exec_events)
 		if self.template_lm_file==None or not os.path.isfile(self.template_lm_file):
@@ -124,12 +125,11 @@ class RepeatRun:
 		filename_prerun = ''
 		for i, (period, event) in enumerate(zip(self.exec_periods, self.exec_events)):
 			'''
-                        if i == 0:
+			if i == 0:
 				continue
 			filename_prerun = self.output_prefix + '0000.lm'
 			filename_prerun = os.path.join(self.output_dir, filename_prerun)
 			'''
-                        
 			# Copy results from a previous run or inits from the orignal template.
 			sys_param['i'] = i
 			if i > 0:

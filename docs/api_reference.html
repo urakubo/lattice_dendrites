@@ -438,18 +438,19 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 label_volume must be specified, which also can be obtained by “load_label_volume”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>GetLabeledConcs object that contains the following instance variables</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<a class="reference internal" href="#pyLD.GetLabeledConcs" title="pyLD.GetLabeledConcs">pyLD.GetLabeledConcs</a>)</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><p>GetLabeledConcs object that contains the following instance variables</p>
 <ul class="simple">
 <li><p>timepoints (numpy[float]): Timepoints (s)</p></li>
 <li><p>concs (dict): Time series of molecular concentrations (number per labeled volume, in the unit of uM). The dict container has {‘species1’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], ‘Species2’: [[conc_label1_t1, conc_label2_t1, …], [conc_label1_t2, conc_label2_t2, …], …], … }.</p></li>
 <li><p>numbers (dict): Time series of the numbers of molecules of the specified molecular species. The dict container has {‘species1’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], ‘Species2’: [[num_label1_t1, num_label2_t1, …], [num_label1_t2, num_label2_t2, …], …], … }.</p></li>
 <li><p>label_ids (numpy[int]): Labels in the volume. The numpy array has [label1, label2, …].</p></li>
 </ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<a class="reference internal" href="#pyLD.GetLabeledConcs" title="pyLD.GetLabeledConcs">pyLD.GetLabeledConcs</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -523,25 +524,27 @@ label_volume must be specified, which also can be obtained by “load_label_volu
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">RepeatRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.RepeatRun" title="Permalink to this definition"></a></dt>
 <dd><p>Repeat simulation runs. Output of each run is set to be a inital state of the next run.
 Users can modify the initial state (4D array; 3D volume + 16 species space),
-which can be considered as event function.</p>
+which can be considered as event function. All argments below are assigned as instance varibles.
+Thus, users can set those parameters anytime before “exec”.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><p>RepeatRun object that contains the following instance variables:</p>
-<ul class="simple">
-<li><p>’template_lm_file’ (str): Template lm file</p></li>
-<li><p>’lm_option’ (list): Optional arguments passing to lm</p></li>
-<li><p>’exec_periods’ (list[float]): Simulation period in each run</p></li>
-<li><p>’exec_events’ (list[obj]): Event function to modify the lattice space before each run</p></li>
-<li><p>’event_params’ (dict/list[dict]/tuple[dict]): Parameters passing to event function</p></li>
-<li><p>’output_dir’ (str): Directory that stores simulation results</p></li>
-<li><p>’output_prefix’ (str): Prefix of output lm filenames that stores simulation results</p></li>
-<li><p>’output_num_zero_padding’ (int): Number of zero padding in output lm filenames</p></li>
-<li><p>’label_volume_file’ (str): labeled volume file (optional)</p></li>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_lm_file</strong> (<em>str</em>) – Template lm file</p></li>
+<li><p><strong>lm_option</strong> (<em>list</em>) – Optional arguments passing to lm</p></li>
+<li><p><strong>exec_periods</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Simulation period in each run</p></li>
+<li><p><strong>exec_events</strong> (<em>list</em><em>[</em><em>obj</em><em>]</em>) – Event function to modify the lattice space before each run</p></li>
+<li><p><strong>event_params</strong> (<em>dict/list</em><em>[</em><em>dict</em><em>]</em><em>/tuple</em><em>[</em><em>dict</em><em>]</em>) – Parameters passing to event function</p></li>
+<li><p><strong>output_dir</strong> (<em>str</em>) – Directory that stores simulation results</p></li>
+<li><p><strong>output_prefix</strong> (<em>str</em>) – Prefix of output lm filenames that stores simulation results</p></li>
+<li><p><strong>output_num_zero_padding</strong> (<em>int</em>) – Number of zero padding in output lm filenames</p></li>
+<li><p><strong>label_volume_file</strong> (<em>str</em>) – labeled volume file (optional)</p></li>
 </ul>
-</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<a class="reference internal" href="#pyLD.RepeatRun" title="pyLD.RepeatRun">pyLD.RepeatRun</a>)</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>RepeatRun object that contains the above instance variables</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.RepeatRun" title="pyLD.RepeatRun">pyLD.RepeatRun</a>)</p>
 </dd>
 </dl>
 <dl class="py method">
