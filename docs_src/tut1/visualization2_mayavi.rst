@@ -9,7 +9,7 @@ Some users need to further analyze simulation results in a spatio-temporal manne
    :linenos:
    :caption: 61_video_photobleach.py
 
-ConnectAnalysis calls the function "event" at each time of recording, and a mayavi-based video was produced as follows:
+ConnectAnalysis calls the function "event" at each time of recording, and it produces a mayavi-based video as follows:
 
 .. video:: _static/photobleach.mp4
 
