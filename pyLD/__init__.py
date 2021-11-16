@@ -7,6 +7,7 @@ from .save_uniem_annotator import *
 
 from .GetLabeledConcs import *
 from .ConnectLabeledConcs import *
+from .ConnectAnalysis import *
 from .ConnectTotalConcs import *
 from .CreateLabeledVolumeFromUniEM import *
 from .RepeatRun import *

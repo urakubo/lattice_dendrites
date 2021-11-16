@@ -3,145 +3,91 @@ import h5py
 import os, sys
 from .utils import get_species_names, get_spacing, num_to_uM
 
-NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
-	np.uint8, np.uint16, np.uint32, np.uint64]
-
 
 class ConnectAnalysis:
-	"""Connect the time developments of molecular numbers/concentrations in labeled conc files.
+	"""Enable user-defined analyses on the time developments of molecules from a series of lm files.
 	
 	Args:
-		label_conc_filenames (str / list[str] / tuple[str]): Generated labeled conc files from the GetLabeledConcs class.
+		lm_files (str / list[str] / tuple[str]): Simulated lm files.
 
 	Returns:
-		(pyLD.ConnectLabeledConcs): ConnectLabeledConcs object that has the follwing instances:
-
-		- timepoints (numpy[float]): Timepoints (s)
-		- concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).
-		- numbers (numpy[float]): Time series of the numbers of molecules in labels (3D array; [Timepoints, species, ids_label]).
-		- ids_label (numpy[int]): Labels. It has [label1, label2, ...].
+		(pyLD.ConnectAnalysis): ConnectAnalysis object
 	"""
 
-	def  __init__(self, label_conc_filenames):
+	def  __init__(self, lm_files):
 		# Check arguments
-		if isinstance(label_conc_filenames, str):
-		    label_conc_filenames = [label_conc_filenames]
-		elif isinstance(label_conc_filenames, list) | isinstance(label_conc_filenames, tuple) :
+		if isinstance(lm_files, str):
+		    lm_files = [lm_files]
+		elif isinstance(lm_files, list) | isinstance(lm_files, tuple) :
 			pass
 		else:
-			raise ValueError('label_conc_filenames must be str, list, or tuple.')
-
-		# Species names, label_ids
-		self.filenames = label_conc_filenames
-		with h5py.File(self.filenames[0],'r') as f:
-			self.species   = list(f['species'][()])
-			self.label_ids = f['label_ids'][()]
+			raise ValueError('lm_files must be str, list, or tuple.')
+		self.lm_files = lm_files
 
 		# Timepoints
-		for i, fname in enumerate(self.filenames):
+		for i, fname in enumerate(self.lm_files):
 		    with h5py.File(fname,'r') as f:
-		        t = f['timepoints'][()]
-		        c = f['concs in uM'][()]
-		        n = f['numbers'][()]
+		        t = f['Simulations']['0000001']['LatticeTimes'][()]
+		        n = f['Simulations']['0000001']['SpeciesCounts'][()]
 		    if i == 0:
 		        self.timepoints = t
-		        self.concs      = c
 		        self.numbers    = n
 		    else:
 		        self.timepoints = np.hstack( (self.timepoints, t[1:]+self.timepoints[-1]) )
-		        self.concs      = np.concatenate([self.concs   , c[1:,:,:] ], axis=0)
-		        self.numbers    = np.concatenate([self.numbers , n[1:,:,:] ], axis=0)
+		        self.numbers    = np.concatenate([self.numbers , n[1:,:] ], axis=0)
 
+		self.species  = get_species_names(self.lm_files[0])
+		self.label_volume_file = None
+		self.event             = None
+		self.event_param       = None
+		self.start_time        = 0.0
 
-	def get_concs(self, species=None, label_ids=None):
-		"""Get time developments of the concentration(s) of specified specie(s) within label(s).
-
-		Args:
-			species (None / str / list[str] / tuple[str]): Target molecular species. They are summed if multiple species are specified, and unsummed if unspecified.
-			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are summed if multiple labels are specified, and unsummed if unspecified.
-
-		Returns:
-			(numpy[float]): Time developments of concentrations (1D/2D/3D array)
-		"""
-
-		species_id, label_id = self._check_arguments(species, label_ids)
-
-		if (species != None) and (label_ids != None):
-			concs = self.concs[:,species_id,label_id]
-			if concs.ndim == 3:
-				concs = np.sum(concs, axis=(1,2))
-			elif concs.ndim == 2:
-				concs = np.sum(concs, axis=1)
-		elif (species != None):
-			concs = np.sum(self.concs[:,species_id,:], axis=(1))
-		elif (label_ids != None):
-			concs = np.sum(self.concs[:,:,label_id], axis=(2))
-		else:
-			concs = self.concs
-
-		return concs
-
-
-	def get_numbers(self, species=None, label_ids=None):
-		"""Get time developments of the number(s) of specified specie(s) within label(s).
+	def exec(self):
+		"""Execute repeats
 
 		Args:
-			species (None / str / list[str] / tuple[str]): Target molecular species. They are summed if multiple species are specified, and unsummed if None is specified.
-			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are summed if multiple labels are specified, and unsummed if None is specified.
 
-		Returns:
-			(numpy[int]): Time developments of number (1D/2D/3D array)
+		Returns: bool 
+			(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.
 		"""
+		sys_param = {}
+		sys_param['species']    = self.species
+		sys_param['timepoints'] = self.timepoints
+		sys_param['numbers']    = self.numbers
+		if self.label_volume_file != None:
+			sys_param = self._load_label_file(sys_param)
 
-		species_id, label_id = self._check_arguments(species, label_ids)
-
-		if (species != None) and (label_ids != None):
-			numbers = self.numbers[:,species_id,label_id]
-			if numbers.ndim == 3:
-				numbers = np.sum(numbers, axis=(1,2))
-			elif numbers.ndim == 2:
-				numbers = np.sum(numbers, axis=1)
-		elif (species != None):
-			numbers = np.sum(self.numbers[:,species_id,:], axis=(1))
-		elif (label_ids != None):
-			numbers = np.sum(self.numbers[:,:,label_id], axis=(2))
-		else:
-			numbers = self.numbers
-
-		return numbers
+		id = 0
+		for lm_file in self.lm_files:
+			self.start_time, id = self._process_each_lm_file(lm_file, sys_param, self.start_time, id)
 
 
-	def _check_arguments(self, species, label_ids):
+	def _process_each_lm_file(self, lm_file, sys_param, start_time, id):
 
-		# Check arguments
-		if isinstance(species, str):
-		    species = [species]
-		elif (species == None) or isinstance(species, list) or isinstance(species, tuple) :
-			pass
-		else:
-			raise ValueError('species must be None, str, list, or tuple.')
+		# Time frames
+		print('file :', lm_file)
+		with h5py.File(lm_file,'r') as file:
+			timepoints = list( file['Simulations']['0000001']['LatticeTimes'][()] )
+			frames = [key for key in file['Simulations']['0000001']['Lattice'].keys()]
+			frames.sort()
 
-		if isinstance(label_ids, int):
-		    label_ids = [label_ids]
-		elif (label_ids == None) or isinstance(label_ids, list) or isinstance(label_ids, tuple) :
-			pass
-		else:
-			raise ValueError('label_ids must be None, int, list, or tuple.')
+			if id != 0:
+				timepoints = timepoints[1:]
+				frames     = frames[1:]
 
-
-		if (species != None):
-			species_id = [id for id, s in enumerate(self.species) if s in species]
-		else:
-			species_id = None
-
-		if (label_ids != None):
-			label_id = [id for id, i in enumerate(self.label_ids) if i in label_ids ]
-		else:
-			label_id = None
-
-		# print('species_id: ', species_id)
-		# print('label_id  : ', label_id)
-		return species_id, label_id
+			for t, f in zip(timepoints, frames):
+				lattice = file['Simulations']['0000001']['Lattice'][f][:,:,:,:]
+				sys_param['time'] = start_time + t
+				sys_param['id']   = id
+				self.event(lattice, sys_param, self.event_param)
+				id += 1
+		start_time = start_time + timepoints[-1]
+		return start_time, id
 
 
+	def _load_label_file(self, sys_param):
+		with h5py.File(self.label_volume_file, 'r') as f:
+			sys_param['label volume'] = f['label volume'][()]
+			sys_param['label ids']    = f['label ids'][()]
+		return sys_param
 

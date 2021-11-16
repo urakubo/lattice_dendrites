@@ -137,6 +137,34 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pyLD.ConnectAnalysis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_files</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectAnalysis" title="Permalink to this definition"></a></dt>
+<dd><p>Enable user-defined analyses on the time developments of molecules from a series of lm files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lm_files</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Simulated lm files.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ConnectAnalysis object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.ConnectAnalysis" title="pyLD.ConnectAnalysis">pyLD.ConnectAnalysis</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.ConnectAnalysis.exec">
+<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectAnalysis.exec" title="Permalink to this definition"></a></dt>
+<dd><p>Execute repeats</p>
+<p>Args:</p>
+<dl class="simple">
+<dt>Returns: bool</dt><dd><p>(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pyLD.ConnectLabeledConcs">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectLabeledConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_conc_filenames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectLabeledConcs" title="Permalink to this definition"></a></dt>
 <dd><p>Connect the time developments of molecular numbers/concentrations in labeled conc files.</p>
