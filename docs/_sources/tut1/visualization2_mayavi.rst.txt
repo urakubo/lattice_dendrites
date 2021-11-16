@@ -14,8 +14,6 @@ Visualization 2: mayavi
 
 
 .. video:: _static/photobleach.mp4
-   :width: 500
-   :height: 300
    :autoplay:
    :nocontrols:
 
