@@ -5,9 +5,18 @@ Tutorial 2: realistic dendrite
 We utilized a schematic shape of spiny dendrite in tutorial 1,
 but can incorporate any shape.
 In pariticular, LD has utility functions to incorporate
-morphologically realistic shapes of cell from Reconstruct [1]_ .
+morphologically realistic shapes of cell from Reconstruct [#Fiala]_ .
+
+
+LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_.
 
 We would like to introduce how to do it.
 
+.. toctree::
 
-.. [1] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy. J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
+	tut2/import_reconstruct
+	tut2/label_uniem
+
+
+.. [#Fiala] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy. J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
+.. [#Urakubo] Urakubo et al (2019) UNI-EM: UNI-EM: An Environment for Deep Neural Network-Based Automated Segmentation of Neuronal Electron Microscopic Images. Sci. Rep. 9: 19413, https://github.com/urakubo/UNI-EM

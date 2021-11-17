@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="3.6. Visualization 2: mayavi" href="tut1/visualization2_mayavi.html" /> 
+    <link rel="prev" title="4.2. Label spines using UNI-EM" href="tut2/label_uniem.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,6 +40,7 @@
 <li class="toctree-l1"><a class="reference internal" href="01.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03.html">3. Tutorial 1: schematic spiny dendrite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">4. Tutorial 2: realistic dendrite</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a></li>
@@ -161,14 +162,17 @@ and users can analyze the lattice on their own use. The parameter file “event_
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – Lattice space (4D array, 3D space plus 16 slots)</p></li>
-<li><p><strong>sys_param</strong> (<em>dict</em>) – System parameters that contains</p></li>
-<li><p><strong>'id'</strong> (<em>-</em>) – Timepoint id</p></li>
-<li><p><strong>'time'</strong> (<em>-</em>) – Current time</p></li>
-<li><p><strong>'species'</strong> (<em>-</em>) – Molecular names that have their own ids</p></li>
-<li><p><strong>'timepoints'</strong> (<em>-</em>) – Total timepoints (1D array)</p></li>
-<li><p><strong>'numbers'</strong> (<em>-</em>) – Total numbers of molecules</p></li>
-<li><p><strong>volume'</strong> (<em>- 'label</em>) – Label volume if specified (3D array, optional)</p></li>
-<li><p><strong>ids'</strong> (<em>- 'label</em>) – Label ids if specified (1D array, optional)</p></li>
+<li><p><strong>sys_param</strong> (<em>dict</em>) – <p>System parameters that contains</p>
+<ul>
+<li><p>’id’ (int): Timepoint id</p></li>
+<li><p>’time’ (float): Current time</p></li>
+<li><p>’species’ (dict): Molecular names that have their own ids</p></li>
+<li><p>’timepoints’ (int): Total timepoints (1D array)</p></li>
+<li><p>’numbers’ (float): Total numbers of molecules</p></li>
+<li><p>’label volume’ (numpy[int]): Label volume if specified (3D array, optional)</p></li>
+<li><p>’label ids’ (numpy[int]): Label ids if specified (1D array, optional)</p></li>
+</ul>
+</p></li>
 <li><p><strong>event_param</strong> (<em>dict</em>) – It contains user-defined parameters for event function</p></li>
 </ul>
 </dd>
@@ -961,7 +965,7 @@ This is aimed to directly connect pyLD-generated surfaces with UNI-EM annotator.
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tut1/visualization2_mayavi.html" class="btn btn-neutral float-left" title="3.6. Visualization 2: mayavi" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tut2/label_uniem.html" class="btn btn-neutral float-left" title="4.2. Label spines using UNI-EM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

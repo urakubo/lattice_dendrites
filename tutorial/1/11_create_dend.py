@@ -66,32 +66,21 @@ os.makedirs('models', exist_ok=True)
 
 with h5py.File(filename,'w') as w:
     w['unit length per voxel (um)'] = xyzpitch
-    w['dendrite'] 					= vol_dend.astype(np.uint8)
-    w['PSD']      					= vol_psd.astype(np.uint8)
-    w['mitochondrion']      		= vol_mito.astype(np.uint8)
-    w['er']	      					= vol_er.astype(np.uint8)
-    w['dendrite not mitochondrion not ER']  = vol_dend_not_mito_not_er
+    w['dendrite']                   = vol_dend.astype(np.uint8)
+    w['PSD']                        = vol_psd.astype(np.uint8)
+    w['mitochondrion']              = vol_mito.astype(np.uint8)
+    w['er']                         = vol_er.astype(np.uint8)
+    w['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
 
     w['boundary areas in volume']   = bound_areas
-    w['boundary vertices']      	= bound_verts
-    w['boundary faces']        		= bound_faces
-    w['PSD ids in boundary faces'] 	= id_face_psd
+    w['boundary vertices']          = bound_verts
+    w['boundary faces']             = bound_faces
+    w['PSD ids in boundary faces']  = id_face_psd
 
     w['mitochondrion areas in volume'] = mito_areas
-    w['mitochondrion vertices']      = mito_verts
-    w['mitochondrion faces']         = mito_faces
+    w['mitochondrion vertices']        = mito_verts
+    w['mitochondrion faces']           = mito_faces
 
     w['er areas in volume'] = er_areas
     w['er vertices']        = er_verts
     w['er faces']           = er_faces
-
-
-# Save UNI-EM annot
-annot_folder = 'annot_ball_and_stick'
-bound_color = [192,192,192]
-mito_color  = [255,255,152]
-er_color    = [179,255,179]
-surfaces = {1: [bound_verts, bound_faces, bound_color],\
-			2: [mito_verts, mito_faces, mito_color],\
-			3: [er_verts, er_faces, er_color]}
-save_uniem_annotator(annot_folder, xyzpitch, (vol_dend+vol_mito+vol_er*2).astype('uint16'), surfaces)

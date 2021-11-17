@@ -48,17 +48,16 @@ class ConnectAnalysis:
 		and users can analyze the lattice on their own use. The parameter file "event_param" is 
 
 		Args:
-
 			lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
 			sys_param (dict): System parameters that contains
 
-			- 'id' (int): Timepoint id
-			- 'time' (float): Current time
-			- 'species' (dict): Molecular names that have their own ids
-			- 'timepoints' (int): Total timepoints (1D array)
-			- 'numbers' (float): Total numbers of molecules
-			- 'label volume' (numpy[int]): Label volume if specified (3D array, optional)
-			- 'label ids' (numpy[int]): Label ids if specified (1D array, optional)
+				- 'id' (int): Timepoint id
+				- 'time' (float): Current time
+				- 'species' (dict): Molecular names that have their own ids
+				- 'timepoints' (int): Total timepoints (1D array)
+				- 'numbers' (float): Total numbers of molecules
+				- 'label volume' (numpy[int]): Label volume if specified (3D array, optional)
+				- 'label ids' (numpy[int]): Label ids if specified (1D array, optional)
 
 			event_param (dict):  It contains user-defined parameters for event function
 

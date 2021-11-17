@@ -1,6 +1,6 @@
-================================
-Create a shape of spiny dendrite
-================================
+==============
+Create a shape
+==============
 
 We first designed a schematics shape of spiny dendrite.
 
