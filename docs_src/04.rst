@@ -18,5 +18,5 @@ We would like to introduce how to do it.
 	tut2/label_uniem
 
 
-.. [#Fiala] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy. J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
-.. [#Urakubo] Urakubo et al (2019) UNI-EM: UNI-EM: An Environment for Deep Neural Network-Based Automated Segmentation of Neuronal Electron Microscopic Images. Sci. Rep. 9: 19413, https://github.com/urakubo/UNI-EM
+.. [#Fiala] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy, J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
+.. [#Urakubo] Urakubo H, Bullmann T, Kubota Y, Oba S, and Ishii S (2019) UNI-EM: An environment for deep neural network-based automated segmentation of neuronal electron microscopic images, Sci. Rep. 9: 19413, https://github.com/urakubo/UNI-EM
