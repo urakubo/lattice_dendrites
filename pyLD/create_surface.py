@@ -19,7 +19,7 @@ def create_surface(pitch, volume, PSD = None, num_smoothing = 30, method_smoothi
 	    volume (numpy): Input volume (3D array, bool preferred)
 	    PSD (numpy): PSD volume  (3D array)
 	    num_smoothing (int): Number of smoothing rounds for the target surface mesh
-		method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
+	    method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
 
 	Returns:
 		(tuple): Tuple containing:
