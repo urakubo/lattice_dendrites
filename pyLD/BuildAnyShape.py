@@ -48,6 +48,13 @@ class BuildAnyShape:
 		ynum   = min([y_lsize, y_vsize])
 		znum   = min([z_lsize, z_vsize])
 
+                
+		# unit converter
+		spacing = sim.latticeSpacing
+		volume_in_L    = spacing * spacing * spacing * 1000 * x_lsize * y_lsize * z_lsize
+		NA             = 6.022e23
+		self.uM_to_num = 1e6 / NA / volume_in_L # umol-1 per L => mol-1 per L
+
 		# Set volume
 		# Can be accelerated using serialization.
 		for x in range(xnum):
@@ -89,6 +96,34 @@ class BuildAnyShape:
 		#print("len(locs['cytoplasm']) : ", len(self.locs['cytoplasm']))
 		#print("len(locs['psd'])       : ", len(self.locs['psd']))                           
 
+
+                
+	def define_species(self, molecular_names):
+		# Check arguments
+		if isinstance(molecular_names, str):
+		    molecular_names = [molecular_names]
+		elif not isinstance(molecular_names, list) and not isinstance(molecular_names, tuple) :
+		    raise ValueError('lm_files must be str, list, or tuple.')
+		else:
+		    self.sim.defineSpecies(molecular_names)
+
+	def modify_region(self, domain_name ):
+		#
+                return self.sim.modifyRegion( domain_name )
+
+	def modifyRegion(self, domain_name ):
+		#
+                return self.sim.modifyRegion( domain_name )
+
+	def add_reaction(self, reactant, product, rate, domain_name ):
+		#
+                self.sim.modifyRegion( domain_name ).addReaction(reactant=reactant, product=product, rate=rate)
+
+	def set_diffusion_rate(self, molecular_name, rate, domain_name ):
+		#
+                self.sim.modifyRegion( domain_name ).setDiffusionRate(molecular_name, rate=rate)
+
+                
 	def add_solute_molecules(self, molecular_name, number, domain_name):
 		"""Add solute molecules.
 
