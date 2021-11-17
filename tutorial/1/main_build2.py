@@ -20,13 +20,12 @@ domains = {ext: 0, cyt: 1, er: 2, mito: 3}
 class setMolecules:
     def __init__(self, cell):
         self.cell     = cell
-        self.cyt_mol  = ['A','B','C']
-        self.cell.define_species(self.cyt_mol)
+        self.molcules  = ['A','B','C']
+        self.cell.define_species(self.molcules)
 
     def addMolecules(self, domain_name):
-        conc = 1 # uM
-        conc_A = conc
-        conc_B = conc * 100
+        conc_A = 1   # uM
+        conc_B = 100 # uM
         conc_C = 0
         cell.add_solute_molecules_uM( 'A', conc_A, domain_name ) # Absolute number
         cell.add_solute_molecules_uM( 'B', conc_B, domain_name ) # Absolute number
@@ -77,10 +76,6 @@ spacing=micron(pitch) # Units in SI
 nx,ny,nz = volume.shape
 sim  = RDME.RDMESimulation(dimensions=micron(nx*pitch,ny*pitch,nz*pitch), spacing=spacing)
 cell = BuildAnyShape(sim, volume, domains, surfaces)
-
-num_voxel_cyt  = np.count_nonzero(volume == domains[cyt])
-number_per_1uM = uM_to_num(conc_in_uM = 1, num_voxels = num_voxel_cyt, spacing_in_m = spacing)
-print('Number of molecules per 1 uM:', number_per_1uM)
 
 
 print('\nSet molecules.\n')
