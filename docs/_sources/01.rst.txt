@@ -3,7 +3,7 @@ Overview
 ========
 
 Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPU) [#LM1]_ .
-It can even utilize multiple GPUs [#LM2]_. It was recently used for [#LM3]_.
+It can even utilize multiple GPUs [#LM2]_. It was recently used for the simulation of mRNA for translation in a HeLa cell[#LM3]_.
 
 Morphologically realistics shapes of cellular structures, in particular, dendrites.
 
