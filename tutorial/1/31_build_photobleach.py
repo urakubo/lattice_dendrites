@@ -6,8 +6,8 @@ from pyLM.units import *
 from pyLD import * 
 
 
-input_filename_morph = 'morph/ball_and_stick.h5'
-output_filename_lm   = 'morph/ball_and_stick_photobleach.lm'
+input_filename_morph = 'models/ball_and_stick.h5'
+output_filename_lm   = 'models/ball_and_stick_photobleach.lm'
 
 ext  = 'default'
 cyt  = 'cytoplasm'
