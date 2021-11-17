@@ -21,9 +21,9 @@ r = RepeatRun()
 r.exec_periods = [4.0, 4.0]
 r.exec_events  = [null_event, remove]
 r.event_params = {'species': 'YFP', 'target label id': 1}
-r.template_lm_file    = 'models/ball_and_stick_photobleach.lm'
-r.labeled_volume_file = 'models/labels_ball_and_stick.h5'
-r.output_dir          = 'results_photobleach'
+r.template_lm_file  = 'models/ball_and_stick_photobleach.lm'
+r.label_volume_file = 'models/labels_ball_and_stick.h5'
+r.output_dir        = 'results_photobleach'
 
 #GPU_ids  = '0,1'
 #num_GPUs = '2'
