@@ -14,7 +14,7 @@ They are steps how to simulate signals in LD/LM.
 	tut1/visualization2_mayavi
 
 
-Please prepare the following script beforehand.
+All tutorial programs are located in $LD_INSTALL_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It includes the functions for tutorial 1. The function "make_cylinder" makes a cylinder with a indicated radius and length in a voxel space. The function "add_shape" locates such a geometric object in a voxel space. The function "show_dendrite" loads and displays the surface objects of cellular boundary, postsynaptic density (PSD), mitochondrion, and endoplasmic reticulum (ER).
 
 .. literalinclude:: ../tutorial/1/tut1_functions.py
    :language: python
