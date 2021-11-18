@@ -63,9 +63,9 @@ class BuildAnyShape:
 		for domain_name in domains:
 		    self.locs[domain_name] = []
 
-		for x in range(xnum):
-		    for y in range(ynum):
-		        for z in range(znum):
+		for x in range(nx):
+		    for y in range(ny):
+		        for z in range(nz):
 		            for domain_name in domains:
 		                if (volume_mod[x,y,z] == self.sim.siteTypes[domain_name]):
 		                    self.locs[domain_name].append((x,y,z))
