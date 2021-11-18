@@ -6,7 +6,9 @@ from pyLD import *
 
 
 input_morph_file = 'models/ball_and_stick.h5'
+# Start variable
 output_lm_file   = 'models/AB_C.lm'
+# End variable
 
 ext  = 'default'
 cyt  = 'cytoplasm'
@@ -14,7 +16,7 @@ er   = 'er'
 mito = 'mito'
 domains = {ext: 0, cyt: 1, er: 2, mito: 3}
 
-
+# Start class
 class SetMolecules:
     def __init__(self, cell):
         self.molecular_names  = ['A','B','C']
@@ -35,7 +37,8 @@ class SetMolecules:
         # AB binding to C
         kon_AB_C = 1
         kof_AB_C = 1
-        self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon_AB_C, kof_AB_C), domain_name)
+        self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon_AB_C, kof_AB_C), domain_name=domain_name)
+# End class
 
 
 print('\nLoad geometry data.\n')

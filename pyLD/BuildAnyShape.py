@@ -34,7 +34,7 @@ class BuildAnyShape:
 		self._check_arguments(volume, domains, spacing_in_m, surfaces)
 
 		nx, ny, nz = volume.shape
-		self.sim = RDME.RDMESimulation(
+		self.sim = pyLM.RDME.RDMESimulation(
 			dimensions= (nx * spacing_in_m, ny * spacing_in_m, nz * spacing_in_m),\
 			spacing=spacing)
 

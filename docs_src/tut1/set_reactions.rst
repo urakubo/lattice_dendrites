@@ -9,15 +9,21 @@ Set reactions
 
 
 .. literalinclude:: ../../tutorial/1/31_build_photobleach.py
-   :language: python
-   :linenos:
-   :caption: 31_build_photobleach.py
+	:language: python
+	:linenos:
+	:caption: 31_build_photobleach.py
 
 
 .. literalinclude:: ../../tutorial/1/32_build_AB_C.py
-   :language: python
-   :linenos:
-   :pyobject: SetMolecules
-   :caption: 32_build_AB_C.py
+	:language: python
+	:start-after: # Start variable
+	:end-before: # End variable
+	:linenos:
+
+
+.. literalinclude:: ../../tutorial/1/32_build_AB_C.py
+	:pyobject: SetMolecules
+	:linenos:
+	:caption: 32_build_AB_C.py
 
 That is all for simulation setup.
