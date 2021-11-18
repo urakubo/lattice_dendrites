@@ -55,7 +55,7 @@ surfaces = {'PSD': vol_PSD, 'cell boundary': vol_bound}
 
 print('\nBuild a lm model.\n')
 spacing_in_m = micron(pitch) # Units in SI
-cell = BuildAnyShape(sim, volume, domains, spacing_in_m, surfaces)
+cell = BuildAnyShape(volume, domains, spacing_in_m, surfaces)
 
 
 print('\nSet molecules.\n')

@@ -200,8 +200,8 @@ class BuildAnyShape:
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(domains, dict) :
 			raise ValueError('domains must be dict.')
-		elif not isinstance(surfaces, (None, dict)) :
-			raise ValueError('surfaces must be None or dict.')
+		elif not isinstance(surfaces, dict) :
+			raise ValueError('surfaces must be dict.')
 		elif not isinstance(spacing_in_m, float) :
 			raise ValueError('spacing_in_m must be float.')
 		else:
