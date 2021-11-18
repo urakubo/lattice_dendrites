@@ -46,16 +46,16 @@ class BuildAnyShape:
 		# Add regions and rename regions of the target volume
 		volume_mod = volume.astype(np.int) * 0
 		for domain_name in domains:
-		    sim.addRegion( domain_name )
-		    volume_mod += (volume == domains[domain_name]).astype(np.int) * sim.siteTypes[domain_name]
+		    self.sim.addRegion( domain_name )
+		    volume_mod += (volume == domains[domain_name]).astype(np.int) * self.sim.siteTypes[domain_name]
 
 		# Set volume
 		# Can be accelerated using serialization.
 		for x in range(nx):
 		    for y in range(ny):
 		        for z in range(nz):
-		            sim.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
-		sim.hasBeenDiscretized = True
+		            self.sim.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
+		self.sim.hasBeenDiscretized = True
 
 		# Register domain locations.
 		## dict.fromkeys(domains, []) refers an identical empty list []. 
@@ -67,7 +67,7 @@ class BuildAnyShape:
 		    for y in range(ynum):
 		        for z in range(znum):
 		            for domain_name in domains:
-		                if (volume_mod[x,y,z] == sim.siteTypes[domain_name]):
+		                if (volume_mod[x,y,z] == self.sim.siteTypes[domain_name]):
 		                    self.locs[domain_name].append((x,y,z))
 
 
