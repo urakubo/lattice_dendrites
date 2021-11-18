@@ -17,25 +17,43 @@ domains = {ext: 0, cyt: 1, er: 2, mito: 3}
 
 class SetMolecules:
     def __init__(self, cell):
-        self.molecular_names  = ['A','B','C']
-        self.cell = cell
-        self.cell.define_species(self.molecular_names)
+        molecules  = ['A','B','C']
+        self.cell  = cell
+        self.cell.define_species(molecules)
 
     def add_molecules(self, domain_name):
-        concs = [1,100, 0]  # uM
-        for name, conc in zip(self.molecular_names, concs):
-        	self.cell.add_molecule_uM(name, conc, domain_name )
+        number_per_1uM = self.cell.number_per_1uM(domain_name)
+        num_A = 1 * number_per_1uM
+        num_B = 1 * number_per_1uM
+        num_C = 0 * number_per_1uM
+        self.cell.add_molecule( 'A', num_A, domain_name ) # Absolute number
+        self.cell.add_molecule( 'B', num_B, domain_name ) # Absolute number
+        self.cell.add_molecule( 'C', num_C, domain_name ) # Absolute number
 
     def set_diffusion(self, domain_name):
-        diff_coeff = 10 * 1e-12 # Diffusion coefficient in SI
-        for name in self.molecular_names:
-            self.cell.set_diffusion(name, diff_coeff, domain_name)
+        d_ABC = 10  * 1e-12 # Diffusion constant
+        d_mol = {'A':d_ABC ,
+                 'B':d_ABC ,
+                 'C':d_ABC }
+        for k, v in d_mol.items():
+            self.cell.set_diffusion_rate(k, v, domain_name)
 
     def set_reactions(self, domain_name):
+
+        # uM_s_to_number_s
+        on = self.cell.per_uM
+
+        # Ca-CaM binding reactions
+        kon_AB_C = 1 * on
+        kof_AB_C = 1 * 1
+
         # AB binding to C
-        kon_AB_C = 1
-        kof_AB_C = 1
-        self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon_AB_C, kof_AB_C), domain_name)
+        A = 'A'
+        B = 'B'
+        C = 'C'
+        cyt = self.cell.modifyRegion( domain_name )
+        cyt.addReaction(reactant=(A,B), product=C    , rate=kon_AB_C)
+        cyt.addReaction(reactant= C   , product=(A,B), rate=kof_AB_C)
 
 
 print('\nLoad geometry data.\n')

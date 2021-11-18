@@ -1,8 +1,8 @@
 import os, sys, shutil
 import subprocess as s
 
-filename_lm     = 'models/ball_and_stick_photobleach.lm'
-filename_run    = 'results/single_ball_and_stick.lm'
+filename_lm     = 'models/photobleach.lm'
+filename_run    = 'results/result_photobleach.lm'
 
 if os.path.isfile(filename_run):
     os.remove(filename_run)

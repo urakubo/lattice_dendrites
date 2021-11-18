@@ -7,6 +7,11 @@ from .utils import uM_to_num
 NUMPY_INTEGERS = [ np.int8, np.int16, np.int32, np.int64, \
 	np.uint8, np.uint16, np.uint32, np.uint64]
 
+try:
+	import pyLM.RDME
+	import pyLM.units
+except ImportError:
+    pass
 
 
 class BuildAnyShape:
@@ -24,10 +29,19 @@ class BuildAnyShape:
 		(pyLD.BuildAnyShape): BuildAnyShape object
 	"""
 
-	def __init__(self, sim, volume, domains, surfaces = {}):
+	def __init__(self, volume, domains, spacing_in_m, surfaces = {}):
 
-		self._check_arguments(sim, volume, domains, surfaces)
-		self.sim = sim
+		self._check_arguments(volume, domains, spacing_in_m, surfaces)
+
+		nx, ny, nz = volume.shape
+		self.sim = RDME.RDMESimulation(
+			dimensions= (nx * spacing_in_m, ny * spacing_in_m, nz * spacing_in_m),\
+			spacing=spacing)
+
+		self.spacing = spacing
+		self.nx = nx
+		self.ny = ny
+		self.nz = nz
 
 		# Add regions and rename regions of the target volume
 		volume_mod = volume.astype(np.int) * 0
@@ -35,25 +49,11 @@ class BuildAnyShape:
 		    sim.addRegion( domain_name )
 		    volume_mod += (volume == domains[domain_name]).astype(np.int) * sim.siteTypes[domain_name]
 
-		# Check volume size
-		x_lsize = sim.lattice.getXSize()
-		y_lsize = sim.lattice.getYSize()
-		z_lsize = sim.lattice.getZSize()
-		print('Lm lattice size   (x, y, z): ', x_lsize, y_lsize, z_lsize )
-		x_vsize  = volume.shape[0]
-		y_vsize  = volume.shape[1]
-		z_vsize  = volume.shape[2]
-		print('Input volume size (x, y, z): ', x_vsize, y_vsize, z_vsize )
-		xnum   = min([x_lsize, x_vsize])
-		ynum   = min([y_lsize, y_vsize])
-		znum   = min([z_lsize, z_vsize])
-
-
 		# Set volume
 		# Can be accelerated using serialization.
-		for x in range(xnum):
-		    for y in range(ynum):
-		        for z in range(znum):
+		for x in range(nx):
+		    for y in range(ny):
+		        for z in range(nz):
 		            sim.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
 		sim.hasBeenDiscretized = True
 
@@ -77,14 +77,12 @@ class BuildAnyShape:
                 
 		# unit converter
 		NA           = 6.022e23
-		self.spacing = sim.latticeSpacing
-		experiment_volume_in_L = self.spacing * self.spacing * self.spacing * \
-                                         1000 * x_lsize * y_lsize * z_lsize
+		experiment_volume_in_L = spacing * spacing * spacing * \
+                                         1000 * nx * ny * nz
 		self.per_uM = 1/(NA*1e-6*experiment_volume_in_L)
 
 
-                
-		# Extract the regions of membranes and PSDs
+		# Extract the regions of surfaces and PSDs
 		
 		self.surf_voxel_locs = {}
 		self.surf_voxel_prob = {}
@@ -100,7 +98,7 @@ class BuildAnyShape:
 
 
                 
-	def number_per_1uM(self, domain_name ):
+	def number_per_1uM( self, domain_name ):
 		num_voxels = self.num_voxels[domain_name]
 		spacing_in_m = self.spacing
 		conc_in_uM = 1
@@ -129,33 +127,34 @@ class BuildAnyShape:
 		#
 		self.sim.modifyRegion( domain_name ).addReaction(reactant=reactant, product=product, rate=rate)
 
-	def reac_oneway_uM(self, reactant, product, rate, domain_name ):
-		if len(reactant) == 2:
-			self.sim.modifyRegion(domain_name).addReaction(reactant=reactant, product=product, rate=rate*self.per_uM)
-		else:
-			self.sim.modifyRegion(domain_name).addReaction(reactant=reactant, product=product, rate=rate)
+	def reac_oneway_uM(self, reac, prod, kf, domain_name ):
+		kf_  = self.per_uM * (len(reac) == 2) + (len(reac) == 1)
+		kf_ *= kf
+		self.sim.modifyRegion(domain_name).addReaction(reactant=reac, product=prod, rate=kf_)
 
-	def reac21_uM(self, reac1, reac2, prod, kf, kb, domain_name ):
+	def reac_twoway_uM(self, reac, prod, rates, domain_name ):
+		kf  = self.per_uM * (len(reac) == 2) + (len(reac) == 1)
+		kf *= rates[0]
+
+		kb  = self.per_uM * (len(prod) == 2) + (len(prod) == 1)
+		kb *= rates[1]
+
 		self.sim.modifyRegion(domain_name)\
-				.addReaction(reactant=(reac1, reac2), product=prod, rate=kf*self.per_uM)
-				.addReaction(reactant=prod, product=(reac1, reac2), rate=kb)
+			.addReaction(reactant=reac, product=prod, rate=kf)\
+			.addReaction(reactant=prod, product=reac, rate=kb)
 
-	def reac12_uM(self, reac, prod1, prod2, kon, koff, domain_name ):
-		self.sim.modifyRegion(domain_name)\
-				.addReaction(reactant=reac, product=(prod1, prod2), rate=kf)
-				.addReaction(reactant=(prod1, prod2), product=reac, rate=kb*self.per_uM)
 
-	def set_diffusion_rate(self, molecular_name, rate, domain_name ):
+	def set_diffusion(self, molecular_name, rate, domain_name ):
 		#
 		self.sim.modifyRegion( domain_name ).setDiffusionRate(molecular_name, rate=rate)
 
-	def add_solute_molecules_uM(self, molecular_name, number, domain_name):
+	def add_molecule_uM(self, molecular_name, number, domain_name):
 		#
 		number_per_1uM = self.number_per_1uM(domain_name)
-		self.add_solute_molecules( molecular_name, int(number*number_per_1uM), domain_name )
+		self.add_molecule( molecular_name, int(number*number_per_1uM), domain_name )
 
-	def add_solute_molecules(self, molecular_name, number, domain_name):
-		"""Add solute molecules.
+	def add_molecule(self, molecular_name, number, domain_name):
+		"""Add molecules to a domain.
 
 		Args:
 			molecular_name (str): Molecular name
@@ -163,7 +162,7 @@ class BuildAnyShape:
 			domain_name (str): Domain name
 
 		Returns:
-			(bool): The return value. True for success, False otherwise.
+			(bool): True for success, False otherwise.
 		"""
 		particleNum=self.sim.particleMap[molecular_name]
 		for i in random.sample(self.locs[domain_name], number):
@@ -172,8 +171,8 @@ class BuildAnyShape:
 		return True
 
 
-	def add_surface_molecules(self, molecular_name, density, surface_name):
-		"""Add membrane molecules.
+	def add_surface_molecule(self, molecular_name, density, surface_name):
+		"""Add surface molecules.
 
 		Args:
 			molecular_name (str): Molecular name
@@ -195,23 +194,16 @@ class BuildAnyShape:
 		return True
 
 
-	def _check_arguments(self, sim, volume, domains, surfaces):
-
-
-		try:
-		    import pySTDLM.StandardReactionSystems
-		    if type(sim) != pySTDLM.StandardReactionSystems.RDMESimulation:
-		        raise ValueError('volume must be a integer 3D np.ndarray.')
-
-		except ImportError:
-		    pass
+	def _check_arguments(self, volume, domains, spacing_in_m, surfaces):
 
 		if not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_INTEGERS):
 			raise ValueError('volume must be a integer 3D np.ndarray.')
 		elif not isinstance(domains, dict) :
 			raise ValueError('domains must be dict.')
-		elif not isinstance(surfaces, dict) :
-			raise ValueError('surfaces must be dict.')
+		elif not isinstance(surfaces, (None, dict)) :
+			raise ValueError('surfaces must be None or dict.')
+		elif not isinstance(spacing_in_m, float) :
+			raise ValueError('spacing_in_m must be float.')
 		else:
 			return True
 
