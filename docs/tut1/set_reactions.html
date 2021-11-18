@@ -82,8 +82,7 @@
              
   <section id="set-reactions">
 <h1><span class="section-number">3.3. </span>Set reactions<a class="headerlink" href="#set-reactions" title="Permalink to this headline"></a></h1>
-<p>まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。</p>
-<p>以下では report というドキュメント名を指定して実行しています。</p>
+<p>In the first example, we examine the spatiotemporal dynamics of YFP after the photobleaching of</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">31_build_photobleach.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
@@ -135,7 +134,7 @@
 <span class="linenos">47</span>
 <span class="linenos">48</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="linenos">49</span><span class="n">spacing_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="c1"># Units in SI</span>
-<span class="linenos">50</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">spacing_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">50</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">spacing_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
 <span class="linenos">51</span>
 <span class="linenos">52</span>
 <span class="linenos">53</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set molecules.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -159,11 +158,10 @@
 </pre></div>
 </div>
 </div>
+<p>Two parts can be replace as follows to exmine the reactions (“32_build_AB_C.py”):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/AB_C.lm&#39;</span>
 </pre></div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">32_build_AB_C.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">SetMolecules</span><span class="p">:</span>
 <span class="linenos"> 2</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
 <span class="linenos"> 3</span>        <span class="bp">self</span><span class="o">.</span><span class="n">molecular_names</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
@@ -186,7 +184,6 @@
 <span class="linenos">20</span>        <span class="n">kof_AB_C</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="linenos">21</span>        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">reac_twoway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">),</span> <span class="n">prod</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">(</span><span class="n">kon_AB_C</span><span class="p">,</span> <span class="n">kof_AB_C</span><span class="p">),</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">domain_name</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 <p>That is all for simulation setup.</p>
 </section>

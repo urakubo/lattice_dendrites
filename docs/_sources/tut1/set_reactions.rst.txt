@@ -2,17 +2,15 @@
 Set reactions
 =============
 
-まずは、好きなディレクトリに移動して、sphinx-quickstartを実行します。
-
-以下では report というドキュメント名を指定して実行しています。
-
-
+In the first example, we examine the spatiotemporal dynamics of YFP after the photobleaching of 
 
 .. literalinclude:: ../../tutorial/1/31_build_photobleach.py
 	:language: python
 	:linenos:
 	:caption: 31_build_photobleach.py
 
+
+Two parts can be replace as follows to exmine the reactions ("32_build_AB_C.py"):
 
 .. literalinclude:: ../../tutorial/1/32_build_AB_C.py
 	:language: python
@@ -24,6 +22,6 @@ Set reactions
 .. literalinclude:: ../../tutorial/1/32_build_AB_C.py
 	:pyobject: SetMolecules
 	:linenos:
-	:caption: 32_build_AB_C.py
+
 
 That is all for simulation setup.

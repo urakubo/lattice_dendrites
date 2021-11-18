@@ -36,9 +36,9 @@ class BuildAnyShape:
 		nx, ny, nz = volume.shape
 		self.sim = pyLM.RDME.RDMESimulation(
 			dimensions= (nx * spacing_in_m, ny * spacing_in_m, nz * spacing_in_m),\
-			spacing=spacing)
+			spacing=spacing_in_m)
 
-		self.spacing = spacing
+		self.spacing = spacing_in_m
 		self.nx = nx
 		self.ny = ny
 		self.nz = nz
@@ -77,7 +77,7 @@ class BuildAnyShape:
                 
 		# unit converter
 		NA           = 6.022e23
-		experiment_volume_in_L = spacing * spacing * spacing * \
+		experiment_volume_in_L = spacing_in_m * spacing_in_m * spacing_in_m * \
                                          1000 * nx * ny * nz
 		self.per_uM = 1/(NA*1e-6*experiment_volume_in_L)
 
@@ -100,9 +100,8 @@ class BuildAnyShape:
                 
 	def number_per_1uM( self, domain_name ):
 		num_voxels = self.num_voxels[domain_name]
-		spacing_in_m = self.spacing
 		conc_in_uM = 1
-		number_per_1uM = uM_to_num(conc_in_uM, num_voxels, spacing_in_m)
+		number_per_1uM = uM_to_num(conc_in_uM, num_voxels, self.spacing_in_m)
 		return number_per_1uM
 
                 
