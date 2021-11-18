@@ -16,29 +16,29 @@ domains = {ext: 0, cyt: 1, er: 2, mito: 3}
 
 
 class SetMolecules:
-    def __init__(self, cell):
-        self.name_yfp = 'YFP'
-        self.cell     = cell
-        self.cell.define_species(self.name_yfp)
+	def __init__(self, cell):
+		self.name_yfp = 'YFP'
+		self.cell     = cell
+		self.cell.define_species(self.name_yfp)
 
-    def add_molecules(self, domain_name):
+	def add_molecules(self, domain_name):
 		conc_yfp = 1 # uM
 		self.cell.add_molecule_uM(self.name_yfp, conc_yfp, domain_name)
 
-    def set_diffusion(self, domain_name):
+	def set_diffusion(self, domain_name):
 		d_yfp    = 1 * 1e-12 # (um2/s) Kang 2012; Traffic 13:1589-1600
 		self.cell.set_diffusion(self.name_yfp, d_yfp, domain_name)
 
-    def set_reactions(self, domain_name):
+	def set_reactions(self, domain_name):
 		pass
 
 
 print('\nLoad geometry data.\n')
 with h5py.File(input_morph_file,'r') as r:
-    dendrite_not_mitochondrion_not_ER = r['dendrite not mitochondrion not ER'][()]
-    pitch          = r['unit length per voxel (um)'][()]
-    PSD            = r['PSD'][()]
-    vol_bound      = r['boundary areas in volume'][()]
+	dendrite_not_mitochondrion_not_ER = r['dendrite not mitochondrion not ER'][()]
+	pitch          = r['unit length per voxel (um)'][()]
+	PSD            = r['PSD'][()]
+	vol_bound      = r['boundary areas in volume'][()]
 
 volume = (dendrite_not_mitochondrion_not_ER > 0) * domains[cyt]
 vol_PSD  = vol_bound * (PSD > 0)
