@@ -180,9 +180,9 @@
 <span class="linenos">16</span>
 <span class="linenos">17</span>    <span class="k">def</span> <span class="nf">set_reactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
 <span class="linenos">18</span>        <span class="c1"># AB binding to C</span>
-<span class="linenos">19</span>        <span class="n">kon_AB_C</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="linenos">20</span>        <span class="n">kof_AB_C</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="linenos">21</span>        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">reac_twoway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">),</span> <span class="n">prod</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">(</span><span class="n">kon_AB_C</span><span class="p">,</span> <span class="n">kof_AB_C</span><span class="p">),</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">domain_name</span><span class="p">)</span>
+<span class="linenos">19</span>        <span class="n">kon</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">20</span>        <span class="n">kof</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">21</span>        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">reac_twoway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">),</span> <span class="n">prod</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">(</span><span class="n">kon</span><span class="p">,</span> <span class="n">kof</span><span class="p">),</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">domain_name</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That is all for simulation setup.</p>

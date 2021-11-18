@@ -16,7 +16,7 @@ er   = 'er'
 mito = 'mito'
 domains = {ext: 0, cyt: 1, er: 2, mito: 3}
 
-# Start class
+
 class SetMolecules:
     def __init__(self, cell):
         self.molecular_names  = ['A','B','C']
@@ -35,10 +35,9 @@ class SetMolecules:
 
     def set_reactions(self, domain_name):
         # AB binding to C
-        kon_AB_C = 1
-        kof_AB_C = 1
-        self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon_AB_C, kof_AB_C), domain_name=domain_name)
-# End class
+        kon = 1
+        kof = 1
+        self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon, kof), domain_name=domain_name)
 
 
 print('\nLoad geometry data.\n')

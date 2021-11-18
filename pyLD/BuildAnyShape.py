@@ -38,7 +38,7 @@ class BuildAnyShape:
 			dimensions= (nx * spacing_in_m, ny * spacing_in_m, nz * spacing_in_m),\
 			spacing=spacing_in_m)
 
-		self.spacing = spacing_in_m
+		self.spacing_in_m = spacing_in_m
 		self.nx = nx
 		self.ny = ny
 		self.nz = nz
