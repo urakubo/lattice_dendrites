@@ -1,6 +1,6 @@
-========================================
-Tutorial 1: schematic spiny dendrite
-========================================
+==============================
+Tutorial 1: schematic dendrite
+==============================
 
 They are steps how to simulate signals in LD/LM.
 
