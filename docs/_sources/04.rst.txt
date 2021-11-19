@@ -2,12 +2,11 @@
 Tutorial 2: realistic dendrite
 ==============================
 
-We utilized a schematic shape of spiny dendrite in tutorial 1,
-but can incorporate any shape, including morphologically realistic shapes of cells.
-In pariticular, LD has utility functions to incorporate 3D segmentations
-of volumetric EM images from the software Reconstruct [#Fiala]_ .
+In tutorial 1, we utilized a schematic shape of spiny dendrite.
+However, LD can incorporate any shape, including morphologically realistic shapes of cells.
+In pariticular, LD has utility functions to incorporate 3D shapes based on volumetric EM images in the software Reconstruct [#Fiala]_ . In tutorial 2, HU would introduce such utility functions.
 
-
+Morphologically realistics shapes of cellular structure also requires ...
 LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_.
 
 We would like to introduce how to do it.
