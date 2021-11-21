@@ -22,16 +22,19 @@ class CreateSurface:
 
 			- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 		"""
+		v = self.vertices / self.pitch
+		f = self.faces
 		xvnum, yvnum, zvnum = PSD.shape
-		face_loc   = ( v_smooth[f_smooth[:,0]]+v_smooth[f_smooth[:,1]]+v_smooth[f_smooth[:,2]] ) / 3.0
+		face_loc   = ( v[f[:,0]]+v[f[:,1]]+v[f[:,2]] ) / 3.0
 		face_voxel = np.round( face_loc ).astype(np.int)
 		face_voxel = (face_voxel < 0) + (face_voxel >= 0) * face_voxel
 		face_voxel[:,0] = (face_voxel[:,0] >= xvnum) * (xvnum-1) + (face_voxel[:,0] < xvnum) * face_voxel[:,0]
 		face_voxel[:,1] = (face_voxel[:,1] >= yvnum) * (yvnum-1) + (face_voxel[:,1] < yvnum) * face_voxel[:,1]
 		face_voxel[:,2] = (face_voxel[:,2] >= zvnum) * (zvnum-1) + (face_voxel[:,2] < zvnum) * face_voxel[:,2]
-		id_face_psd = (PSD[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
+		id_face_psd = (psd[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
 
 		return id_face_psd
+
 
 	def __init__(volume, pitch, num_smoothing = 30, method_smoothing = 'humphrey'):
 
