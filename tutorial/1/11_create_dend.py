@@ -53,9 +53,11 @@ m = {}
 dend = CreateSurface(vol_dend, xyzpitch, num_smoothing = 5, method_smoothing = 'laplacian')
 m['bound vertices']        = dend.vertices
 m['bound faces']           = dend.faces
-m['bound faces in volume'] = dend.get_surface_to_volume()  * vol_dend_not_mito_not_er
+m['bound faces in volume'] = dend.get_surface_to_volume()
+m['bound faces in volume']　*= vol_dend_not_mito_not_er
 face_id_psd = get_faceid_inside(vol_psd)
-m['psd faces in volume']   = dend.get_surface_to_volume(face_id_psd) * vol_dend_not_mito_not_er
+m['psd faces in volume']   = dend.get_surface_to_volume(face_id_psd)
+m['psd faces in volume']   *= vol_dend_not_mito_not_er
 m['face id psd']           = face_id_psd
 
 mito = CreateSurface(vol_not_mito, xyzpitch)
