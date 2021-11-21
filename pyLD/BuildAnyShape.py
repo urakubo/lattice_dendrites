@@ -23,7 +23,7 @@ class BuildAnyShape:
 		sim (obj): RDMESimulation object
 		volume (numpy[int]): 3D array that specifies volume_ids
 		domains (dict): {'domain name', volume_id}
-		surfaces (dict): {'surface_name', numpy[float]} : Surface areas in voxel space (3D array)
+		surfaces (dict): {'surface_name', numpy[float], numpy[float]} :  (3D array)
 
 	Returns:
 		(pyLD.BuildAnyShape): BuildAnyShape object
