@@ -65,13 +65,11 @@ m['mito vertices']         = mito.vertices
 m['mito faces']            = mito.faces
 
 er = CreateSurface(vol_not_er, xyzpitch)
-m['er vertices']         = er.vertices
-m['er faces']            = er.faces
+m['er vertices']           = er.vertices
+m['er faces']              = er.faces
 
 m['unit length (um)']      = xyzpitch
-m['dendrite']              = vol_dend
-m['PSD']                   = vol_psd
-m['mitochondrion']         = vol_mito
+m['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
 
 # Save
 filename = 'models/ball_and_stick.h5'
