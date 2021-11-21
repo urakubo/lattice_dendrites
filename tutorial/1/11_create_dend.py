@@ -48,39 +48,34 @@ vol_dend_not_mito_not_er = vol_dend ^ (vol_mito | vol_er)
 
 # Create surface
 xyzpitch = 0.02
+m = {}
 
-bound_verts, bound_faces, bound_area_per_face, bound_areas, id_face_psd = \
-	create_surface(xyzpitch, vol_dend, PSD = vol_psd, num_smoothing = 5, method_smoothing = 'laplacian')
+dend = CreateSurface(vol_dend, xyzpitch, num_smoothing = 5, method_smoothing = 'laplacian')
+m['bound vertices']        = dend.vertices
+m['bound faces']           = dend.faces
+m['bound faces in volume'] = dend.get_surface_to_volume()  * vol_dend_not_mito_not_er
+face_id_psd = get_faceid_inside(vol_psd)
+m['psd faces in volume']   = dend.get_surface_to_volume(face_id_psd) * vol_dend_not_mito_not_er
+m['face id psd']           = face_id_psd
 
-mito_verts, mito_faces, mito_area_per_face, mito_areas = create_surface(xyzpitch, vol_not_mito)
-er_verts, er_faces, er_area_per_face, er_areas         = create_surface(xyzpitch, vol_not_er)
+mito = CreateSurface(vol_not_mito, xyzpitch)
+m['mito vertices']         = mito.vertices
+m['mito faces']            = mito.faces
+m['mito faces in volume']  = mito.get_surface_to_volume() * vol_dend_not_mito_not_er
 
-mito_areas  = mito_areas  * vol_dend_not_mito_not_er
-er_areas    = er_areas    * vol_dend_not_mito_not_er
-bound_areas = bound_areas * vol_dend_not_mito_not_er
+er = CreateSurface(vol_not_er, xyzpitch)
+m['mito vertices']         = er.vertices
+m['mito faces']            = er.faces
+m['mito faces in volume']  = er.get_surface_to_volume()  * vol_dend_not_mito_not_er
 
+m['unit length (um)']      = xyzpitch
+m['dendrite']              = vol_dend
+m['PSD']                   = vol_psd
+m['mitochondrion']         = vol_mito
 
 # Save
 filename = 'models/ball_and_stick.h5'
 os.makedirs('models', exist_ok=True)
 
 with h5py.File(filename,'w') as w:
-    w['unit length per voxel (um)'] = xyzpitch
-    w['dendrite']                   = vol_dend.astype(np.uint8)
-    w['PSD']                        = vol_psd.astype(np.uint8)
-    w['mitochondrion']              = vol_mito.astype(np.uint8)
-    w['er']                         = vol_er.astype(np.uint8)
-    w['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
-
-    w['boundary areas in volume']   = bound_areas
-    w['boundary vertices']          = bound_verts
-    w['boundary faces']             = bound_faces
-    w['PSD ids in boundary faces']  = id_face_psd
-
-    w['mitochondrion areas in volume'] = mito_areas
-    w['mitochondrion vertices']        = mito_verts
-    w['mitochondrion faces']           = mito_faces
-
-    w['er areas in volume'] = er_areas
-    w['er vertices']        = er_verts
-    w['er faces']           = er_faces
+    w = m
