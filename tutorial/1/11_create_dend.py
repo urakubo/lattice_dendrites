@@ -61,12 +61,10 @@ m['face id psd']           = face_id_psd
 mito = CreateSurface(vol_not_mito, xyzpitch)
 m['mito vertices']         = mito.vertices
 m['mito faces']            = mito.faces
-m['mito faces in volume']  = mito.get_surface_to_volume() * vol_dend_not_mito_not_er
 
 er = CreateSurface(vol_not_er, xyzpitch)
 m['er vertices']         = er.vertices
 m['er faces']            = er.faces
-m['er faces in volume']  = er.get_surface_to_volume()  * vol_dend_not_mito_not_er
 
 m['unit length (um)']      = xyzpitch
 m['dendrite']              = vol_dend
