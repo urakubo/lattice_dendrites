@@ -82,13 +82,13 @@
              
   <section id="run-simulation">
 <h1><span class="section-number">3.4. </span>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline"></a></h1>
-<p>We would lienk to keep “models/ball_and_stick.lm” as a template, and store the simulation reults in “results/run_ball_and_stick.lm”. We can realize it from the command prompt as follows.</p>
+<p>We would like to keep “models/ball_and_stick.lm” as a template, and store the simulation reults in “results/run_ball_and_stick.lm”. To do this, we first copy the file then execute lm simulation through the command prompt:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir results
 $ cp models/ball_and_stick.lm results/run_ball_and_stick.lm
 $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
 </pre></div>
 </div>
-<p>We can also arrage the above as a Python script as follows.</p>
+<p>We can also write a Python script to realize the above:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">41_single_run.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
@@ -111,9 +111,13 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results/run_
 </pre></div>
 </div>
 </div>
-<p>In many cases, such a single run would not satisfy the aim of simulation. The repeat of runs is wrapped in the following code.</p>
+<p>We can easily run such a single simulation; however, it would not satisfy an aim of simulation.
+For example, one may want to see a fluorescence recovery after photobleaching (FRAP).
+In this case, a preparatory run should be followed by an instantaneous action, i.e., photobleach.
+Then, the recovery process would be observed.
+This is raelized by the following script.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">42_repeat_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">42_connect_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>

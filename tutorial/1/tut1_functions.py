@@ -21,14 +21,14 @@ def add_shape(volume, object, loc_center):
 def show_dendrite(input_morpho_file):
 
 	with h5py.File(input_morpho_file,'r') as f:
-		bound_v   = f['boundary vertices'][()]
-		bound_f   = f['boundary faces'][()]
-		PSD_ids   = f['PSD ids in boundary faces'][()]
-		mito_v    = f['mitochondrion vertices'][()]
-		mito_f    = f['mitochondrion faces'][()]
+		bound_v   = f['bound vertices'][()]
+		bound_f   = f['bound faces'][()]
+		PSD_ids   = f['face id psd'][()]
+		mito_v    = f['mito vertices'][()]
+		mito_f    = f['mito faces'][()]
 		er_v      = f['er vertices'][()]
 		er_f      = f['er faces'][()]
-		pitch     = f['unit length per voxel (um)'][()]
+		pitch     = f['unit length (um)'][()]
 
 	bound_v = bound_v / pitch
 	mito_v = mito_v / pitch

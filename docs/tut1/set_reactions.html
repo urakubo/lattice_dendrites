@@ -123,38 +123,37 @@
 <span class="linenos">36</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Load geometry data.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="linenos">37</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morph_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
 <span class="linenos">38</span>	<span class="n">dendrite_not_mitochondrion_not_ER</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
-<span class="linenos">39</span>	<span class="n">pitch</span>          <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length per voxel (um)&#39;</span><span class="p">][()]</span>
-<span class="linenos">40</span>	<span class="n">PSD</span>            <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;PSD&#39;</span><span class="p">][()]</span>
-<span class="linenos">41</span>	<span class="n">vol_bound</span>      <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;boundary areas in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">39</span>	<span class="n">pitch</span>     <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
+<span class="linenos">40</span>	<span class="n">vol_PSD</span>   <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">41</span>	<span class="n">vol_bound</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">][()]</span>
 <span class="linenos">42</span>
 <span class="linenos">43</span><span class="n">volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">dendrite_not_mitochondrion_not_ER</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">domains</span><span class="p">[</span><span class="n">cyt</span><span class="p">]</span>
-<span class="linenos">44</span><span class="n">vol_PSD</span>  <span class="o">=</span> <span class="n">vol_bound</span> <span class="o">*</span> <span class="p">(</span><span class="n">PSD</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="linenos">45</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
+<span class="linenos">44</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
+<span class="linenos">45</span>
 <span class="linenos">46</span>
-<span class="linenos">47</span>
-<span class="linenos">48</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">49</span><span class="n">spacing_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="c1"># Units in SI</span>
-<span class="linenos">50</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">spacing_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">47</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">48</span><span class="n">spacing_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="c1"># Units in SI</span>
+<span class="linenos">49</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">spacing_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">50</span>
 <span class="linenos">51</span>
-<span class="linenos">52</span>
-<span class="linenos">53</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set molecules.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">54</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">SetMolecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-<span class="linenos">55</span><span class="n">molecules</span><span class="o">.</span><span class="n">add_molecules</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">56</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">57</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">52</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set molecules.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">53</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">SetMolecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="linenos">54</span><span class="n">molecules</span><span class="o">.</span><span class="n">add_molecules</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">55</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">56</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">57</span>
 <span class="linenos">58</span>
-<span class="linenos">59</span>
-<span class="linenos">60</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">61</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
-<span class="linenos">62</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">63</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">64</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="linenos">59</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">60</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
+<span class="linenos">61</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">62</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">63</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="linenos">64</span>
 <span class="linenos">65</span>
-<span class="linenos">66</span>
-<span class="linenos">67</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save simulation setup.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">68</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
-<span class="linenos">69</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
-<span class="linenos">70</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos">66</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save simulation setup.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">67</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+<span class="linenos">68</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos">69</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

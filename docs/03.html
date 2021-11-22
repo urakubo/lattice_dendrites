@@ -118,14 +118,14 @@
 <span class="linenos">21</span><span class="k">def</span> <span class="nf">show_dendrite</span><span class="p">(</span><span class="n">input_morpho_file</span><span class="p">):</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span>	<span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morpho_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">24</span>		<span class="n">bound_v</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;boundary vertices&#39;</span><span class="p">][()]</span>
-<span class="linenos">25</span>		<span class="n">bound_f</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;boundary faces&#39;</span><span class="p">][()]</span>
-<span class="linenos">26</span>		<span class="n">PSD_ids</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;PSD ids in boundary faces&#39;</span><span class="p">][()]</span>
-<span class="linenos">27</span>		<span class="n">mito_v</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mitochondrion vertices&#39;</span><span class="p">][()]</span>
-<span class="linenos">28</span>		<span class="n">mito_f</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mitochondrion faces&#39;</span><span class="p">][()]</span>
+<span class="linenos">24</span>		<span class="n">bound_v</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bound vertices&#39;</span><span class="p">][()]</span>
+<span class="linenos">25</span>		<span class="n">bound_f</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bound faces&#39;</span><span class="p">][()]</span>
+<span class="linenos">26</span>		<span class="n">PSD_ids</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;face id psd&#39;</span><span class="p">][()]</span>
+<span class="linenos">27</span>		<span class="n">mito_v</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mito vertices&#39;</span><span class="p">][()]</span>
+<span class="linenos">28</span>		<span class="n">mito_f</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mito faces&#39;</span><span class="p">][()]</span>
 <span class="linenos">29</span>		<span class="n">er_v</span>      <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">][()]</span>
 <span class="linenos">30</span>		<span class="n">er_f</span>      <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">][()]</span>
-<span class="linenos">31</span>		<span class="n">pitch</span>     <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;unit length per voxel (um)&#39;</span><span class="p">][()]</span>
+<span class="linenos">31</span>		<span class="n">pitch</span>     <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
 <span class="linenos">32</span>
 <span class="linenos">33</span>	<span class="n">bound_v</span> <span class="o">=</span> <span class="n">bound_v</span> <span class="o">/</span> <span class="n">pitch</span>
 <span class="linenos">34</span>	<span class="n">mito_v</span> <span class="o">=</span> <span class="n">mito_v</span> <span class="o">/</span> <span class="n">pitch</span>

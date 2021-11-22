@@ -8,11 +8,14 @@ import h5py
 import numpy as np
 import os
 
+NUMPY_BOOL_INTEGERS = [ np.bool, np.int8, np.int16, np.int32, np.int64, \
+	np.uint8, np.uint16, np.uint32, np.uint64]
+
 
 class CreateSurface:
 
-	def get_faceid_inside(self, psd):
-		"""Get face it inside a specified volume.
+	def get_face_ids_inside(self, psd):
+		"""Get face ids inside a specified volume.
 
 		Args:
 		    PSD (numpy): PSD volume  (3D array)
@@ -22,9 +25,13 @@ class CreateSurface:
 
 			- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 		"""
+		if not isinstance(psd, np.ndarray) or (psd.ndim != 3) or np.any(psd.shape != self.volume.shape):
+			raise ValueError('psd.shape must be equal to volume.shape.')
+
+		xvnum, yvnum, zvnum = psd.shape
+
 		v = self.vertices / self.pitch
 		f = self.faces
-		xvnum, yvnum, zvnum = PSD.shape
 		face_loc   = ( v[f[:,0]]+v[f[:,1]]+v[f[:,2]] ) / 3.0
 		face_voxel = np.round( face_loc ).astype(np.int)
 		face_voxel = (face_voxel < 0) + (face_voxel >= 0) * face_voxel
@@ -36,7 +43,7 @@ class CreateSurface:
 		return id_face_psd
 
 
-	def __init__(volume, pitch, num_smoothing = 30, method_smoothing = 'humphrey'):
+	def __init__(self, volume, pitch, num_smoothing = 30, method_smoothing = 'humphrey'):
 
 		"""Create a smooth surface mesh of a volume.
 		Smoothing is based a humphrey filter, and surface area per face is calcudated.
@@ -45,7 +52,6 @@ class CreateSurface:
 		Args:
 		    pitch (float): Unit length per voxel
 		    volume (numpy): Input volume (3D array, bool preferred)
-		    PSD (numpy): PSD volume  (3D array)
 		    num_smoothing (int): Number of smoothing rounds for the target surface mesh
 		    method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
 
@@ -56,6 +62,12 @@ class CreateSurface:
 			- faces (numpy[int]): Faces of smoothing mesh (3xY array)
 			- areas (numpy[int]): Area per face (Y array)
 		"""
+		if not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_BOOL_INTEGERS):
+			print('isinstance(volume, np.ndarray)', isinstance(volume, np.ndarray))
+			print('(volume.ndim != 3)', (volume.ndim != 3))
+			print('volume.ndim ', volume.ndim)
+			print('volume.dtype', volume.dtype)
+			raise ValueError('volume must be a numpy 3D bool or int.')
 
 		volume = volume.astype(np.bool)
 		xvnum, yvnum, zvnum = volume.shape
@@ -92,12 +104,12 @@ class CreateSurface:
 
 		self.vertices = pitch * mesh_smooth.vertices
 		self.faces    = mesh_smooth.faces
-		self.areas    = self._area_per_face(self.vertices, self.faces)
+		self.areas    = self._area_per_face()
 		self.volume   = volume
 		self.pitch    = pitch
 
 
-	def get_surface_to_volume(self, face_ids = None)
+	def get_surface_to_volume(self, face_ids = None):
 		#
 		v = self.vertices / self.pitch
 		volume = self.volume
@@ -107,7 +119,7 @@ class CreateSurface:
 			f_areas = self.areas
 		else:
 			f = self.faces[face_ids, :]
-			f_areas = self.areas[face_ids, :]
+			f_areas = self.areas[face_ids]
 
 		# Obrain the surface area of each trianglar face.
 		f_vec_ac = v[f[:,0]] - v[f[:,2]]
@@ -159,11 +171,14 @@ class CreateSurface:
 		return surf_area
 
 
-	def _area_per_face(self, v, f):
+	def _area_per_face(self):
 		# Obrain the surface area of each trianglar face.
+		v = self.vertices
+		f = self.faces
+
 		f_vec_ac = v[f[:,0]] - v[f[:,2]]
 		f_vec_bc = v[f[:,1]] - v[f[:,2]]
 		f_outer  = np.cross(f_vec_ac, f_vec_bc) 
 		f_areas  = np.linalg.norm(f_outer, axis=1) / 2
-		return areas
+		return f_areas
 

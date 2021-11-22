@@ -13,12 +13,14 @@ mlab.view(90, 90, 300, [ 50, 30, 50 ] )
 
 pitch = 1
 for id in c.label_ids:
-	vert, face,_ ,_ = create_surface(pitch, c.label_volume == id)
+	s = CreateSurface(c.label_volume == id, pitch)
 	color = tuple(np.random.rand(3))
-	mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=color, opacity=0.3)
+	mlab.triangular_mesh(s.vertices[:,0], s.vertices[:,1], s.vertices[:,2],\
+		s.faces, color=color, opacity=0.3)
 
-vert, face, _, _ = create_surface(pitch, c.ref_volume ^ (c.label_volume > 0))
+d = CreateSurface( c.ref_volume ^ (c.label_volume > 0),  pitch)
 color = (0.8,0.8,0.8)
-mlab.triangular_mesh(vert[:,0], vert[:,1], vert[:,2], face, color=color, opacity=0.3)
+mlab.triangular_mesh(d.vertices[:,0], d.vertices[:,1], d.vertices[:,2],\
+	d.faces, color=color, opacity=0.3)
 mlab.savefig(output_image_file)
 mlab.show()

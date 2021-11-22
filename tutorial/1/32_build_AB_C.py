@@ -43,12 +43,11 @@ class SetMolecules:
 print('\nLoad geometry data.\n')
 with h5py.File(input_morph_file,'r') as r:
 	dendrite_not_mitochondrion_not_ER = r['dendrite not mitochondrion not ER'][()]
-	pitch          = r['unit length per voxel (um)'][()]
-	PSD            = r['PSD'][()]
-	vol_bound      = r['boundary areas in volume'][()]
+	pitch     = r['unit length (um)'][()]
+	vol_PSD   = r['psd faces in volume'][()]
+	vol_bound = r['bound faces in volume'][()]
 
 volume = (dendrite_not_mitochondrion_not_ER > 0) * domains[cyt]
-vol_PSD  = vol_bound * (PSD > 0)
 surfaces = {'PSD': vol_PSD, 'cell boundary': vol_bound}
 
 

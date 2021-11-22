@@ -54,8 +54,8 @@ dend = CreateSurface(vol_dend, xyzpitch, num_smoothing = 5, method_smoothing = '
 m['bound vertices']        = dend.vertices
 m['bound faces']           = dend.faces
 m['bound faces in volume'] = dend.get_surface_to_volume()
-m['bound faces in volume']　*= vol_dend_not_mito_not_er
-face_id_psd = get_faceid_inside(vol_psd)
+m['bound faces in volume'] *= vol_dend_not_mito_not_er
+face_id_psd = dend.get_face_ids_inside(vol_psd)
 m['psd faces in volume']   = dend.get_surface_to_volume(face_id_psd)
 m['psd faces in volume']   *= vol_dend_not_mito_not_er
 m['face id psd']           = face_id_psd
@@ -76,4 +76,5 @@ filename = 'models/ball_and_stick.h5'
 os.makedirs('models', exist_ok=True)
 
 with h5py.File(filename,'w') as w:
-    w = m
+	for k, v in m.items():
+		w.create_dataset(k, data=v)

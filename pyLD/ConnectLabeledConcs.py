@@ -116,14 +116,14 @@ class ConnectLabeledConcs:
 		# Check arguments
 		if isinstance(species, str):
 		    species = [species]
-		elif (species == None) or isinstance(species, list) or isinstance(species, tuple) :
+		elif (species == None) or isinstance(species, (list, tuple)):
 			pass
 		else:
 			raise ValueError('species must be None, str, list, or tuple.')
 
 		if isinstance(label_ids, int):
 		    label_ids = [label_ids]
-		elif (label_ids == None) or isinstance(label_ids, list) or isinstance(label_ids, tuple) :
+		elif (label_ids == None) or isinstance(label_ids, (list, tuple)) :
 			pass
 		else:
 			raise ValueError('label_ids must be None, int, list, or tuple.')
