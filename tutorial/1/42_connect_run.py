@@ -17,7 +17,7 @@ def remove(lattice, sys_param, event_param):
 	return lattice, event_param
 
 
-r = RepeatRun()
+r = ConnectRun()
 r.exec_periods = [4.0, 4.0]
 r.exec_events  = [null_event, remove]
 r.event_params = {'species': 'YFP', 'target label id': 1}

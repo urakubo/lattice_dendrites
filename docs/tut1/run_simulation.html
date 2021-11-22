@@ -137,7 +137,7 @@ To handle such events, we can use the “ConnectRun” class as follows:</p>
 <span class="linenos">17</span>	<span class="k">return</span> <span class="n">lattice</span><span class="p">,</span> <span class="n">event_param</span>
 <span class="linenos">18</span>
 <span class="linenos">19</span>
-<span class="linenos">20</span><span class="n">r</span> <span class="o">=</span> <span class="n">RepeatRun</span><span class="p">()</span>
+<span class="linenos">20</span><span class="n">r</span> <span class="o">=</span> <span class="n">ConnectRun</span><span class="p">()</span>
 <span class="linenos">21</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span> <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
 <span class="linenos">22</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>  <span class="o">=</span> <span class="p">[</span><span class="n">null_event</span><span class="p">,</span> <span class="n">remove</span><span class="p">]</span>
 <span class="linenos">23</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;species&#39;</span><span class="p">:</span> <span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;target label id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
