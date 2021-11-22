@@ -2,7 +2,7 @@
 Run simulation
 ==============
 
-We would like to keep "models/ball_and_stick.lm" as a template, and store the simulation reults in "results/run_ball_and_stick.lm". To do this, we first copy the file then execute lm simulation through the command prompt:
+We would like to keep "models/ball_and_stick.lm" as a template, and store the simulation reults in "results/run_ball_and_stick.lm". To do this, we first copy the lm file then execute the simulation through the command prompt:
 
 .. code-block:: bash
 
@@ -11,7 +11,7 @@ We would like to keep "models/ball_and_stick.lm" as a template, and store the si
 	$ lm -r 1 -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
 
 
-We can also write a Python script to realize the above:
+We can also write a Python script like:
 
 .. literalinclude:: ../../tutorial/1/41_single_run.py
    :language: python
@@ -19,11 +19,11 @@ We can also write a Python script to realize the above:
    :caption: 41_single_run.py
 
 
-We can easily run such a single simulation; however, it would not satisfy an aim of simulation.
+We can easily run such a simulation; however, it would not satisfy aims of simulation.
 For example, one may want to see a fluorescence recovery after photobleaching (FRAP).
 In this case, a preparatory run should be followed by an instantaneous action, i.e., photobleach.
-Then, the recovery process would be observed.
-This is raelized by the following script.
+Then, the recovery process should be simulated.
+To handle such events, we can use the "ConnectRun" class as follows:
 
 .. literalinclude:: ../../tutorial/1/42_connect_run.py
    :language: python

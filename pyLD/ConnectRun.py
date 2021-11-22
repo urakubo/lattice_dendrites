@@ -53,8 +53,8 @@ def activate(lattice, sys_param, event_param):
 	return lattice, event_param
 
 
-class RepeatRun:
-	"""Repeat simulation runs. Output of each run is set to be a inital state of the next run.
+class ConnectRun:
+	"""Connect multiple runs of simulation. Output of each run is set to be a inital state of the next run.
 	Users can modify the initial state (4D array; 3D volume + 16 species space),
 	which can be considered as event function. All argments below are assigned as instance varibles.
 	Thus, users can set those parameters anytime before "exec".
@@ -71,7 +71,7 @@ class RepeatRun:
 		label_volume_file (str): labeled volume file (optional)
 
 	Returns:
-		(pyLD.RepeatRun): RepeatRun object that contains the above instance variables
+		(pyLD.ConnectRun): ConnectRun object that contains the above instance variables
 	"""
 	def __init__(self,
 		template_lm_file = None,

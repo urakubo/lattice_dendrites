@@ -2,16 +2,16 @@ from .utils import *
 from .save_uniem_annotator import *
 
 from .BuildAnyShape import *
-from .CreateVolumeFromReconstruct import *
-from .RotateVolume import *
-from .GetLabeledConcs import *
-from .ConnectLabeledConcs import *
 from .ConnectAnalysis import *
+from .ConnectLabeledConcs import *
+from .ConnectRun import *
 from .ConnectTotalConcs import *
 from .CreateLabelVolumeFromUniEM import *
 from .CreateSurface import *
+from .CreateVolumeFromReconstruct import *
+from .GetLabeledConcs import *
 from .LoadLabelVolume import *
-from .RepeatRun import *
+from .RotateVolume import *
 
 """
 __all__ = ['buildAnyShape','calcSurfaceArea','createVolumeFromReconstruct','rotateVolume']

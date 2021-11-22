@@ -11,7 +11,7 @@ output_label_filename = 'models/labels_ball_and_stick.h5'
 
 print('Load morpho file')
 with h5py.File( input_morpho_filename,'r' ) as f:
-    vol_dend_not_mito_not_er = f['dendrite not mitochondrion not ER'][()]
+	vol_dend_not_mito_not_er = f['dendrite not mitochondrion not ER'][()]
 
 
 print('Label spine')
