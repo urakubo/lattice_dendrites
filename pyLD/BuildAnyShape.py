@@ -147,10 +147,10 @@ class BuildAnyShape:
 		#
 		self.sim.modifyRegion( domain_name ).setDiffusionRate(molecular_name, rate=rate)
 
-	def add_molecule_uM(self, molecular_name, number, domain_name):
+	def add_molecule_uM(self, molecular_name, conc, domain_name):
 		#
 		number_per_1uM = self.number_per_1uM(domain_name)
-		self.add_molecule( molecular_name, int(number*number_per_1uM), domain_name )
+		self.add_molecule( molecular_name, int(conc*number_per_1uM), domain_name )
 
 	def add_molecule(self, molecular_name, number, domain_name):
 		"""Add molecules to a domain.
