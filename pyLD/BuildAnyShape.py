@@ -109,7 +109,7 @@ class BuildAnyShape:
 		# Check arguments
 		if isinstance(molecular_names, str):
 		    molecular_names = [molecular_names]
-		elif not isinstance(molecular_names, list) and not isinstance(molecular_names, tuple) :
+		if not isinstance(molecular_names, (list, tuple)) :
 		    raise ValueError('lm_files must be str, list, or tuple.')
 		else:
 		    self.sim.defineSpecies(molecular_names)
