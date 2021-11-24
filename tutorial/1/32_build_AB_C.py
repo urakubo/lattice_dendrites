@@ -37,7 +37,7 @@ class SetMolecules:
 		# AB binding to C
 		kon = 1
 		kof = 1
-		elf.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon, kof), domain_name=domain_name)
+		self.cell.reac_twoway_uM(reac=('A','B'), prod='C', rates=(kon, kof), domain_name=domain_name)
 
 
 print('\nLoad geometry data.\n')
