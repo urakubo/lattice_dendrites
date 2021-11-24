@@ -126,9 +126,9 @@ class BuildAnyShape:
 		#
 		self.sim.modifyRegion( domain_name ).addReaction(reactant=reactant, product=product, rate=rate)
 
-	def reac_oneway_uM(self, reac, prod, kf, domain_name ):
+	def reac_oneway_uM(self, reac, prod, rate, domain_name ):
 		kf_  = self.per_uM * (len(reac) == 2) + (len(reac) == 1)
-		kf_ *= kf
+		kf_ *= rate
 		self.sim.modifyRegion(domain_name).addReaction(reactant=reac, product=prod, rate=kf_)
 
 	def reac_twoway_uM(self, reac, prod, rates, domain_name ):
