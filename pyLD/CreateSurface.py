@@ -121,12 +121,6 @@ class CreateSurface:
 			f = self.faces[face_ids, :]
 			f_areas = self.areas[face_ids]
 
-		# Obrain the surface area of each trianglar face.
-		f_vec_ac = v[f[:,0]] - v[f[:,2]]
-		f_vec_bc = v[f[:,1]] - v[f[:,2]]
-		f_outer  = np.cross(f_vec_ac, f_vec_bc) 
-		f_areas  = np.linalg.norm(f_outer, axis=1) / 2
-
 		# Obtain the location of trianglar faces in the voxel space
 		xvnum, yvnum, zvnum = volume.shape
 		face_loc  = ( v[f[:,0]]+v[f[:,1]]+v[f[:,2]] ) / 3.0 # Center of mass
