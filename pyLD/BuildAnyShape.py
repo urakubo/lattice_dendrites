@@ -129,28 +129,28 @@ class BuildAnyShape:
 
 	def reac_oneway_uM(self, reac, prod, rate, domain_name ):
 		if isinstance(reac, tuple) and (len(reac) == 2):
-                        kf  = self.per_uM * rate
+		    kf  = self.per_uM * rate
 		elif isinstance(reac, str):
-                        kf  = rate
+		    kf  = rate
 		else :
-                        raise ValueError('Illigal values of reac in reac_oneway_uM.', reac)
+		    raise ValueError('Illigal values of reac in reac_oneway_uM.', reac)
 		self.sim.modifyRegion(domain_name).addReaction(reactant=reac, product=prod, rate=kf)
 
 
 	def reac_twoway_uM(self, reac, prod, rates, domain_name ):
 		if isinstance(reac, tuple) and (len(reac) == 2):
-                        kf  = self.per_uM * rates[0]
+		    kf  = self.per_uM * rates[0]
 		elif isinstance(reac, str):
-                        kf  = rates[0]
+		    kf  = rates[0]
 		else :
-                        raise ValueError('Illigal values of reac in reac_twoway_uM.', reac)
+		    raise ValueError('Illigal values of reac in reac_twoway_uM.', reac)
 
 		if isinstance(prod, tuple) and (len(prod) == 2):
-                        kb  = self.per_uM * rates[1]
+		    kb  = self.per_uM * rates[1]
 		elif isinstance(prod, str):
-                        kb  = rates[1]
+		    kb  = rates[1]
 		else :
-                        raise ValueError('Illigal values of prod in reac_twoway_uM.', prod)
+		    raise ValueError('Illigal values of prod in reac_twoway_uM.', prod)
 
 		self.sim.modifyRegion(domain_name)\
 			.addReaction(reactant=reac, product=prod, rate=kf)\
