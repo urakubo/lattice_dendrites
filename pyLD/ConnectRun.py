@@ -5,9 +5,38 @@ import subprocess as s
 from .utils import get_species_names, get_spacing
 
 
-def null_event(lattice, sys_param, event_param):
-	"""Null event function in RepeatRun. Any operation will not be executed.
-	Initial state of molelcules can be modified in (lattice; 4D array, 3D volume + 16 species space).
+def event_inherit(lattice, sys_param, event_param):
+	"""Inherit event function for ConnectRun.
+	In this event, the final state of a specified run is copied to the initial state of the next run.
+
+	Args:
+		lattice (numpy[uint8]): See "pyLD.null_event"
+		sys_param (dict): See "pyLD.null_event"
+		event_param (dict): Parameters for the event function that contain 
+
+			- 'filename_prerun' (str): Filename of the prerun result.
+
+	Returns: Tuple containing:
+
+		- lattice: (numpy[uint8]): See "pyLD.null_event"
+		- event_param: (dict): See "pyLD.null_event"
+	"""
+	i    = sys_param['i']
+	time = sys_param['time']
+	print('\nInherit event at: {:g}, Current time: {:.3f}\n'.format(i, time))
+
+	with h5py.File(event_param['filename_prerun'],'r') as f:
+		TimePoints = list( f['Simulations']['0000001']['Lattice'].keys() )
+		TimePoints.sort()
+		lattice_prerun = f['Simulations']['0000001']['Lattice'][TimePoints[-1]][()]
+
+	lattice = lattice_prerun
+	return lattice, event_param
+
+
+def event_null(lattice, sys_param, event_param):
+	"""Null event function for ConnectRun. Any operation will not be executed.
+	Users can modify the initial state of molelcules of each run (lattice; 4D array, 3D volume + 16 species space).
 
 	Args:
 		lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
@@ -33,7 +62,24 @@ def null_event(lattice, sys_param, event_param):
 	return lattice, event_param
 
 
-def activate(lattice, sys_param, event_param):
+def event_activate(lattice, sys_param, event_param):
+	"""Activate event function for ConnectRun.
+	In this event, a specified species of molecules ( event_param['source species'] )
+	is replaced with another species ( event_param['destination species'] ).
+
+	Args:
+		lattice (numpy[uint8]): See "pyLD.null_event"
+		sys_param (dict): See "pyLD.null_event"
+		event_param (dict): Parameters for the event function that contain 
+
+			- 'source species' (str): Source species
+			- 'destination species' (str): Destination species
+
+	Returns: Tuple containing:
+
+		- lattice: (numpy[uint8]): See "pyLD.null_event"
+		- event_param: (dict): See "pyLD.null_event"
+	"""
 	i    = sys_param['i']
 	time = sys_param['time']
 	print('\nActivate event at: {:g}, Current time: {:.3f}\n'.format(i, time))
@@ -43,9 +89,8 @@ def activate(lattice, sys_param, event_param):
 
 	src  = event_param['source species']
 	dst  = event_param['destination species']
-	prob = event_param['probability']
-	ids  = event_param['target label ids']
-
+	# prob = event_param['probability']
+	# ids  = event_param['target label ids']
 	# (np.random.rand(n) < prob)
 
 	# lattice, source_molecule, dest_molecule, probability, domain = None, label_volume=):
@@ -68,6 +113,7 @@ class ConnectRun:
 		output_dir (str): Directory that stores simulation results
 		output_prefix (str): Prefix of output lm filenames that stores simulation results
 		output_num_zero_padding (int): Number of zero padding in output lm filenames
+		start_id (int): Start id for the output filename
 		label_volume_file (str): labeled volume file (optional)
 
 	Returns:
@@ -77,12 +123,13 @@ class ConnectRun:
 		template_lm_file = None,
 		lm_option     = ['-r', '1', '-sp', '-sl','lm::rdme::MpdRdmeSolver'],
 		exec_periods  = [1],
-		exec_events   = [null_event],
+		exec_events   = [event_null],
 		event_params  = None,
 		output_dir    = 'results',
 		output_prefix = '',
 		output_num_zero_padding = 4,
-		label_volume_file = None
+		label_volume_file = None,
+		start_id = 0
 		):
 
 		self.template_lm_file = template_lm_file
@@ -93,7 +140,8 @@ class ConnectRun:
 		self.output_dir       = output_dir
 		self.output_prefix    = output_prefix
 		self.output_num_zero_padding = output_num_zero_padding
-		self.label_volume_file = label_volume_file
+		self.label_volume_file= label_volume_file
+		self.start_id         = start_id
 
 
 	def exec(self):
@@ -123,15 +171,9 @@ class ConnectRun:
 		os.makedirs(self.output_dir, exist_ok=True)
 		filename = ''
 		filename_prerun = ''
+		sys_param['i'] = self.start_id
 		for i, (period, event) in enumerate(zip(self.exec_periods, self.exec_events)):
-			'''
-			if i == 0:
-				continue
-			filename_prerun = self.output_prefix + '0000.lm'
-			filename_prerun = os.path.join(self.output_dir, filename_prerun)
-			'''
 			# Copy results from a previous run or inits from the orignal template.
-			sys_param['i'] = i
 			if i > 0:
 				sys_param['time'] = sys_param['time'] + self.exec_periods[i-1]
 				with h5py.File(filename_prerun,'r') as f:
@@ -159,23 +201,24 @@ class ConnectRun:
 			species_count[uniq-1] = count
 
 			# Copy a lm file from the original template
-			filename = self.output_prefix + str(i).zfill(self.output_num_zero_padding)+'.lm'
+			filename = self.output_prefix + str(sys_param['i']).zfill(self.output_num_zero_padding)+'.lm'
 			filename = os.path.join(self.output_dir, filename)
 			shutil.copy(self.template_lm_file, filename)
 
-                        # Modify the lm file
+            # Modify the lm file
 			with h5py.File(filename,'a') as f:
 				period_s = str(period).ljust(4)[:4]
 				f['Parameters'].attrs['maxTime'] = np.string_(period_s)
 				f['Model']['Diffusion']['Lattice'][()] = lattice
 				f['Model']['Reaction']['InitialSpeciesCounts'][()] = species_count
 
-                        # Execute the modified lm file
+            # Execute the modified lm file
 			command = ['lm', '-f', filename]
 			command.extend(self.lm_option)
 			print(' '.join(command))
 			s.call(command)
 			filename_prerun = filename
+			sys_param['i']  += 1
 
 		return True
 

@@ -3,7 +3,7 @@ import numpy as np
 from pyLD import *
 
 
-def remove(lattice, sys_param, event_param):
+def event_remove(lattice, sys_param, event_param):
 	i    = sys_param['i']
 	time = sys_param['time']
 	print('\nRemove event at: {:g}, Current time: {:.3f}\n'.format(i, time))
@@ -19,7 +19,7 @@ def remove(lattice, sys_param, event_param):
 
 r = ConnectRun()
 r.exec_periods = [4.0, 4.0]
-r.exec_events  = [null_event, remove]
+r.exec_events  = [event_null, event_remove]
 r.event_params = {'species': 'YFP', 'target label id': 1}
 r.template_lm_file  = 'models/photobleach.lm'
 r.label_volume_file = 'models/labels_ball_and_stick.h5'

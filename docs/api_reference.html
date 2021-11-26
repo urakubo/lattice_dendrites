@@ -251,7 +251,7 @@ and users can analyze the lattice on their own use. The parameter file “event_
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.ConnectRun">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">event_null&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None,</span> <span class="pre">start_id=0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun" title="Permalink to this definition"></a></dt>
 <dd><p>Connect multiple runs of simulation. Output of each run is set to be an inital state of the next run.
 Users can modify the initial state (4D array; 3D volume + 16 species space through user-defined event functions.
 All the argments below are assigned as instance variables of this class.
@@ -267,6 +267,7 @@ Thus, users can set/modify them anytime before “exec”.</p>
 <li><p><strong>output_dir</strong> (<em>str</em>) – Directory that stores simulation results</p></li>
 <li><p><strong>output_prefix</strong> (<em>str</em>) – Prefix of output lm filenames that stores simulation results</p></li>
 <li><p><strong>output_num_zero_padding</strong> (<em>int</em>) – Number of zero padding in output lm filenames</p></li>
+<li><p><strong>start_id</strong> (<em>int</em>) – Start id for the output filename</p></li>
 <li><p><strong>label_volume_file</strong> (<em>str</em>) – labeled volume file (optional)</p></li>
 </ul>
 </dd>
@@ -626,6 +627,93 @@ Note that concentrations are simply obtained by the total numbers of molecules d
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.event_activate">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">event_activate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.event_activate" title="Permalink to this definition"></a></dt>
+<dd><p>Activate event function for ConnectRun.
+In this event, a specified species of molecules ( event_param[‘source species’] )
+is replaced with another species ( event_param[‘destination species’] ).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – See “pyLD.null_event”</p></li>
+<li><p><strong>sys_param</strong> (<em>dict</em>) – See “pyLD.null_event”</p></li>
+<li><p><strong>event_param</strong> (<em>dict</em>) – <p>Parameters for the event function that contain</p>
+<ul>
+<li><p>’source species’ (str): Source species</p></li>
+<li><p>’destination species’ (str): Destination species</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: Tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>lattice: (numpy[uint8]): See “pyLD.null_event”</p></li>
+<li><p>event_param: (dict): See “pyLD.null_event”</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.event_inherit">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">event_inherit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.event_inherit" title="Permalink to this definition"></a></dt>
+<dd><p>Inherit event function for ConnectRun.
+In this event, the final state of a specified run is copied to the initial state of the next run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – See “pyLD.null_event”</p></li>
+<li><p><strong>sys_param</strong> (<em>dict</em>) – See “pyLD.null_event”</p></li>
+<li><p><strong>event_param</strong> (<em>dict</em>) – <p>Parameters for the event function that contain</p>
+<ul>
+<li><p>’filename_prerun’ (str): Filename of the prerun result.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: Tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>lattice: (numpy[uint8]): See “pyLD.null_event”</p></li>
+<li><p>event_param: (dict): See “pyLD.null_event”</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.event_null">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">event_null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.event_null" title="Permalink to this definition"></a></dt>
+<dd><p>Null event function for ConnectRun. Any operation will not be executed.
+Users can modify the initial state of molelcules of each run (lattice; 4D array, 3D volume + 16 species space).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – Lattice space (4D array, 3D space plus 16 slots)</p></li>
+<li><p><strong>sys_param</strong> (<em>dict</em>) – <p>System parameters that contains</p>
+<ul>
+<li><p>’i’ (int): Exec id,</p></li>
+<li><p>’time’ (float): Start time</p></li>
+<li><p>’species’ (dict): Molecular names that have their own ids</p></li>
+<li><p>’label volume’ (numpy[int]): Label volume if specified (3D array, optional)</p></li>
+<li><p>’label ids’ (numpy[int]): Label ids if specified (1D array, optional)</p></li>
+</ul>
+</p></li>
+<li><p><strong>event_param</strong> (<em>dict</em>) – It contains user-defined parameters for event function</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: Tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>lattice: (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)</p></li>
+<li><p>event_param: (dict): User-defined values can be passed to the next event</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.get_annot_colors">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_annot_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_annot_colors" title="Permalink to this definition"></a></dt>
 <dd><p>Obtain colors of painted areas in the file of UNI-EM morphometric plugin.</p>
@@ -753,37 +841,6 @@ Note that concentrations are simply obtained by the total numbers of molecules d
 <dd class="field-odd"><p>(numpy)</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyLD.null_event">
-<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">null_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.null_event" title="Permalink to this definition"></a></dt>
-<dd><p>Null event function in RepeatRun. Any operation will not be executed.
-Initial state of molelcules can be modified in (lattice; 4D array, 3D volume + 16 species space).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – Lattice space (4D array, 3D space plus 16 slots)</p></li>
-<li><p><strong>sys_param</strong> (<em>dict</em>) – <p>System parameters that contains</p>
-<ul>
-<li><p>’i’ (int): Exec id,</p></li>
-<li><p>’time’ (float): Start time</p></li>
-<li><p>’species’ (dict): Molecular names that have their own ids</p></li>
-<li><p>’label volume’ (numpy[int]): Label volume if specified (3D array, optional)</p></li>
-<li><p>’label ids’ (numpy[int]): Label ids if specified (1D array, optional)</p></li>
-</ul>
-</p></li>
-<li><p><strong>event_param</strong> (<em>dict</em>) – It contains user-defined parameters for event function</p></li>
-</ul>
-</dd>
-</dl>
-<p>Returns: Tuple containing:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>lattice: (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)</p></li>
-<li><p>event_param: (dict): User-defined values can be passed to the next event</p></li>
-</ul>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
