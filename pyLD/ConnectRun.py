@@ -25,7 +25,7 @@ def event_inherit(lattice, sys_param, event_param):
 	time = sys_param['time']
 	print('\nInherit event at: {:g}, Current time: {:.3f}\n'.format(i, time))
 
-	with h5py.File(event_param['filename_prerun'],'r') as f:
+	with h5py.File(event_param['filename prerun'],'r') as f:
 		TimePoints = list( f['Simulations']['0000001']['Lattice'].keys() )
 		TimePoints.sort()
 		lattice_prerun = f['Simulations']['0000001']['Lattice'][TimePoints[-1]][()]
