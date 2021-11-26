@@ -252,10 +252,10 @@ and users can analyze the lattice on their own use. The parameter file “event_
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.ConnectRun">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">null_event&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun" title="Permalink to this definition"></a></dt>
-<dd><p>Connect multiple runs of simulation. Output of each run is set to be a inital state of the next run.
-Users can modify the initial state (4D array; 3D volume + 16 species space),
-which can be considered as event function. All argments below are assigned as instance varibles.
-Thus, users can set those parameters anytime before “exec”.</p>
+<dd><p>Connect multiple runs of simulation. Output of each run is set to be an inital state of the next run.
+Users can modify the initial state (4D array; 3D volume + 16 species space through user-defined event functions.
+All the argments below are assigned as instance variables of this class.
+Thus, users can set/modify them anytime before “exec”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

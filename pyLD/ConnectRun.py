@@ -54,10 +54,10 @@ def activate(lattice, sys_param, event_param):
 
 
 class ConnectRun:
-	"""Connect multiple runs of simulation. Output of each run is set to be a inital state of the next run.
-	Users can modify the initial state (4D array; 3D volume + 16 species space),
-	which can be considered as event function. All argments below are assigned as instance varibles.
-	Thus, users can set those parameters anytime before "exec".
+	"""Connect multiple runs of simulation. Output of each run is set to be an inital state of the next run.
+	Users can modify the initial state (4D array; 3D volume + 16 species space through user-defined event functions.
+	All the argments below are assigned as instance variables of this class.
+	Thus, users can set/modify them anytime before "exec".
 
 	Args:
 		template_lm_file (str): Template lm file
