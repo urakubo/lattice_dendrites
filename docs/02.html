@@ -83,40 +83,41 @@
 <h2><span class="section-number">2.1. </span>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>NVIDIA GPU-powered computers</p></li>
-<li><p>Python3.6/Ubuntu18.04 or Python3.8/Ubuntu20.04</p></li>
-<li><p>(pip)</p></li>
-<li><p>(virtualenv)</p></li>
+<li><p>Python3.6.X / CUDA11.0 / Linux (e.g., Ubuntu18.04) or Python3.8.X / CUDA11.4 / Linux (e.g., Ubuntu20.04)</p></li>
+<li><p>pip</p></li>
+<li><p>Virtual environment such as venv, virtualenv, and conda, if preferred</p></li>
+<li><p>ffmpeg</p></li>
 </ul>
-<p>Morphological operations in LD also work on Microsoft Windows 10/11.</p>
+<p>Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.</p>
 </section>
 <section id="preparation">
 <h2><span class="section-number">2.2. </span>Preparation<a class="headerlink" href="#preparation" title="Permalink to this headline"></a></h2>
-<p>On your terminal</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install sphinx
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtualenv env
-<span class="nb">source</span> env/bin/activate
+<p>Install dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -r requirements.txt
 </pre></div>
 </div>
 </section>
 <section id="download-and-file-extraction">
 <h2><span class="section-number">2.3. </span>Download and file extraction<a class="headerlink" href="#download-and-file-extraction" title="Permalink to this headline"></a></h2>
-<p>Download LD to your computer through a command prompt:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/urakubo/lattice_dendrites.git
+<p>Download LD to your computer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
+$ git clone https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
 <p>Then locate the</p>
-<p>Retrieve LM for py3.6/CUDA11.0/ubuntu18.04 as follows:</p>
+<p>Retrieve LM as follows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
 $ cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
 $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 </pre></div>
 </div>
 <p>Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LD paths</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/pyLD:<span class="nv">$PYTHONPATH</span>
+
+<span class="c1"># LM paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORYlib</span>/lm:<span class="nv">$PYTHONPATH</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib/lm:<span class="nv">$PYTHONPATH</span>
 <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib/python:<span class="nv">$PYTHONPATH</span>
 <span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/hdf5_1.12.0_gcc8.4.0/lib:<span class="nv">$LD_INSTALL_DIRECTORY</span>
 

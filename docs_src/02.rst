@@ -5,38 +5,35 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Python3.6/Ubuntu18.04 or Python3.8/Ubuntu20.04
-* (pip)
-* (virtualenv)
+* Python3.6.X / CUDA11.0 / Linux (e.g., Ubuntu18.04) or Python3.8.X / CUDA11.4 / Linux (e.g., Ubuntu20.04)
+* pip
+* Virtual environment such as venv, virtualenv, and conda, if preferred
+* ffmpeg
 
-Morphological operations in LD also work on Microsoft Windows 10/11.
+Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.
 
 Preparation
 ===========
-On your terminal
+Install dependencies:
 
 .. code-block:: bash
 
-    $ pip install sphinx
-
-.. code-block:: bash
-
-    virtualenv env
-    source env/bin/activate
+    $ pip install -r requirements.txt
 
 Download and file extraction
 ============================
-Download LD to your computer through a command prompt:
+Download LD to your computer:
 
 .. code-block:: bash
 
+    $ cd $LD_INSTALL_DIRECTORY
     $ git clone https://github.com/urakubo/lattice_dendrites.git
 
 
 Then locate the 
 
 
-Retrieve LM for py3.6/CUDA11.0/ubuntu18.04 as follows:
+Retrieve LM as follows:
 
 .. code-block:: bash
 
@@ -49,9 +46,13 @@ Set environment paths. In the case of bash, add the following lines in $HOME/.ba
 
 .. code-block:: bash
 
+
+	# LD paths
+	export PYTHONPATH=$LD_INSTALL_DIRECTORY/pyLD:$PYTHONPATH
+
 	# LM paths
 	export PATH=$LD_INSTALL_DIRECTORY/bin:$PATH
-	export PYTHONPATH=$LD_INSTALL_DIRECTORYlib/lm:$PYTHONPATH
+	export PYTHONPATH=$LD_INSTALL_DIRECTORY/lib/lm:$PYTHONPATH
 	export PYTHONPATH=$LD_INSTALL_DIRECTORY/lib/python:$PYTHONPATH
 	export LD_LIBRARY_PATH=$LD_INSTALL_DIRECTORY/hdf5_1.12.0_gcc8.4.0/lib:$LD_INSTALL_DIRECTORY
 
