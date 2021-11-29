@@ -5,11 +5,12 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Python3.6.X / CUDA11.0 / Linux (e.g., Ubuntu18.04) or Python3.8.X / CUDA11.4 / Linux (e.g., Ubuntu20.04)
+* Linux operating system (e.g., Ubuntu18.04 or 20.04)
+* Python3.6.X / CUDA11.0 or Python3.8.X / CUDA11.4
 * pip
-* Virtual environment such as venv, virtualenv, and conda, if preferred
 * ffmpeg
 
+If preferred, users can use virtual environment such as venv, virtualenv, and conda.
 Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.
 
 Preparation
