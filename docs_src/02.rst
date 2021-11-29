@@ -10,7 +10,7 @@ Requirements
 * pip
 * ffmpeg
 
-If preferred, users can use virtual environment such as venv, virtualenv, and conda.
+If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
 Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.
 
 Preparation
