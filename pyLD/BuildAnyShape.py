@@ -51,11 +51,11 @@ class BuildAnyShape:
 
 		# Set volume
 		# Can be accelerated using serialization.
+		self.lattice = self.sim.getLattice()
 		for x in range(nx):
 		    for y in range(ny):
 		        for z in range(nz):
-		            self.sim.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
-		self.sim.hasBeenDiscretized = True
+		            self.lattice.setSiteType(x, y, z, int(volume_mod[x,y,z]))
 
 		# Register domain locations.
 		## dict.fromkeys(domains, []) refers an identical empty list []. 
