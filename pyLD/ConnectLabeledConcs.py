@@ -27,15 +27,15 @@ class ConnectLabeledConcs:
 		if isinstance(label_conc_filenames, str):
 		    label_conc_filenames = [label_conc_filenames]
 		elif isinstance(label_conc_filenames, list) | isinstance(label_conc_filenames, tuple) :
-			pass
+		    pass
 		else:
-			raise ValueError('label_conc_filenames must be str, list, or tuple.')
+		    raise ValueError('label_conc_filenames must be str, list, or tuple.')
 
 		# Species names, label_ids
 		self.filenames = label_conc_filenames
 		with h5py.File(self.filenames[0],'r') as f:
-			self.species   = list(f['species'][()])
-			self.label_ids = f['label_ids'][()]
+		    self.species   = list(f['species'][()])
+		    self.label_ids = f['label_ids'][()]
 
 		# Timepoints
 		for i, fname in enumerate(self.filenames):
@@ -57,25 +57,36 @@ class ConnectLabeledConcs:
 		"""Get time developments of the concentration(s) of specified specie(s) within label(s).
 
 		Args:
-			species (None / str / list[str] / tuple[str]): Target molecular species. They are summed if multiple species are specified, and unsummed if unspecified.
-			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are summed if multiple labels are specified, and unsummed if unspecified.
+			species (None / str / list[str] / tuple[str]): Target molecular species. They are averaged if multiple species are specified, and averaged if unspecified.
+			label_ids (None / int / list[int] / tuple[int]): Target label ids. They are averaged if multiple labels are specified, and averaged if unspecified.
 
 		Returns:
 			(numpy[float]): Time developments of concentrations (1D/2D/3D array)
 		"""
 
-		species_id, label_id = self._check_arguments(species, label_ids)
+		species_i, label_i = self._check_arguments(species, label_ids)
 
-		if (species != None) and (label_ids != None):
-			concs = self.concs[:,species_id,label_id]
+		if (species_i != None) and (label_i != None):
+			#print('self.concs.shape',  self.concs.shape)
+			#print('species_i ',  species_i)
+			#print('label_i   ',  label_i)
+			concs = self.concs[:,species_i,:]
 			if concs.ndim == 3:
-				concs = np.sum(concs, axis=(1,2))
+				concs = concs[:,:,label_i]
+				if concs.ndim == 3:
+				        concs = np.mean(concs, axis=(1,2))
+				else:
+				        concs = np.mean(concs, axis=1)
 			elif concs.ndim == 2:
-				concs = np.sum(concs, axis=1)
-		elif (species != None):
-			concs = np.sum(self.concs[:,species_id,:], axis=(1))
-		elif (label_ids != None):
-			concs = np.sum(self.concs[:,:,label_id], axis=(2))
+				concs = concs[:,label_i]
+				if concs.ndim == 2:
+				        concs = np.mean(concs, axis=1)
+				else:
+				        pass
+		elif (species_i != None):
+			concs = np.mean(self.concs[:,species_i,:], axis=1)
+		elif (label_i != None):
+			concs = np.mean(self.concs[:,:,label_i], axis=2)
 		else:
 			concs = self.concs
 
@@ -93,18 +104,26 @@ class ConnectLabeledConcs:
 			(numpy[int]): Time developments of number (1D/2D/3D array)
 		"""
 
-		species_id, label_id = self._check_arguments(species, label_ids)
+		species_i, label_i = self._check_arguments(species, label_ids)
 
-		if (species != None) and (label_ids != None):
-			numbers = self.numbers[:,species_id,label_id]
+		if (species_i != None) and (label_i != None):
+			numbers = self.numbers[:,species_i,:]
 			if numbers.ndim == 3:
-				numbers = np.sum(numbers, axis=(1,2))
+				numbers = numbers[:,:,label_i]
+				if numbers.ndim == 3:
+				        numbers = np.sum(numbers, axis=(1,2))
+				else:
+				        numbers = np.sum(numbers, axis=1)
 			elif numbers.ndim == 2:
-				numbers = np.sum(numbers, axis=1)
-		elif (species != None):
-			numbers = np.sum(self.numbers[:,species_id,:], axis=(1))
-		elif (label_ids != None):
-			numbers = np.sum(self.numbers[:,:,label_id], axis=(2))
+				numbers = numbers[:,label_i]
+				if numbers.ndim == 2:
+				        concs = np.sum(numbers, axis=1)
+				else:
+				        pass
+		elif (species_i != None):
+			numbers = np.sum(self.numbers[:,species_id,:], axis=1)
+		elif (label_i != None):
+			numbers = np.sum(self.numbers[:,:,label_id], axis=2)
 		else:
 			numbers = self.numbers
 
@@ -117,27 +136,27 @@ class ConnectLabeledConcs:
 		if isinstance(species, str):
 		    species = [species]
 		elif (species == None) or isinstance(species, (list, tuple)):
-			pass
+		    pass
 		else:
-			raise ValueError('species must be None, str, list, or tuple.')
+		    raise ValueError('species must be None, str, list, or tuple.')
 
 		if isinstance(label_ids, int):
 		    label_ids = [label_ids]
 		elif (label_ids == None) or isinstance(label_ids, (list, tuple)) :
-			pass
+		    pass
 		else:
-			raise ValueError('label_ids must be None, int, list, or tuple.')
+		    raise ValueError('label_ids must be None, int, list, or tuple.')
 
 
 		if (species != None):
-			species_id = [id for id, s in enumerate(self.species) if s in species]
+		    species_id = [id for id, s in enumerate(self.species) if s in species]
 		else:
-			species_id = None
+		    species_id = None
 
 		if (label_ids != None):
-			label_id = [id for id, i in enumerate(self.label_ids) if i in label_ids ]
+		    label_id = [id for id, i in enumerate(self.label_ids) if i in label_ids ]
 		else:
-			label_id = None
+		    label_id = None
 
 		# print('species_id: ', species_id)
 		# print('label_id  : ', label_id)
