@@ -88,7 +88,7 @@ Execute 'lm -l' to confirm successful installation. You will see the following m
 .. code-block:: bash
 
 	$ lm -l
-	Lattice Microbes 2.3a build by root on 1336a712b2ab at 2021-11-10 01:18:56 in 64-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
+	Lattice Microbes 2.3.0 build by root on 1336a712b2ab at 2021-11-29 17:33:08 in 64-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
 	Copyright (C) 2008-2016 Luthey-Schulten Group,
 	University of Illinois at Urbana-Champaign.
 
