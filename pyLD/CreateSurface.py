@@ -14,6 +14,24 @@ NUMPY_BOOL_INTEGERS = [ np.bool, np.int8, np.int16, np.int32, np.int64, \
 
 class CreateSurface:
 
+	"""Create a smooth surface mesh of a volume.
+	Smoothing is based a humphrey filter, and surface area per face is calcudated.
+	Faces within PSD regions are labeled.
+
+	Args:
+	    pitch (float): Unit length per voxel
+	    volume (numpy): Input volume (3D array, bool preferred)
+	    num_smoothing (int): Number of smoothing rounds for the target surface mesh
+	    method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
+
+	Returns:
+		(pyLD.CreateSurface): CreateSurface object that has the follwing instances:
+
+		- vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
+		- faces (numpy[int]): Faces of smoothing mesh (3xY array)
+		- areas (numpy[int]): Area per face (Y array)
+	"""
+
 	def get_face_ids_inside(self, psd):
 		"""Get face ids inside a specified volume.
 
@@ -44,24 +62,6 @@ class CreateSurface:
 
 
 	def __init__(self, volume, pitch, num_smoothing = 30, method_smoothing = 'humphrey'):
-
-		"""Create a smooth surface mesh of a volume.
-		Smoothing is based a humphrey filter, and surface area per face is calcudated.
-		Faces within PSD regions are labeled.
-
-		Args:
-		    pitch (float): Unit length per voxel
-		    volume (numpy): Input volume (3D array, bool preferred)
-		    num_smoothing (int): Number of smoothing rounds for the target surface mesh
-		    method_smoothing(str): Smoothing method: 'laplacian', 'humphrey', 'mut_dif_laplacian', or 'taubin'
-
-		Returns:
-			(pyLD.CreateSurface): CreateSurface object that has the follwing instances:
-
-			- vertices (numpy[float]): Vertices of smoothing mesh (3xX array)
-			- faces (numpy[int]): Faces of smoothing mesh (3xY array)
-			- areas (numpy[int]): Area per face (Y array)
-		"""
 		if not isinstance(volume, np.ndarray) or (volume.ndim != 3) or (volume.dtype not in NUMPY_BOOL_INTEGERS):
 			print('isinstance(volume, np.ndarray)', isinstance(volume, np.ndarray))
 			print('(volume.ndim != 3)', (volume.ndim != 3))

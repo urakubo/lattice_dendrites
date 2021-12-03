@@ -419,6 +419,57 @@ Thus, users can set/modify them anytime before “exec”.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pyLD.CreateSurface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">CreateSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'humphrey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateSurface" title="Permalink to this definition"></a></dt>
+<dd><p>Create a smooth surface mesh of a volume.
+Smoothing is based a humphrey filter, and surface area per face is calcudated.
+Faces within PSD regions are labeled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> (<em>float</em>) – Unit length per voxel</p></li>
+<li><p><strong>volume</strong> (<em>numpy</em>) – Input volume (3D array, bool preferred)</p></li>
+<li><p><strong>num_smoothing</strong> (<em>int</em>) – Number of smoothing rounds for the target surface mesh</p></li>
+<li><p><strong>method_smoothing</strong> (<em>str</em>) – Smoothing method: ‘laplacian’, ‘humphrey’, ‘mut_dif_laplacian’, or ‘taubin’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>CreateSurface object that has the follwing instances:</p>
+<ul class="simple">
+<li><p>vertices (numpy[float]): Vertices of smoothing mesh (3xX array)</p></li>
+<li><p>faces (numpy[int]): Faces of smoothing mesh (3xY array)</p></li>
+<li><p>areas (numpy[int]): Area per face (Y array)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#pyLD.CreateSurface" title="pyLD.CreateSurface">pyLD.CreateSurface</a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.CreateSurface.get_face_ids_inside">
+<span class="sig-name descname"><span class="pre">get_face_ids_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateSurface.get_face_ids_inside" title="Permalink to this definition"></a></dt>
+<dd><p>Get face ids inside a specified volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pyLD.CreateVolumeFromReconstruct">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">CreateVolumeFromReconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_reconstruct_dxf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xypitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_domains</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateVolumeFromReconstruct" title="Permalink to this definition"></a></dt>
 <dd><p>Create a volume from a set of Reconstruct dxf files.
