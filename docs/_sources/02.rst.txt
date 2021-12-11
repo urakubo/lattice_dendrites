@@ -21,6 +21,9 @@ Install dependencies:
 
     $ pip install -r requirements.txt
 
+Essentially, LD requires numpy, json, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, opencv, and pathlib. Tutorials further require matplolib and mayavi.
+
+
 Download and file extraction
 ============================
 Download LD to your computer:
