@@ -2,18 +2,37 @@
 Overview
 ========
 
-Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPU) [#LM1]_ .
-It can even utilize multiple GPUs [#LM2]_. It was recently used for the simulation of mRNA splicing in a HeLa cell [#LM3]_.
+Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) [#LM1]_. LM computes CME/RDME using Graphics Processing Units (GPU) and even multiple GPUs [#LM2]_. LM is recently used for the simulation of mRNA splicing in a HeLa cell [#LM3]_.
 
-Morphologically realistics shapes of cellular structures, in particular, dendrites.
+LM is designed to simulate cells with geometric shapes, because of limited availability of information on cellular shapes. However, LM originally can incorporate any shapes of cellular boundary or the other cellular structure, as demonstrated in a previous study [#LM4]_.
 
-LM is orignally developed for Python2, and reconfigured for Python3.
+We here developed an extension of LM, which is named Lattice Dendrites (LD), for the efficient incorporation of realistic cellular shapes. In particular, LD is designed to incorporate shapes of segmented images from electron microscopy (EM). LD provides a variety of utility classes/functions for:
 
-LD is designed to work together with UNI-EM annotator.
+#. Conversion of segmented shapes from a software for EM segmentation (Reconstruct).
+#. Object rotation to minimize their volume in a rectangular solid.
+#. Manual annotation using UNI-EM annotator. 
+#. Surface molecule distribution proportional to surface area.
+#. Simulation with events
+#. Data analyses for visualization.
 
+Users can use them below for their model development, simulation, and analyses. Their usages are described in Tutorials 1 and 2.
+
+|
+
+.. image:: imgs/scheme.png
+   :scale: 80%
+   :align: center
+
+|
+
+
+
+**References**
 
 .. [#LM1] Roberts E, Stone JE, and Luthey-Schulten Z (2013) Lattice Microbes: high-performance stochastic simulation method for the reaction-diffusion master equation, J. Comput. Chem. 34(3):245-255, http://faculty.scs.illinois.edu/schulten/lm/ , http://faculty.scs.illinois.edu/schulten/Software2.0.html#1
 
 .. [#LM2] Hallock MJ, Stone JE, Roberts E, Fry C, Luthey-Schulten Z (2014) Simulation of reaction diffusion processes over biologically-relevant size and time scales using multi-GPU workstations, Parallel Comput. 40:86-99
 
 .. [#LM3] Ghaemi Z, Peterson JR, Gruebele M, and Luthey-Schulten Z (2020) An in-silico human cell model reveals the influence of organization on RNA splicing, PLOS Comput. Biol. 16(3): e1007717, https://eukaryoticcellbuilder.github.io/HeLa_Builder/
+
+.. [#LM4] Earnest, TM, Watanabe, R, Stone, JE, Mahamid, J, Baumeister, W, Villa, E, & Luthey-Schulten, Z (2017) Challenges of integrating stochastic dynamics and cryo-electron tomograms in whole-cell simulations. J. Phys. Chem. B, 121(15):3871-3881

@@ -73,11 +73,26 @@
              
   <section id="overview">
 <h1><span class="section-number">1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
-<p>Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPU) <a class="footnote-reference brackets" href="#lm1" id="id1">1</a> .
-It can even utilize multiple GPUs <a class="footnote-reference brackets" href="#lm2" id="id2">2</a>. It was recently used for the simulation of mRNA splicing in a HeLa cell <a class="footnote-reference brackets" href="#lm3" id="id3">3</a>.</p>
-<p>Morphologically realistics shapes of cellular structures, in particular, dendrites.</p>
-<p>LM is orignally developed for Python2, and reconfigured for Python3.</p>
-<p>LD is designed to work together with UNI-EM annotator.</p>
+<p>Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) <a class="footnote-reference brackets" href="#lm1" id="id1">1</a>. LM computes CME/RDME using Graphics Processing Units (GPU) and even multiple GPUs <a class="footnote-reference brackets" href="#lm2" id="id2">2</a>. LM is recently used for the simulation of mRNA splicing in a HeLa cell <a class="footnote-reference brackets" href="#lm3" id="id3">3</a>.</p>
+<p>LM is designed to simulate cells with geometric shapes, because of limited availability of information on cellular shapes. However, LM originally can incorporate any shapes of cellular boundary or the other cellular structure, as demonstrated in a previous study <a class="footnote-reference brackets" href="#lm4" id="id4">4</a>.</p>
+<p>We here developed an extension of LM, which is named Lattice Dendrites (LD), for the efficient incorporation of realistic cellular shapes. In particular, LD is designed to incorporate shapes of segmented images from electron microscopy (EM). LD provides a variety of utility classes/functions for:</p>
+<ol class="arabic simple">
+<li><p>Conversion of segmented shapes from a software for EM segmentation (Reconstruct).</p></li>
+<li><p>Object rotation to minimize their volume in a rectangular solid.</p></li>
+<li><p>Manual annotation using UNI-EM annotator.</p></li>
+<li><p>Surface molecule distribution proportional to surface area.</p></li>
+<li><p>Simulation with events</p></li>
+<li><p>Data analyses for visualization.</p></li>
+</ol>
+<p>Users can use them below for their model development, simulation, and analyses. Their usages are described in Tutorials 1 and 2.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<a class="reference internal image-reference" href="_images/scheme.png"><img alt="_images/scheme.png" class="align-center" src="_images/scheme.png" style="width: 680.0px; height: 209.60000000000002px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>References</strong></p>
 <dl class="footnote brackets">
 <dt class="label" id="lm1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Roberts E, Stone JE, and Luthey-Schulten Z (2013) Lattice Microbes: high-performance stochastic simulation method for the reaction-diffusion master equation, J. Comput. Chem. 34(3):245-255, <a class="reference external" href="http://faculty.scs.illinois.edu/schulten/lm/">http://faculty.scs.illinois.edu/schulten/lm/</a> , <a class="reference external" href="http://faculty.scs.illinois.edu/schulten/Software2.0.html#1">http://faculty.scs.illinois.edu/schulten/Software2.0.html#1</a></p>
@@ -87,6 +102,9 @@ It can even utilize multiple GPUs <a class="footnote-reference brackets" href="#
 </dd>
 <dt class="label" id="lm3"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
 <dd><p>Ghaemi Z, Peterson JR, Gruebele M, and Luthey-Schulten Z (2020) An in-silico human cell model reveals the influence of organization on RNA splicing, PLOS Comput. Biol. 16(3): e1007717, <a class="reference external" href="https://eukaryoticcellbuilder.github.io/HeLa_Builder/">https://eukaryoticcellbuilder.github.io/HeLa_Builder/</a></p>
+</dd>
+<dt class="label" id="lm4"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p>Earnest, TM, Watanabe, R, Stone, JE, Mahamid, J, Baumeister, W, Villa, E, &amp; Luthey-Schulten, Z (2017) Challenges of integrating stochastic dynamics and cryo-electron tomograms in whole-cell simulations. J. Phys. Chem. B, 121(15):3871-3881</p>
 </dd>
 </dl>
 </section>
