@@ -18,8 +18,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    packages = ['pyLM','pySTDLM','pyLD'],
     entry_points = {
         'console_scripts': ['sample_command = sample_command.sample_command:main']
     },
-    python_requires='>=3.7',
+    python_requires='>=3.6',
 )
