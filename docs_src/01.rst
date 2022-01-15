@@ -11,7 +11,7 @@ We here developed an extension of LM, which is named Lattice Dendrites (LD), for
 #. Import of shapes from a software for EM segmentation (Reconstruct).
 #. Object rotation to minimize their volume in a rectangular solid.
 #. Manual annotation using UNI-EM annotator. 
-#. Distrubtion of surface molecule, which density is proportional to surface area.
+#. Distrubtion of surface molecule whose density is proportional to surface area.
 #. Simulation with events.
 #. Data analyses for visualization.
 
