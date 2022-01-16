@@ -39,9 +39,15 @@
 #
 
 import lm
+from pyLM.LMLogger import LMLogger
 
 ##
 # @package pySTDLM A standard library of functionality that is commonly used in biological simulations.  Three sets of functionality exist including "StandardReactions" which include standard reactions such as Michealis-Menton, membrane transport, transporters, etc.  "StandardReactionSystems" includes published reaction systems from a variety of cells including the MinDE system, Lac switch systems in E. coli etc.  Finally, "StandardCells" includes a number of standard cell geometries.
 
-__all__ = ['StandardReactions', 'StandardReactionSystems', 'StandardCells', 'Cells', 'CellArranger', 'Distributions', 'PostProcessing', 'NetworkVisualization']
+__all__ = ['StandardReactions', 'StandardReactionSystems', 'StandardCells', 'Cells', 'CellArranger', 'Distributions', 'PostProcessing']
+
+try:
+    import NetworkVisualization
+except:
+    LMLogger.warn("The NetworkVisualization tools couldn't be imported. This is most likely due to a dependency issue with optional packages 'gexf' or 'igraph'.")
 

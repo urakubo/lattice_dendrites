@@ -55,7 +55,7 @@ from pyLM.LMLogger import *
 # @param filename Name of the file
 # @return a handle to the file
 def openLMFile(filename):
-	f=h5py.File(filename)
+	f=h5py.File(filename,'r')
 	return f
 
 ## Close a Lattice Microbes File
@@ -155,13 +155,13 @@ def plotTrace(f, species=None, replicate=1, filename=None, **kwargs):
 
 	# Actually create a figure handl
 	fig = plt.figure(1)
+	axs = plt.gca()
 
 	# Plot the line graph of mean vs. time.
 	plt.xlabel("Time (s)")
 	plt.ylabel("Number")
-	plt.hold(True)
 	for i in range(traces.shape[1]):
-		plt.plot(times, traces[:,i], **kwargs)
+		axs.plot(times, traces[:,i], **kwargs)
 
 	# Add a legend if the species number is > 1
 	if hasattr(species, '__iter__') and len(species) > 1:
@@ -442,6 +442,26 @@ def plotPhaseSpace(f, species=None, replicate=1, withHistogram=False):
 # ##############################################################
 # Functions to extract particular features from the simulation #
 # ##############################################################
+
++
+## Exract the species names
+# @param f The HDF5 file handle to extract from or the name of a file to open
+def getSpecies(f):
+    # Open file if a string is passed
+    wasString = False
+    if isinstance(f, str):
+        f = openLMFile(f)
+        wasString = True
+    
+    # Get a handle a copy of the species names
+    species = f['Parameters'].attrs['speciesNames'].decode('utf8').split(",")
+    
+    # close file if need be
+    if wasString:
+        closeLMFile(f)
+    
+    return species
+
 ## Extract the timestep times
 # @param f The HDF5 file handle to extract from or the name of a file to open
 # @return The timestep times in a numpy array
