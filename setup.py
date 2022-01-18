@@ -1,7 +1,7 @@
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md") as f:
+    long_description = f.read()
 
 setuptools.setup(
     name="lattice_dendrites",
@@ -9,8 +9,9 @@ setuptools.setup(
     author="hidetoshi-urakubo",
     author_email="hurakubo@gmail.com",
     description="Lattice dendrite",
-    long_description=read('README.md'),
+    long_description=long_description,
     long_description_content_type="text/markdown",
+    include_package_data=True, # described in MANIFEST.in
     url="https://github.com/urakubo/lattice_dendrites",
     classifiers=[
         "License :: OSI Approved :: MIT License",
@@ -28,17 +29,28 @@ setuptools.setup(
     ],
 	install_requires=[
 		"h5py",
-		"json",
 		"numpy>=1.16.1",
-		"opencv-python>=4.5.4.60",
+		"opencv-python>=4.2.0",
 		"pymeshfix>=0.15.0",
 		"pyvista>=0.32.1",
 		"scikit-image>=0.17.2",
 		"trimesh>=3.9.36"
 	],
     packages = ['pyLM','pySTDLM','pyLD'],
-    entry_points = {
-        'console_scripts': ['sample_command = sample_command.sample_command:main']
-    },
     python_requires="~=3.6", # >= 3.6 < 4.0
 )
+
+import os, sys
+import tarfile
+from lm.check_cuda import locate_cuda
+
+major_version = sys.version_info[0] # Major
+minor_version = sys.version_info[1] # Minor
+
+if os.name== 'posix' and major_version == 3 and major_version == 8:
+    cuda_version = locate_cuda()
+    if cuda_version == '11.0':
+    	fname = "lm/lm_py3.6_cuda11.0.tar.gz"
+    	with tarfile.open(fname, "r:gz") as f:
+    		tar.extractall()     
+
