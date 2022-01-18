@@ -86,7 +86,7 @@ class CMESimulation:
 			particleNum=self.particleMap[species]
 		except KeyError:
 			particleNum=1
-			LMLogger.warn('In CME.addParticles, couldn\'t find particle of type %s in map (is it previously defined with \'CME.defineSpecies(...)\'?).  Shouldn\'t happen.',species)
+			LMLogger.warn('In CME.addParticles, couldn\'t find particle of type "%s" in map (is it previously defined with \'CME.defineSpecies(...)\'?).  Shouldn\'t happen.',species)
 		self.initial_counts[species]+=count
 
 	## Add a concentration of particles of the specified type to the simulation
@@ -102,7 +102,7 @@ class CMESimulation:
 			particleNum=self.particleMap[species]
 		except KeyError:
 			particleNum=1
-			LMLogger.warn('In CME.addConcentration, couldn\'t find particle of type %s in map (is it previously defined with \'CME.defineSpecies(...)\'?).  Shouldn\'t happen.',species)
+			LMLogger.warn('In CME.addConcentration, couldn\'t find particle of type "%s" in map (is it previously defined with \'CME.defineSpecies(...)\'?).  Shouldn\'t happen.',species)
 		self.initial_counts[species]= int(round(conc*self.volume*6.022e23))
 
 

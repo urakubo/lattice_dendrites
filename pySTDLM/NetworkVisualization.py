@@ -113,20 +113,20 @@ def plotCMEReactionNetwork(sim, filename, withRxnNodes=False, collapseReversible
 			# Add reactants
 			if isinstance(rxn[0], tuple):
 				rctnum=ss.index(r)
-				g.add_edges((rctnum+nr,count))
+				g.add_edges([(rctnum+nr,count)])
 			else:
 				if rxn[0] != '': # FIXME
 					rctnum=ss.index(rxn[0])
-					g.add_edges((rctnum+nr,count))
+					g.add_edges([(rctnum+nr,count)])
 			# Add products
 			if isinstance(rxn[1], tuple):
 				for p in rxn[1]:
 					pdtnum=ss.index(p)
-					g.add_edges((count, pdtnum+nr))
+					g.add_edges([(count, pdtnum+nr)])
 			else:
 				if rxn[1] != '': # FIXME
 					pdtnum=ss.index(rxn[1])
-					g.add_edges((count, pdtnum+nr))
+					g.add_edges([(count, pdtnum+nr)])
 
 			count+=1	
 	else:
@@ -137,21 +137,21 @@ def plotCMEReactionNetwork(sim, filename, withRxnNodes=False, collapseReversible
 					if isinstance(rxn[1],tuple):
 						for p in rxn[1]:
 							prdnum=ss.index(p)
-							g.add_edges((rctnum,prdnum))
+							g.add_edges([(rctnum,prdnum)])
 					else:
 						if rxn[1] != '': # FIXME
 							prdnum=ss.index(rxn[1])
-							g.add_edges((rctnum,prdnum))
+							g.add_edges([(rctnum,prdnum)])
 			else:
 				rctnum=ss.index(rxn[0])
 				if isinstance(rxn[1],tuple):
 					for p in rxn[1]:
 						prdnum=ss.index(p)
-						g.add_edges((rctnum,prdnum))
+						g.add_edges([(rctnum,prdnum)])
 				else:
 					if rxn[1] != '': # FIXME
 						prdnum=ss.index(rxn[1])
-						g.add_edges((rctnum,prdnum))
+						g.add_edges([(rctnum,prdnum)])
 				
 
 	# Save the graph...
