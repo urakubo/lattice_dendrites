@@ -1,32 +1,70 @@
-import setuptools
+from setuptools import setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+
+import os, sys
+import tarfile
+from lm.check_cuda import locate_cuda
+
 
 with open("README.md") as f:
-    long_description = f.read()
+	long_description = f.read()
 
-setuptools.setup(
-    name="lattice_dendrites",
-    version="0.1.0",
-    author="hidetoshi-urakubo",
-    author_email="hurakubo@gmail.com",
-    description="Lattice dendrite",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    include_package_data=True, # described in MANIFEST.in
-    url="https://github.com/urakubo/lattice_dendrites",
-    classifiers=[
-        "License :: OSI Approved :: MIT License",
-	    "Programming Language :: Python",
-	    "Programming Language :: Python :: 3",
-	    "Programming Language :: Python :: 3.6",
-	    "Programming Language :: Python :: 3.7",
-	    "Programming Language :: Python :: 3.8",
-	    "Programming Language :: Python :: 3.9",
-	    "Topic :: Scientific/Engineering",
-	    "Intended Audience :: Science/Research",
-	    "Operating System :: POSIX",
-	    "Operating System :: MacOS",
-	    "Operating System :: Microsoft :: Windows :: Windows 10",
-    ],
+class PostInstallCommand(install):
+	"""Post-installation for installation mode."""
+	def run(self):
+		install.run(self)
+		# PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
+		print(self.install_lib)
+
+		filename    = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
+		extract_dir = os.path.join(self.install_lib, 'lm')
+		with tarfile.open(filename, "r:*") as f:
+			f.extractall(path=extract_dir, numeric_owner=True)
+		major_version = sys.version_info[0] # Major
+		minor_version = sys.version_info[1] # Minor
+
+
+		if os.name== 'posix' and major_version == 3 and major_version == 6:
+			cuda_version = locate_cuda()
+			if cuda_version == '11.0':
+				print('Postprocess: posix (linux, mac), python3.6, cuda11.0.')
+				print('Postprocess: lm_py3.6_cuda11.0 is extracted.')
+				filename = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
+				with tarfile.open(filename, "r:*") as f:
+					f.extractall(numeric_owner=True)
+
+
+class PostDevelopCommand(develop):
+	"""Post-installation for development mode."""
+	def run(self):
+		develop.run(self)
+		# PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
+
+s = setup(
+	name="lattice_dendrites",
+	version="0.1.0",
+	author="hidetoshi-urakubo",
+	author_email="hurakubo@gmail.com",
+	description="Lattice dendrite",
+	long_description=long_description,
+	long_description_content_type="text/markdown",
+	include_package_data=True, # described in MANIFEST.in
+	url="https://github.com/urakubo/lattice_dendrites",
+	classifiers=[
+		"License :: OSI Approved :: MIT License",
+		"Programming Language :: Python",
+		"Programming Language :: Python :: 3",
+		"Programming Language :: Python :: 3.6",
+		"Programming Language :: Python :: 3.7",
+		"Programming Language :: Python :: 3.8",
+		"Programming Language :: Python :: 3.9",
+		"Topic :: Scientific/Engineering",
+		"Intended Audience :: Science/Research",
+		"Operating System :: POSIX",
+		"Operating System :: MacOS",
+		"Operating System :: Microsoft :: Windows :: Windows 10",
+	],
 	install_requires=[
 		"h5py",
 		"numpy>=1.16.1",
@@ -36,21 +74,11 @@ setuptools.setup(
 		"scikit-image>=0.17.2",
 		"trimesh>=3.9.36"
 	],
-    packages = ['pyLM','pySTDLM','pyLD'],
-    python_requires="~=3.6", # >= 3.6 < 4.0
+	packages = ['pyLM','pySTDLM','pyLD','lm'],
+	package_data={"lm": ['*']},
+	python_requires="~=3.6", # >= 3.6 < 4.0
+	cmdclass={
+	    'develop': PostDevelopCommand,
+	    'install': PostInstallCommand,
+	},
 )
-
-import os, sys
-import tarfile
-from lm.check_cuda import locate_cuda
-
-major_version = sys.version_info[0] # Major
-minor_version = sys.version_info[1] # Minor
-
-if os.name== 'posix' and major_version == 3 and major_version == 8:
-    cuda_version = locate_cuda()
-    if cuda_version == '11.0':
-    	fname = "lm/lm_py3.6_cuda11.0.tar.gz"
-    	with tarfile.open(fname, "r:gz") as f:
-    		tar.extractall()     
-

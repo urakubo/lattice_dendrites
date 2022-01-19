@@ -1,1 +1,2 @@
-graft lm
+include *.tar.gz
+global-exclude *.py[cod]
