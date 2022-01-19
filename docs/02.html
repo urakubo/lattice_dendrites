@@ -105,14 +105,15 @@ Many of morphological operations in LD also work on Microsoft Windows 10 or Wind
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
-<p>Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:</p>
+<p>Find the installation paths by executing the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ check_lm_install_dir
 </pre></div>
 </div>
-<p>Then, you will obtain the paths of $LM_BIN_PATH and $LM_LIB_PATH.</p>
+<p>This command shows the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+Then, set environment paths. Add the following lines in $HOME/.bashrc:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LM_BIN_PATH</span>:<span class="nv">$PATH</span>
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LM_LIB_PATH</span>:<span class="nv">$LD_LIBRARY_PATH</span>
 
 <span class="c1"># CUDA paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
@@ -132,7 +133,7 @@ Many of morphological operations in LD also work on Microsoft Windows 10 or Wind
 </pre></div>
 </div>
 <p>and execute the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> .bashrc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> <span class="nv">$HOME</span>/.bashrc
 </pre></div>
 </div>
 </section>

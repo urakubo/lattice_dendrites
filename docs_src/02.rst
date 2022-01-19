@@ -33,21 +33,21 @@ Download LD and install pyLD, pyLM, and pySTDLM:
     $ pip install git+https://github.com/urakubo/lattice_dendrites.git
 
 
-
-
-Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:
+Find the installation paths by executing the following command:
 
 .. code-block:: bash
 
     $ check_lm_install_dir
 
-Then, you will obtain the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+This command shows the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+Then, set environment paths. Add the following lines in $HOME/.bashrc:
+
 
 .. code-block:: bash
 
 	# LM paths
-	export PATH=$LD_INSTALL_DIRECTORY/bin:$PATH
-	export LD_LIBRARY_PATH=$LD_INSTALL_DIRECTORY/lib:$LD_LIBRARY_PATH
+	export PATH=$LM_BIN_PATH:$PATH
+	export LD_LIBRARY_PATH=$LM_LIB_PATH:$LD_LIBRARY_PATH
 
 	# CUDA paths
 	export PATH=/usr/local/cuda/bin:$PATH
@@ -69,7 +69,7 @@ and execute the following command:
 
 .. code-block:: bash
 
-    $ source .bashrc
+    $ source $HOME/.bashrc
 
 
 Test execution
