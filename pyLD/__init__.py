@@ -1,5 +1,7 @@
 from .utils import *
 from .save_uniem_annotator import *
+from .check_cuda import *
+from .check_lm_install_dir import *
 
 from .BuildAnyShape import *
 from .ConnectAnalysis import *

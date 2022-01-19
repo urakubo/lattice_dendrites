@@ -4,7 +4,6 @@ from os.path import join as pjoin
 import subprocess
 import sys
 
-
 def get_cuda_version(cuda_home):
     """Locate the CUDA version
     """

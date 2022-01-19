@@ -7,8 +7,8 @@ Requirements
 * NVIDIA GPU-powered computers
 * Linux operating system (e.g., Ubuntu18.04 or 20.04)
 * Python3.6.X / CUDA11.0 or Python3.8.X / CUDA11.4
-* pip
-* ffmpeg
+* pip3
+* ffmpeg (preferred)
 
 If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
 Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.
@@ -19,46 +19,35 @@ Install dependencies:
 
 .. code-block:: bash
 
-    $ pip install -r requirements.txt
+    $ pip3 install -r requirements.txt
 
-Essentially, LD requires numpy, json, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, opencv, and pathlib. Tutorials further require matplolib and mayavi.
+Essentially, LD requires numpy, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, and opencv. Tutorials further require matplolib and mayavi.
 
 
 Download and file extraction
 ============================
-Download LD to your computer:
+Download LD and install pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
-    $ cd $LD_INSTALL_DIRECTORY
-    $ git clone https://github.com/urakubo/lattice_dendrites.git
+    $ pip install git+https://github.com/urakubo/lattice_dendrites.git
 
 
-Then locate the 
-
-
-Retrieve LM as follows:
-
-.. code-block:: bash
-
-    $ cd $LD_INSTALL_DIRECTORY
-    $ cp $LD/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-    $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 
 
 Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:
 
 .. code-block:: bash
 
+    $ check_lm_install_dir
 
-	# LD paths
-	export PYTHONPATH=$LD_INSTALL_DIRECTORY/pyLD:$PYTHONPATH
+Then, you will obtain the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+
+.. code-block:: bash
 
 	# LM paths
 	export PATH=$LD_INSTALL_DIRECTORY/bin:$PATH
-	export PYTHONPATH=$LD_INSTALL_DIRECTORY/lib/lm:$PYTHONPATH
-	export PYTHONPATH=$LD_INSTALL_DIRECTORY/lib/python:$PYTHONPATH
-	export LD_LIBRARY_PATH=$LD_INSTALL_DIRECTORY/hdf5_1.12.0_gcc8.4.0/lib:$LD_INSTALL_DIRECTORY
+	export LD_LIBRARY_PATH=$LD_INSTALL_DIRECTORY/lib:$LD_LIBRARY_PATH
 
 	# CUDA paths
 	export PATH=/usr/local/cuda/bin:$PATH

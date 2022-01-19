@@ -650,6 +650,12 @@ volume (numpy[int/bool]): Target volume</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.binaries_directory">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">binaries_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.binaries_directory" title="Permalink to this definition"></a></dt>
+<dd><p>Return the installation directory, or None</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.connect_total_concs">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">connect_total_concs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_filenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.connect_total_concs" title="Permalink to this definition"></a></dt>
 <dd><p>Connect time developments of the number and concentration of specified molecules.
@@ -789,6 +795,12 @@ Users can modify the initial state of molelcules of each run (lattice; 4D array,
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_cuda_version">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_cuda_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cuda_home</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_cuda_version" title="Permalink to this definition"></a></dt>
+<dd><p>Locate the CUDA version</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyLD.get_spacing">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_spacing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_spacing" title="Permalink to this definition"></a></dt>
 <dd><p>Retrieve spacing from a LM/LM-output file.</p>
@@ -892,6 +904,16 @@ Note that concentrations are simply obtained by the total numbers of molecules d
 <dd class="field-odd"><p>(numpy)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.locate_cuda">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">locate_cuda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.locate_cuda" title="Permalink to this definition"></a></dt>
+<dd><p>Locate the CUDA environment on the system</p>
+<p>Returns a dict with keys ‘home’, ‘include’ and ‘lib64’
+and values giving the absolute path to each directory.</p>
+<p>Starts by looking for the CUDA_HOME or CUDA_PATH env variable. If not found, everything
+is based on finding ‘nvcc’ in the PATH.</p>
 </dd></dl>
 
 <dl class="py function">

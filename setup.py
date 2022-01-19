@@ -4,7 +4,7 @@ from setuptools.command.install import install
 
 import os, sys
 import tarfile
-from lm.check_cuda import locate_cuda
+from pyLD.check_cuda import locate_cuda
 
 
 with open("README.md") as f:
@@ -24,15 +24,19 @@ class PostInstallCommand(install):
 		major_version = sys.version_info[0] # Major
 		minor_version = sys.version_info[1] # Minor
 
-
+		print('Processed here.')
 		if os.name== 'posix' and major_version == 3 and major_version == 6:
 			cuda_version = locate_cuda()
 			if cuda_version == '11.0':
 				print('Postprocess: posix (linux, mac), python3.6, cuda11.0.')
 				print('Postprocess: lm_py3.6_cuda11.0 is extracted.')
-				filename = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
-				with tarfile.open(filename, "r:*") as f:
-					f.extractall(numeric_owner=True)
+				target_file = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
+				extract_dir = os.path.join(self.install_lib, 'lm')
+				with tarfile.open(target_file, "r:*") as f:
+					f.extractall(path=extract_dir, numeric_owner=True)
+				print('Please set the following two paths.')
+				print('Please export PATH={}:$PATH',  os.path.join(extract_dir,'bin') )
+				print('Please export LD_LIBRARY_PATH={}:$LD_LIBRARY_PATH',  os.path.join(extract_dir,'lib') )
 
 
 class PostDevelopCommand(develop):
@@ -81,4 +85,12 @@ s = setup(
 	    'develop': PostDevelopCommand,
 	    'install': PostInstallCommand,
 	},
+	entry_points={
+		'console_scripts': [
+		'check_lm_install_dir = pyLD:check_lm_install_dir',
+	],
+},
+
 )
+
+

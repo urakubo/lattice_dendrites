@@ -85,8 +85,8 @@
 <li><p>NVIDIA GPU-powered computers</p></li>
 <li><p>Linux operating system (e.g., Ubuntu18.04 or 20.04)</p></li>
 <li><p>Python3.6.X / CUDA11.0 or Python3.8.X / CUDA11.4</p></li>
-<li><p>pip</p></li>
-<li><p>ffmpeg</p></li>
+<li><p>pip3</p></li>
+<li><p>ffmpeg (preferred)</p></li>
 </ul>
 <p>If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
 Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.</p>
@@ -94,34 +94,25 @@ Many of morphological operations in LD also work on Microsoft Windows 10 or Wind
 <section id="preparation">
 <h2><span class="section-number">2.2. </span>Preparation<a class="headerlink" href="#preparation" title="Permalink to this headline"></a></h2>
 <p>Install dependencies:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install -r requirements.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install -r requirements.txt
 </pre></div>
 </div>
-<p>Essentially, LD requires numpy, json, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, opencv, and pathlib. Tutorials further require matplolib and mayavi.</p>
+<p>Essentially, LD requires numpy, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, and opencv. Tutorials further require matplolib and mayavi.</p>
 </section>
 <section id="download-and-file-extraction">
 <h2><span class="section-number">2.3. </span>Download and file extraction<a class="headerlink" href="#download-and-file-extraction" title="Permalink to this headline"></a></h2>
-<p>Download LD to your computer:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
-$ git clone https://github.com/urakubo/lattice_dendrites.git
-</pre></div>
-</div>
-<p>Then locate the</p>
-<p>Retrieve LM as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> <span class="nv">$LD_INSTALL_DIRECTORY</span>
-$ cp <span class="nv">$LD</span>/lm/lm_py3.6_cuda11.0_ubuntu18.04.tar.gz ./
-$ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
+<p>Download LD and install pyLD, pyLM, and pySTDLM:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
 <p>Set environment paths. In the case of bash, add the following lines in $HOME/.bashrc:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LD paths</span>
-<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/pyLD:<span class="nv">$PYTHONPATH</span>
-
-<span class="c1"># LM paths</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ check_lm_install_dir
+</pre></div>
+</div>
+<p>Then, you will obtain the paths of $LM_BIN_PATH and $LM_LIB_PATH.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib/lm:<span class="nv">$PYTHONPATH</span>
-<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib/python:<span class="nv">$PYTHONPATH</span>
-<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/hdf5_1.12.0_gcc8.4.0/lib:<span class="nv">$LD_INSTALL_DIRECTORY</span>
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_INSTALL_DIRECTORY</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
 
 <span class="c1"># CUDA paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
@@ -149,7 +140,7 @@ $ tar -xvzf lm_py3.6_cuda11.0_ubuntu18.04.tar.gz
 <h2><span class="section-number">2.4. </span>Test execution<a class="headerlink" href="#test-execution" title="Permalink to this headline"></a></h2>
 <p>Execute ‘lm -l’ to confirm successful installation. You will see the following message:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm -l
-Lattice Microbes <span class="m">2</span>.3.0 build by root on 1336a712b2ab at <span class="m">2021</span>-11-29 <span class="m">17</span>:33:08 in <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
+Lattice Microbes <span class="m">2</span>.3.0 build by root on 1336a712b2ab at <span class="m">2021</span>-11-29 <span class="m">17</span>:33:08 <span class="k">in</span> <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
 Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2008</span>-2016 Luthey-Schulten Group,
 University of Illinois at Urbana-Champaign.
 
