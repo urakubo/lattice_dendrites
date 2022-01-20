@@ -1,4 +1,0 @@
-lm
-pyLD
-pyLM
-pySTDLM

@@ -13,7 +13,6 @@ NUMPY_BOOL_INTEGERS = [ np.bool, np.int8, np.int16, np.int32, np.int64, \
 
 
 class CreateSurface:
-
 	"""Create a smooth surface mesh of a volume.
 	Smoothing is based a humphrey filter, and surface area per face is calcudated.
 	Faces within PSD regions are labeled.
