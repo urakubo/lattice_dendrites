@@ -6,16 +6,16 @@ Requirements
 ============
 * NVIDIA GPU-powered computers
 * Linux operating system (e.g., Ubuntu18.04 or 20.04)
-* Python3.6.X / CUDA11.0 or Python3.8.X / CUDA11.4
+* Python3.6.X/CUDA11.0 or Python3.8.X/CUDA11.4
 * pip3
 * ffmpeg (preferred)
 
 If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
-Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.
+Many of morphological operations in LD also work on Microsoft Windows 10 and 11.
 
 Preparation
 ===========
-Install dependencies:
+Obtain requirements.txt from `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install dependencies:
 
 .. code-block:: bash
 
@@ -24,9 +24,9 @@ Install dependencies:
 Essentially, LD requires numpy, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, and opencv. Tutorials further require matplolib and mayavi.
 
 
-Download and file extraction
-============================
-Download LD and install pyLD, pyLM, and pySTDLM:
+Installation and settings
+=========================
+Download/install pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
@@ -39,7 +39,7 @@ Find the installation paths by executing the following command:
 
     $ check_lm_install_dir
 
-This command shows the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+This command shows two paths: $LM_BIN_PATH and $LM_LIB_PATH.
 Then, set environment paths. Add the following lines in $HOME/.bashrc:
 
 

@@ -24,11 +24,12 @@ def binaries_directory(user):
 
 
 def check_lm_install_dir():
-	cuda_version = locate_cuda()
-	if not cuda_version in VALID_CUDA_VERSIONS:
-		print('Current CUDA version: ', cuda_version)
-		print('Valid CUDA versions : ', ','.join(VALID_CUDA_VERSIONS) )
-		#sys.exit()
+	if os.name== 'posix':
+		cuda_version = locate_cuda()
+		print('Detected CUDA version: ', cuda_version)
+	else:
+		print('Linux CUDA undetected.')
+	print('Valid CUDA versions : ', ','.join(VALID_CUDA_VERSIONS) )
 
 	module_paths1 = binaries_directory(True)
 	module_paths2 = binaries_directory(False)

@@ -1,0 +1,28 @@
+Metadata-Version: 2.1
+Name: lattice-dendrites
+Version: 0.1.0
+Summary: Lattice dendrite
+Home-page: https://github.com/urakubo/lattice_dendrites
+Author: hidetoshi-urakubo
+Author-email: hurakubo@gmail.com
+License: UNKNOWN
+Description: # Lattice dendrites
+        Lattice Dendrites (LD) is an extension of lattice microbes (LM) that can incorporate morphologically realistic shapes of cells, in particular, from volumetric images of electron microscopy (EM). For detailed information, please see the [manual](https://urakubo.github.io/lattice_dendrites/).
+        
+        
+        
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Scientific/Engineering
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows :: Windows 10
+Requires-Python: ~=3.6
+Description-Content-Type: text/markdown

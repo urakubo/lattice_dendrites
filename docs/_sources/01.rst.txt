@@ -2,16 +2,16 @@
 Overview
 ========
 
-Lattice Microbes (LM) is a software package for efficiently sampling trajectories from the chemical and reaction-diffusion master equations (CME/RDME) [#LM1]_. LM computes CME/RDME using Graphics Processing Units (GPU) and even multiple GPUs [#LM2]_. LM is recently used for the simulation of mRNA splicing in a HeLa cell [#LM3]_.
+Lattice Microbes (LM) is a software package for simulating stochastic reaction-diffusion processes in cell biological systems [#LM1]_. LM computes chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPUs) [#LM2]_, and is recently used for the simulation of mRNA splicing in a HeLa cell [#LM3]_.
 
-LM is designed to solve RDMEs with geometric shapes of cells, because of limited availability of information on cellular shapes. However, LM originally can incorporate any shapes of cellular structure, as demonstrated in a previous study [#LM4]_.
+LM requests users to build geometrically-shaped cells. However, LM essentially can incorporate any shapes of cells and cellular structure, as demonstrated in a previous study [#LM4]_.
 
-We here developed an extension of LM, which is named Lattice Dendrites (LD), for the efficient incorporation of realistic shapes of cellular boundary or the other cellular structure. In particular, LD is designed to incorporate segmented volumes from the images of electron microscopy (EM). LD provides a variety of utility classes/functions for:
+We here developed an extension of LM, which is named Lattice Dendrites (LD), for the efficient incorporation of realistic shapes of cells and cellular structure. In particular, LD is designed to incorporate segmented volumes from the images of electron microscopy (EM). LD provides a variety of utility classes/functions for:
 
-#. Import of shapes from a software for EM segmentation (Reconstruct).
+#. Import of the shape data formatted in a software for EM segmentation (Reconstruct).
 #. Object rotation to minimize their volume in a rectangular solid.
 #. Manual annotation using UNI-EM annotator. 
-#. Distrubtion of surface molecule whose density is proportional to surface area.
+#. Distrubtion of surface molecules whose densites are proportional to surface area.
 #. Simulation with events.
 #. Data analyses for visualization.
 

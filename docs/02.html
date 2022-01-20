@@ -42,7 +42,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">2.1. Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#preparation">2.2. Preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#download-and-file-extraction">2.3. Download and file extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-settings">2.3. Installation and settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#test-execution">2.4. Test execution</a></li>
 </ul>
 </li>
@@ -84,24 +84,24 @@
 <ul class="simple">
 <li><p>NVIDIA GPU-powered computers</p></li>
 <li><p>Linux operating system (e.g., Ubuntu18.04 or 20.04)</p></li>
-<li><p>Python3.6.X / CUDA11.0 or Python3.8.X / CUDA11.4</p></li>
+<li><p>Python3.6.X/CUDA11.0 or Python3.8.X/CUDA11.4</p></li>
 <li><p>pip3</p></li>
 <li><p>ffmpeg (preferred)</p></li>
 </ul>
 <p>If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
-Many of morphological operations in LD also work on Microsoft Windows 10 or Windows11.</p>
+Many of morphological operations in LD also work on Microsoft Windows 10 and 11.</p>
 </section>
 <section id="preparation">
 <h2><span class="section-number">2.2. </span>Preparation<a class="headerlink" href="#preparation" title="Permalink to this headline"></a></h2>
-<p>Install dependencies:</p>
+<p>Obtain requirements.txt from <a class="reference external" href="https://github.com/urakubo/lattice_dendrites.git">the github site</a> , and install dependencies:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install -r requirements.txt
 </pre></div>
 </div>
 <p>Essentially, LD requires numpy, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, and opencv. Tutorials further require matplolib and mayavi.</p>
 </section>
-<section id="download-and-file-extraction">
-<h2><span class="section-number">2.3. </span>Download and file extraction<a class="headerlink" href="#download-and-file-extraction" title="Permalink to this headline"></a></h2>
-<p>Download LD and install pyLD, pyLM, and pySTDLM:</p>
+<section id="installation-and-settings">
+<h2><span class="section-number">2.3. </span>Installation and settings<a class="headerlink" href="#installation-and-settings" title="Permalink to this headline"></a></h2>
+<p>Download/install pyLD, pyLM, and pySTDLM:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
@@ -109,7 +109,7 @@ Many of morphological operations in LD also work on Microsoft Windows 10 or Wind
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ check_lm_install_dir
 </pre></div>
 </div>
-<p>This command shows the paths of $LM_BIN_PATH and $LM_LIB_PATH.
+<p>This command shows two paths: $LM_BIN_PATH and $LM_LIB_PATH.
 Then, set environment paths. Add the following lines in $HOME/.bashrc:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LM_BIN_PATH</span>:<span class="nv">$PATH</span>
@@ -141,7 +141,7 @@ Then, set environment paths. Add the following lines in $HOME/.bashrc:</p>
 <h2><span class="section-number">2.4. </span>Test execution<a class="headerlink" href="#test-execution" title="Permalink to this headline"></a></h2>
 <p>Execute ‘lm -l’ to confirm successful installation. You will see the following message:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ lm -l
-Lattice Microbes <span class="m">2</span>.3.0 build by root on 1336a712b2ab at <span class="m">2021</span>-11-29 <span class="m">17</span>:33:08 <span class="k">in</span> <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
+Lattice Microbes <span class="m">2</span>.3.0 build by root on 1336a712b2ab at <span class="m">2021</span>-11-29 <span class="m">17</span>:33:08 in <span class="m">64</span>-bit mode with options CUDA MPD:MAPPED_OVERFLOWS MPD:GLOBAL_S_MATRIX MPD:FREAKYFAST.
 Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2008</span>-2016 Luthey-Schulten Group,
 University of Illinois at Urbana-Champaign.
 

@@ -1,0 +1,3 @@
+[console_scripts]
+check_lm_install_dir = pyLD:check_lm_install_dir
+
