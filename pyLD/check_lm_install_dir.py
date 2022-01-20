@@ -24,6 +24,7 @@ def binaries_directory(user):
 
 
 def check_lm_install_dir():
+	print()
 	if os.name== 'posix':
 		cuda_version = locate_cuda()
 		print('Detected CUDA version: ', cuda_version)
