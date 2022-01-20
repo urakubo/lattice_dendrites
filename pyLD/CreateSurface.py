@@ -42,7 +42,11 @@ class CreateSurface:
 
 			- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
 		"""
-		if not isinstance(psd, np.ndarray) or (psd.ndim != 3) or np.any(psd.shape != self.volume.shape):
+		if not isinstance(psd, np.ndarray):
+			raise ValueError('psd must be np.ndarray.')
+		elif psd.ndim != 3:
+			raise ValueError('psd must have a three dimensional space, but psd.ndim = ', psd.ndim)
+		elif np.any(psd.shape != self.volume.shape):
 			raise ValueError('psd.shape must be equal to volume.shape.')
 
 		xvnum, yvnum, zvnum = psd.shape
