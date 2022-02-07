@@ -8,10 +8,10 @@ Requirements
 * Linux operating system (e.g., Ubuntu18.04 or 20.04)
 * Python3.6.X/CUDA11.0 or Python3.8.X/CUDA11.4
 * pip3
-* ffmpeg (preferred)
+* ffmpeg (required for the generation of videos)
 
-If preferred, users can use a virtual environment such as venv, virtualenv, and conda.
-Many of morphological operations in LD also work on Microsoft Windows 10 and 11.
+Users can use a virtual environment such as venv, virtualenv, and conda.
+Many of morphological operations in LD work on Microsoft Windows 10 and 11.
 
 Preparation
 ===========
