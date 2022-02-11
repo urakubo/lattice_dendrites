@@ -2,7 +2,7 @@
 Tutorial 1: schematic dendrite
 ==============================
 
-They are steps how to simulate signals in LD/LM.
+We would introduce how to use LD and LM through two tutorials. In this tutorial (tutorial 1), we first build a dendritic spine that is represented by a schematic shape (ball and stick), then two types of simulation are conducted: Ca2+ influx through NMDA receptors and fluorescence recovery after photobleaching (FRAP). Through these simulations, users can understand how to build a spiny dendrite, label the spine, run simulation, and visualize the simulation results.
 
 .. toctree::
 
@@ -14,7 +14,8 @@ They are steps how to simulate signals in LD/LM.
 	tut1/visualization2_mayavi
 
 
-All tutorial programs are located in $LD_INSTALL_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It includes utility functions for tutorial 1. The function "make_cylinder" makes a cylinder with a indicated radius and length. The function "add_shape" locates such a geometric object in a volume space. The function "show_dendrite" loads and displays the surface objects of cellular boundary, postsynaptic density (PSD), mitochondrion, and endoplasmic reticulum (ER).
+All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It provides utility functions that are used in tutorial 1. The function "make_cylinder" makes a cylinder with an indicated radius and length. The function "add_shape" locates a geometric object into a volume space. The function "show_dendrite" loads and displays the surface objects of cellular boundary, postsynaptic density (PSD), mitochondrion, and endoplasmic reticulum (ER).
+
 
 .. literalinclude:: ../tutorial/1/tut1_functions.py
    :language: python

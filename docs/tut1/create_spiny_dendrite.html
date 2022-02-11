@@ -82,8 +82,17 @@
              
   <section id="create-a-shape">
 <h1><span class="section-number">3.1. </span>Create a shape<a class="headerlink" href="#create-a-shape" title="Permalink to this headline"></a></h1>
-<p>We first designed a schematics shape of spiny dendrite.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <a class="reference internal image-reference" href="../_images/Scheme.jpg"><img alt="../_images/Scheme.jpg" class="align-center" src="../_images/Scheme.jpg" style="width: 676.1999999999999px; height: 507.0px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>We would first draw a blueprint of a schematics shape of spiny dendrite (Figure above), and the designed shape is embedded in a voxel space.</p>
+<ol class="arabic simple">
+<li><p>a voxel space of 96 × 60 × 96 voxels (20 nm/voxel) is set as a numpy 3D array ‘vol_dend’ (Line 14 in 11_create_dend.py). Then, we use a Python module function morphology.ball (skimage) to create a spine head (Line 10) as a sphere with a radius of 0.25 μ m (12 voxels). This sphere is added to the voxel space ‘vol_dend’ (add_shape; Line 15). Similarly, we make spine neck and dendrite as cylinders (Lines 11 and 12, respectively), and add them to ‘vol_dend’ (add_shape; Lines 16 and 17, respectively). The in-house function ‘add_shape,’ simply overlays overwrapped regions, and represents the filled areas as 1 (cytosolic region) and the void areas as 0 (extracellular region). Thus, we have already built the contour of the spiny dendrite in ‘vol_dend.’</p></li>
+</ol>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">11_create_dend.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
