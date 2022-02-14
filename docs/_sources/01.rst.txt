@@ -15,7 +15,10 @@ We here developed an extension of LM, which is named Lattice Dendrites (LD), for
 #. Simulation with events.
 #. Data analyses for visualization.
 
-Users can use use a variety of functions below for their model development, simulation, and analyses. Their usage are described in Tutorials 1 and 2.
+Users can use use a variety of functions below for their model development, simulation, and analyses. Their usages are described in Tutorials 1 and 2.
+In tutorial 1, we would introduce how to build a geometrically-shaped dendritic spine, and how to simulate Ca2+ influx through NMDA receptors as well as fluorescence recovery after photobleaching (FRAP).
+In tutorial 2, we would introduce how to import realistic shapes of cells from the external software Reconstruct, and how to annotate them using UNI-EM annotator. 
+
 
 |
 
