@@ -83,7 +83,7 @@
   <section id="create-a-shape">
 <h1><span class="section-number">3.1. </span>Create a shape<a class="headerlink" href="#create-a-shape" title="Permalink to this headline"></a></h1>
 <ol class="arabic simple">
-<li><p>We would first draw a blueprint of a spiny dendrite as a combination of geometric shapes (Figure below). A sphere with a radius of 0.25 μ m represents a spine head, part of which is labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μ m, length 1.0 μ m), which is connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μ m, length 1.8 μ m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μ m, length 1.8 μ m; blue colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μ m, length 1.8 μ m; yellow colored objects).</p></li>
+<li><p>We first draw a blueprint of a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 μ m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μ m, length 1.0 μ m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μ m, length 1.8 μ m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μ m, length 1.8 μ m; blue colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μ m, length 1.8 μ m; yellow colored objects).</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -94,7 +94,12 @@
 </div>
 <ol class="arabic simple" start="2">
 <li><p>The designed shape is embedded in a voxel space for simulation (Lines 1-35, 11_create_dend.py). First, a voxel space of 96 × 60 × 96 voxels (20 nm/voxel) is set as a numpy 3D array ‘vol_dend’ (Line 14). Then, the spine head is created using a Python module function morphology.ball (skimage; Line 10; 0.25 μ m, 12 voxels), which is added to ‘vol_dend’ (add_shape; Line 15). Similarly, we make the spine neck and dendrite as cylinders (Lines 11 and 12, respectively), and add them to ‘vol_dend’ (Lines 16 and 17, respectively). The in-house function ‘add_shape,’ simply overlays overwrapped regions, and represents the filled areas as 1 (cytosolic region) and the void areas as 0 (extracellular region). Thus, we have already built the contour of the spiny dendrite in ‘vol_dend.’ Similarly, the PSD, Mitochondrion, and ER are embedded in vol_psd, vol_mito, and vol_er, respectively.</p></li>
-<li><p>Here, the volume sizes need to be corrected. LM can only simulate a volume with a size of a multiple of 32 × 32 × 32 voxels, whereas the current voxel size is 96 × 60 × 96 voxels. We thus execute a utility function ‘lmpad’ (Lines 39-42). The voxel sizes are automatically expanded to the multiple of 32 (96 × 64 × 96 voxels in this case). Users can of course set a multiple of 32 voxels from the beginning.</p></li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Here, the volume sizes need to be corrected. LM can only simulate the volume with a size of a multiple of 32 × 32 × 32 voxels, whereas the current voxel size is 96 × 60 × 96 voxels. We thus execute a utility function ‘lmpad’ (Lines 39-42). The voxel sizes are automatically expanded to the multiple of 32 (96 × 64 × 96 voxels in this case). Users can of course set a multiple of 32 voxels from the beginning.</p></li>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">11_create_dend.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
@@ -182,7 +187,13 @@
 </div>
 </div>
 <ol class="arabic simple" start="4">
-<li><p>The surface of each object is calculated.</p></li>
+<li><p>Then, we use the CreateSurface class to generate smoothed surfaces of each object (Lines 53, 63, and 67). The generated triangle surfaces are required for locating surface molecules as well as visualizing simulation results. Each of the triangle is specified by a face that is composed of three vertices (Lines 55 and 56, respectively). Also, the CreateSurface class can generate the surface areas per volume. LD can distribute surface molecules in the voxel space, depending on the surface areas per volume (Line 56). We can further select the surface triangles within the areas of PSD (face_id_psd, Lines 58, 59) to distribute molecules only in this area.</p></li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Finally, the generated variables are assembled in a Python dictionary ‘m’ (Lines 51-72), and ‘m’ is saved into the HDF container file ‘models/ball_and_stick.h5’ (Lines 75-80).</p></li>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">12_show_dend.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
@@ -198,7 +209,9 @@
 </div>
 </div>
 <a class="reference internal image-reference" href="../_images/ball_and_stick.png"><img alt="../_images/ball_and_stick.png" class="align-center" src="../_images/ball_and_stick.png" style="width: 350.0px; height: 326.0px;" /></a>
-<p>That is all.</p>
+<ol class="arabic simple" start="6">
+<li><p>Execute ‘python3 11_create_dend.py’. If users have successfully saved the volumes and surfaces, the execution of the subsequent script ‘python3 12_show_dend.py’ will show its 3D shape (Figure above). We use this spiny dendrite for simulation.</p></li>
+</ol>
 </section>
 
 

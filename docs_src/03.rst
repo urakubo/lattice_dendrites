@@ -2,7 +2,7 @@
 Tutorial 1: schematic dendrite
 ==============================
 
-In this tutorial (tutorial 1), we first build a dendritic spine that is represented by a geometrical shape (ball and stick), then two types of simulation are conducted: Ca2+ influx through NMDA receptors and fluorescence recovery after photobleaching (FRAP). Through these simulations, users can understand how to build a spiny dendrite, label the spine, run simulation, and visualize the simulation results.
+In this tutorial (tutorial 1), we first build a dendritic spine that is represented by a geometrical shape (ball and stick), then conduct two types of simulation: Ca2+ influx through NMDA receptors and fluorescence recovery after photobleaching (FRAP). Through these simulations, users can understand how to build a spiny dendrite, label the spine, run simulation, and visualize the simulation results.
 
 .. toctree::
 
@@ -14,7 +14,7 @@ In this tutorial (tutorial 1), we first build a dendritic spine that is represen
 	tut1/visualization2_mayavi
 
 
-All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It provides utility functions that are used in tutorial 1. The function "make_cylinder" makes a cylinder with an indicated radius and length. The function "add_shape" locates a geometric object into a volume space. The function "show_dendrite" loads and displays the surface objects of cellular boundary, postsynaptic density (PSD), mitochondrion, and endoplasmic reticulum (ER).
+All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It provides utility functions that are used in tutorial 1. The function "make_cylinder" makes a cylinder in a voxel space. The function "add_shape" embed a voxel object at the location specified by the barycenter. The function "show_dendrite" displays the surface objects of cellular contours, postsynaptic densities (PSD), mitochondria, and endoplasmic reticulum (ER).
 
 
 .. literalinclude:: ../tutorial/1/tut1_functions.py
