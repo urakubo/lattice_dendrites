@@ -82,9 +82,7 @@
              
   <section id="label-a-spine">
 <h1><span class="section-number">3.2. </span>Label a spine<a class="headerlink" href="#label-a-spine" title="Permalink to this headline"></a></h1>
-<p>We would like to label a spine volume to obtain molecular concentration of this region.
-Because the spine has a geometric shape, we can programmably label the spine volume, not using the UNI-EM annotator, as follows.</p>
-<p>Convert the labeled areas to labeled volumes, and save them.</p>
+<p>For analyses, we often need to obtain molecular concentration of a specific region, such as a spine. To enable this, we label a spine volume. It is easy to do it in the case of the geometrically shaped cells, because users can label a specific area by re-defining the same sphere in the same space. In the sample script (12_label_head.py), the total cytosolic volume ‘vol_dend_not_mito_not_er’ is loaded from ‘models/ball_and_stick.h5’, and saved as the container ‘ref volume’ in the label file ‘models/labels_ball_and_stick.h5’. Similarly, the label id is saved as the container ‘label ids’.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">21_label_head.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
@@ -121,7 +119,7 @@ Because the spine has a geometric shape, we can programmably label the spine vol
 </pre></div>
 </div>
 </div>
-<p>Confirm the successful segmentation in the voxel space by visualizing it.</p>
+<p>If users can successfully save the spine label, they can confirm it using the visualzation script ‘22_show_label.py’. The labeled area appears as a colored part.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">22_show_label.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
@@ -154,7 +152,7 @@ Because the spine has a geometric shape, we can programmably label the spine vol
 </div>
 </div>
 <a class="reference internal image-reference" href="../_images/labels_ball_and_stick.png"><img alt="../_images/labels_ball_and_stick.png" class="align-center" src="../_images/labels_ball_and_stick.png" style="width: 350.0px; height: 326.0px;" /></a>
-<p>That is all for labeling.</p>
+<p>It is not easy to label specific regions in the case of a morphologically realistic model. We will try it in tutorial 2.</p>
 </section>
 
 

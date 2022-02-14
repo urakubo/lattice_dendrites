@@ -33,7 +33,7 @@ Create a shape
 
 |
 
-5. Finally, the generated variables are assembled in a Python dictionary 'm' (Lines 51-72), and 'm' is saved into the HDF container file 'models/ball_and_stick.h5' (Lines 75-80).  
+5. Finally, the generated variables are assembled in a Python dictionary variable 'm' (Lines 51-72), and 'm' is saved into the HDF container file 'models/ball_and_stick.h5' (Lines 75-80).  
 
 .. literalinclude:: ../../tutorial/1/12_show_dend.py
    :language: python
@@ -44,5 +44,5 @@ Create a shape
    :scale: 50%
    :align: center
 
-6. Execute 'python3 11_create_dend.py'. If users have successfully saved the volumes and surfaces, the execution of the subsequent script 'python3 12_show_dend.py' will show its 3D shape (Figure above). We use this spiny dendrite for simulation.
+6. Execute 'python3 11_create_dend.py'. If users have successfully created the volumes and surfaces, the execution of the subsequent script 'python3 12_show_dend.py' will show its 3D shape (Figure above). We use this spiny dendrite for simulation.
 
