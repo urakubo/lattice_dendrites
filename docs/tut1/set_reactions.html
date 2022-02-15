@@ -82,107 +82,142 @@
              
   <section id="set-reactions">
 <h1><span class="section-number">3.3. </span>Set reactions<a class="headerlink" href="#set-reactions" title="Permalink to this headline"></a></h1>
-<p>In the first example, we examine the spatiotemporal dynamics of YFP after the photobleaching of</p>
+<p>In this subsection, a LM model is built based on the voxelized shape of a spiny dendrite (31_build_model.py).</p>
+<ol class="arabic simple">
+<li><p>We first load the HDF containers that has the cytosolic region (vol_cytosol; Line 18), PSD region (vol_PSD; Line 19), and the region of cell boundary (vol_bound; Line 20).</p></li>
+<li><p>We set the dict variable ‘domains’ to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 23), and the dict variable ‘surfaces’ to designate the pairs of a name and voxelized surface areas (64-bit float; Line 24).</p></li>
+<li><p>We then call the BuildAnyShape class (Line 29) to register the domains and surfaces.</p></li>
+<li><p>We further set molecular properties, such as names, initial locations, diffusion, and interactions (set_molecules; Line 30). They are described in the files ‘32_FRAP.py’ and ‘33_CaSignal.py’, either of which can be incorporated (Lines 7-11).</p></li>
+<li><p>We set simulation timers (Lines 33-37), and save the LM model (Lines 40-43).</p></li>
+</ol>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">31_build_photobleach.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">31_build_model.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
-<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="kn">import</span> <span class="n">micron</span>
 <span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span> 
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span>
-<span class="linenos"> 8</span><span class="n">input_morph_file</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
-<span class="linenos"> 9</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
-<span class="linenos">10</span>
-<span class="linenos">11</span><span class="n">ext</span>  <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
-<span class="linenos">12</span><span class="n">cyt</span>  <span class="o">=</span> <span class="s1">&#39;cytoplasm&#39;</span>
-<span class="linenos">13</span><span class="n">er</span>   <span class="o">=</span> <span class="s1">&#39;er&#39;</span>
-<span class="linenos">14</span><span class="n">mito</span> <span class="o">=</span> <span class="s1">&#39;mito&#39;</span>
-<span class="linenos">15</span><span class="n">domains</span> <span class="o">=</span> <span class="p">{</span><span class="n">ext</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cyt</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">er</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mito</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
-<span class="linenos">16</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span><span class="k">class</span> <span class="nc">SetMolecules</span><span class="p">:</span>
-<span class="linenos">19</span>	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
-<span class="linenos">20</span>		<span class="bp">self</span><span class="o">.</span><span class="n">name_yfp</span> <span class="o">=</span> <span class="s1">&#39;YFP&#39;</span>
-<span class="linenos">21</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span>     <span class="o">=</span> <span class="n">cell</span>
-<span class="linenos">22</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name_yfp</span><span class="p">)</span>
-<span class="linenos">23</span>
-<span class="linenos">24</span>	<span class="k">def</span> <span class="nf">add_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos">25</span>		<span class="n">conc_yfp</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># uM</span>
-<span class="linenos">26</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_molecule_uM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">conc_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">)</span>
-<span class="linenos">27</span>
-<span class="linenos">28</span>	<span class="k">def</span> <span class="nf">set_diffusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos">29</span>		<span class="n">d_yfp</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mf">1e-12</span> <span class="c1"># (um2/s) Kang 2012; Traffic 13:1589-1600</span>
-<span class="linenos">30</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">d_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="mi">32</span><span class="n">_FRAP</span> <span class="kn">import</span> <span class="nn">set_molecules</span>
+<span class="linenos"> 8</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/photobleach_yfp.lm&#39;</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># from 33_CaSignal import set_molecules</span>
+<span class="linenos">11</span><span class="c1"># output_lm_file   = &#39;models/Ca_influx.lm&#39;</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Load geometry data.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">15</span><span class="n">input_morph_file</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
+<span class="linenos">16</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morph_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
+<span class="linenos">17</span>	<span class="n">pitch_in_um</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
+<span class="linenos">18</span>	<span class="n">vol_cytosol</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">19</span>	<span class="n">vol_PSD</span>     <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">20</span>	<span class="n">vol_bound</span>   <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="n">vol_cytosol</span> <span class="o">=</span> <span class="p">(</span><span class="n">vol_cytosol</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="linenos">23</span><span class="n">domains</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;not cytosol&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;cytosol&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="linenos">24</span><span class="n">surfaces</span>    <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">28</span><span class="n">pitch_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch_in_um</span><span class="p">)</span> <span class="c1"># Unit in SI</span>
+<span class="linenos">29</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">vol_cytosol</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">pitch_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">30</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
 <span class="linenos">31</span>
-<span class="linenos">32</span>	<span class="k">def</span> <span class="nf">set_reactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos">33</span>		<span class="k">pass</span>
-<span class="linenos">34</span>
-<span class="linenos">35</span>
-<span class="linenos">36</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Load geometry data.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">37</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morph_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
-<span class="linenos">38</span>	<span class="n">dendrite_not_mitochondrion_not_ER</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
-<span class="linenos">39</span>	<span class="n">pitch</span>     <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
-<span class="linenos">40</span>	<span class="n">vol_PSD</span>   <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">][()]</span>
-<span class="linenos">41</span>	<span class="n">vol_bound</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">][()]</span>
-<span class="linenos">42</span>
-<span class="linenos">43</span><span class="n">volume</span> <span class="o">=</span> <span class="p">(</span><span class="n">dendrite_not_mitochondrion_not_ER</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">domains</span><span class="p">[</span><span class="n">cyt</span><span class="p">]</span>
-<span class="linenos">44</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
-<span class="linenos">45</span>
-<span class="linenos">46</span>
-<span class="linenos">47</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">48</span><span class="n">spacing_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="c1"># Units in SI</span>
-<span class="linenos">49</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">spacing_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
-<span class="linenos">50</span>
-<span class="linenos">51</span>
-<span class="linenos">52</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set molecules.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">53</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">SetMolecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-<span class="linenos">54</span><span class="n">molecules</span><span class="o">.</span><span class="n">add_molecules</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">55</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">56</span><span class="n">molecules</span><span class="o">.</span><span class="n">set_reactions</span><span class="p">(</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">57</span>
-<span class="linenos">58</span>
-<span class="linenos">59</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">60</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
-<span class="linenos">61</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">62</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">63</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
-<span class="linenos">64</span>
-<span class="linenos">65</span>
-<span class="linenos">66</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save simulation setup.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">67</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
-<span class="linenos">68</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
-<span class="linenos">69</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">34</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
+<span class="linenos">35</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">36</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">37</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save overall setup.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">41</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+<span class="linenos">42</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos">43</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Two parts can be replace as follows to exmine the reactions (“32_build_AB_C.py”):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/AB_C.lm&#39;</span>
-</pre></div>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span> <span class="nc">SetMolecules</span><span class="p">:</span>
-<span class="linenos"> 2</span>	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
-<span class="linenos"> 3</span>		<span class="bp">self</span><span class="o">.</span><span class="n">molecular_names</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
-<span class="linenos"> 4</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
-<span class="linenos"> 5</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">molecular_names</span><span class="p">)</span>
+<p>Then, we recall the two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure below) and Ca2+ influx through NMDA receptors (right in Figure below).</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<a class="reference internal image-reference" href="../_images/Scheme2.jpg"><img alt="../_images/Scheme2.jpg" class="align-center" src="../_images/Scheme2.jpg" style="width: 491.20000000000005px; height: 296.8px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Two parts can be replace as follows to exmine the reactions (‘32_FRAP.py’):</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">32_FRAP.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Define molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos"> 4</span>	<span class="n">name_yfp</span> <span class="o">=</span> <span class="s1">&#39;YFP&#39;</span>
+<span class="linenos"> 5</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">)</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span>	<span class="k">def</span> <span class="nf">add_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos"> 8</span>		<span class="n">concs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># uM</span>
-<span class="linenos"> 9</span>		<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">conc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">molecular_names</span><span class="p">,</span> <span class="n">concs</span><span class="p">):</span>
-<span class="linenos">10</span>			<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_molecule_uM</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">conc</span><span class="p">,</span> <span class="n">domain_name</span> <span class="p">)</span>
+<span class="linenos"> 7</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Add molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos"> 8</span>	<span class="n">conc_yfp</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># uM</span>
+<span class="linenos"> 9</span>	<span class="n">cyt</span>      <span class="o">=</span> <span class="s1">&#39;cytosol&#39;</span>
+<span class="linenos">10</span>	<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule_uM</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">conc_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
 <span class="linenos">11</span>
-<span class="linenos">12</span>	<span class="k">def</span> <span class="nf">set_diffusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos">13</span>		<span class="n">diff_coeff</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mf">1e-12</span> <span class="c1"># Diffusion coefficient in SI</span>
-<span class="linenos">14</span>		<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecular_names</span><span class="p">:</span>
-<span class="linenos">15</span>			<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">diff_coeff</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">)</span>
-<span class="linenos">16</span>
-<span class="linenos">17</span>	<span class="k">def</span> <span class="nf">set_reactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
-<span class="linenos">18</span>		<span class="c1"># AB binding to C</span>
-<span class="linenos">19</span>		<span class="n">kon</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="linenos">20</span>		<span class="n">kof</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="linenos">21</span>		<span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">reac_twoway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">),</span> <span class="n">prod</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="p">(</span><span class="n">kon</span><span class="p">,</span> <span class="n">kof</span><span class="p">),</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">domain_name</span><span class="p">)</span>
+<span class="linenos">12</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set diffusion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">13</span>	<span class="n">d_yfp</span>    <span class="o">=</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="mf">1e-12</span> <span class="c1"># (0.7 um2/s) Kang 2012; Traffic 13:1589-1600</span>
+<span class="linenos">14</span>	<span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">d_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>33_Ca.py</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">33_CaSignal.py</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Define molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos"> 4</span>	<span class="n">name_Ca</span>        <span class="o">=</span> <span class="s1">&#39;Ca&#39;</span>
+<span class="linenos"> 5</span>	<span class="n">surf_numbers</span>   <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NMDAR_act&#39;</span><span class="p">:</span><span class="mi">0</span>    <span class="p">,</span><span class="s1">&#39;NMDAR_inact&#39;</span><span class="p">:</span><span class="mi">20</span>   <span class="p">,</span> <span class="s1">&#39;Pump&#39;</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span> <span class="s1">&#39;Pump_Ca&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<span class="linenos"> 6</span>	<span class="n">surf_local</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NMDAR_act&#39;</span><span class="p">:</span><span class="s1">&#39;PSD&#39;</span><span class="p">,</span><span class="s1">&#39;NMDAR_inact&#39;</span><span class="p">:</span><span class="s1">&#39;PSD&#39;</span><span class="p">,</span> \
+<span class="linenos"> 7</span>			<span class="s1">&#39;Pump&#39;</span><span class="p">:</span><span class="s1">&#39;cell boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;CaPump&#39;</span><span class="p">:</span><span class="s1">&#39;cell boundary&#39;</span><span class="p">}</span>
+<span class="linenos"> 8</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span> <span class="n">name_Ca</span> <span class="p">)</span>
+<span class="linenos"> 9</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span> <span class="nb">list</span><span class="p">(</span><span class="n">surf_numbers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Add molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>	<span class="n">conc_Ca</span>        <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">13</span>	<span class="n">cyt</span>            <span class="o">=</span> <span class="s1">&#39;cytosol&#39;</span>
+<span class="linenos">14</span>	<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule</span><span class="p">(</span><span class="n">name_Ca</span><span class="p">,</span> <span class="n">conc_Ca</span><span class="p">,</span> <span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">15</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">surf_numbers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">16</span>		<span class="n">cell</span><span class="o">.</span><span class="n">add_surface_molecule</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">surf_local</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set diffusion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">19</span>	<span class="n">diff_Ca</span>        <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mf">1e-12</span>
+<span class="linenos">20</span>	<span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">name_Ca</span><span class="p">,</span> <span class="n">diff_Ca</span><span class="p">,</span> <span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set reactions</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">23</span>	<span class="n">k_nmdar_deact</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">24</span>	<span class="n">k_channel_Ca</span>  <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">25</span>	<span class="n">k_pump_Ca</span>     <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">26</span>	<span class="n">kon_Ca</span>        <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">27</span>	<span class="n">koff_Ca</span>       <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">28</span>	<span class="n">oneway_reacs</span> <span class="o">=</span> \
+<span class="linenos">29</span>		<span class="p">[[</span><span class="s1">&#39;NMDAR_act&#39;</span><span class="p">,</span>       <span class="s1">&#39;NMDAR_inact&#39;</span> <span class="p">,</span> <span class="n">k_nmdar_deact</span><span class="p">],</span> \
+<span class="linenos">30</span>		 <span class="p">[</span><span class="s1">&#39;NMDAR_act&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;NMDAR_act&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca&#39;</span><span class="p">)</span> <span class="p">,</span> <span class="n">k_channel_Ca</span><span class="p">]</span> <span class="p">,</span> \
+<span class="linenos">31</span>		 <span class="p">[</span><span class="s1">&#39;Pump_Ca&#39;</span>  <span class="p">,</span>              <span class="s1">&#39;Pump&#39;</span> <span class="p">,</span> <span class="n">k_pump_Ca</span><span class="p">]]</span>
+<span class="linenos">32</span>	<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">oneway_reacs</span><span class="p">:</span>
+<span class="linenos">33</span>		<span class="n">cell</span><span class="o">.</span><span class="n">reac_oneway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prod</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rate</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">34</span>	<span class="c1">#</span>
+<span class="linenos">35</span>	<span class="n">cell</span><span class="o">.</span><span class="n">reac_twoway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Pump&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca&#39;</span><span class="p">),</span> \
+<span class="linenos">36</span>		<span class="n">prod</span><span class="o">=</span><span class="s1">&#39;Pump_Ca&#39;</span><span class="p">,</span> \
+<span class="linenos">37</span>		<span class="n">rates</span><span class="o">=</span><span class="p">(</span><span class="n">kon_Ca</span><span class="p">,</span> <span class="n">koff_Ca</span><span class="p">),</span> \
+<span class="linenos">38</span>		<span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <p>That is all for simulation setup.</p>
 </section>

@@ -83,7 +83,7 @@
   <section id="create-a-shape">
 <h1><span class="section-number">3.1. </span>Create a shape<a class="headerlink" href="#create-a-shape" title="Permalink to this headline"></a></h1>
 <ol class="arabic simple">
-<li><p>We first draw a blueprint of a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 μ m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μ m, length 1.0 μ m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μ m, length 1.8 μ m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μ m, length 1.8 μ m; blue colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μ m, length 1.8 μ m; yellow colored objects).</p></li>
+<li><p>We first draw a blueprint to make a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 μ m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μ m, length 1.0 μ m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μ m, length 1.8 μ m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μ m, length 1.8 μ m; green colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μ m, length 1.8 μ m; yellow colored objects).</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -187,7 +187,7 @@
 </div>
 </div>
 <ol class="arabic simple" start="4">
-<li><p>Then, we use the CreateSurface class to generate smoothed surfaces of each object (Lines 53, 63, and 67). The generated triangle surfaces are required for locating surface molecules as well as visualizing simulation results. Each of the triangle is specified by a face that is composed of three vertices (Lines 55 and 56, respectively). Also, the CreateSurface class can generate the surface areas per volume. LD can distribute surface molecules in the voxel space, depending on the surface areas per volume (Line 56). We can further select the surface triangles within the areas of PSD (face_id_psd, Lines 58, 59) to distribute molecules only in this area.</p></li>
+<li><p>Then, we use the CreateSurface class to generate smoothed surfaces of each object (Lines 53, 63, and 67). The generated surfaces are required for locating surface molecules as well as visualizing simulation results. Each surface is composed of triangles that are specified by three vertices (Lines 55 and 56, respectively). Also, the CreateSurface class can generate the surface areas per volume. LD can distribute surface molecules in the voxel space, depending on the surface areas per volume (Line 56). We can further select the surface triangles within the areas of PSD (face_id_psd, Lines 58, 59), to distribute molecules only in this area.</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -197,20 +197,22 @@
 </ol>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">12_show_dend.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="n">show_dendrite</span>
-<span class="linenos">2</span>
-<span class="linenos">3</span><span class="n">input_morpho_file</span> <span class="o">=</span> <span class="s2">&quot;models/ball_and_stick.h5&quot;</span>
-<span class="linenos">4</span><span class="n">output_image_file</span> <span class="o">=</span> <span class="s2">&quot;imgs/ball_and_stick.png&quot;</span>
-<span class="linenos">5</span>
-<span class="linenos">6</span><span class="n">mlab</span> <span class="o">=</span> <span class="n">show_dendrite</span><span class="p">(</span><span class="n">input_morpho_file</span><span class="p">)</span>
-<span class="linenos">7</span><span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_image_file</span><span class="p">)</span>
-<span class="linenos">8</span><span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="n">show_dendrite</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">input_morpho_file</span> <span class="o">=</span> <span class="s2">&quot;models/ball_and_stick.h5&quot;</span>
+<span class="linenos"> 5</span><span class="n">output_image_file</span> <span class="o">=</span> <span class="s2">&quot;imgs/ball_and_stick.png&quot;</span>
+<span class="linenos"> 6</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;imgs&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">mlab</span> <span class="o">=</span> <span class="n">show_dendrite</span><span class="p">(</span><span class="n">input_morpho_file</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_image_file</span><span class="p">)</span>
+<span class="linenos">10</span><span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <a class="reference internal image-reference" href="../_images/ball_and_stick.png"><img alt="../_images/ball_and_stick.png" class="align-center" src="../_images/ball_and_stick.png" style="width: 350.0px; height: 326.0px;" /></a>
 <ol class="arabic simple" start="6">
-<li><p>Execute ‘python3 11_create_dend.py’. If users have successfully created the volumes and surfaces, the execution of the subsequent script ‘python3 12_show_dend.py’ will show its 3D shape (Figure above). We use this spiny dendrite for simulation.</p></li>
+<li><p>Execute ‘python3 11_create_dend.py’. If users have successfully created the volumes and surfaces, the subsequent script ‘python3 12_show_dend.py’ will show its 3D shape (Figure above). We use the spiny dendrite for simulation.</p></li>
 </ol>
 </section>
 

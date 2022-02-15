@@ -81,7 +81,12 @@
              
   <section id="tutorial-1-schematic-dendrite">
 <h1><span class="section-number">3. </span>Tutorial 1: schematic dendrite<a class="headerlink" href="#tutorial-1-schematic-dendrite" title="Permalink to this headline"></a></h1>
-<p>In this tutorial (tutorial 1), we first build a dendritic spine that is represented by a geometrical shape (ball and stick), then conduct two types of simulation: Ca2+ influx through NMDA receptors and fluorescence recovery after photobleaching (FRAP). Through these simulations, users can understand how to build a spiny dendrite, label the spine, run simulation, and visualize the simulation results.</p>
+<p>In this tutorial (tutorial 1), we first build a dendritic spine that is represented by a geometrical shape (ball and stick), then simulate two example phenomena: fluorescence recovery after photobleaching (FRAP) and Ca2+ influx through NMDA receptors (Figure below). Through these simulations, users can understand how to build a spiny dendrite, label the spine, run simulation, and visualize the simulation results.</p>
+<a class="reference internal image-reference" href="_images/Scheme2.jpg"><img alt="_images/Scheme2.jpg" class="align-center" src="_images/Scheme2.jpg" style="width: 491.20000000000005px; height: 296.8px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Table of contents</strong></p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tut1/create_spiny_dendrite.html">3.1. Create a shape</a></li>
@@ -92,7 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tut1/visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
 </ul>
 </div>
-<p>All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory “1”. It provides utility functions that are used in tutorial 1. The function “make_cylinder” makes a cylinder in a voxel space. The function “add_shape” embed a voxel object at the location specified by the barycenter. The function “show_dendrite” displays the surface objects of cellular contours, postsynaptic densities (PSD), mitochondria, and endoplasmic reticulum (ER).</p>
+<p>All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory “1”. It provides utility functions that are used in tutorial 1. The function “make_cylinder” makes a cylinder in a voxel space. The function “add_shape” embeds a voxel object at the location specified by the barycenter. The function “show_dendrite” displays the surface objects of cellular contours, postsynaptic densities (PSD), mitochondria, and endoplasmic reticulum (ER).</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">tut1_functions.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

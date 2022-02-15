@@ -5,7 +5,7 @@
 Create a shape
 ==============
 
-1. We first draw a blueprint of a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 |mgr| m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 |mgr| m, length 1.0 |mgr| m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 |mgr| m, length 1.8 |mgr| m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 |mgr| m, length 1.8 |mgr| m; blue colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 |mgr| m, length 1.8 |mgr| m; yellow colored objects). 
+1. We first draw a blueprint to make a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 |mgr| m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 |mgr| m, length 1.0 |mgr| m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 |mgr| m, length 1.8 |mgr| m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 |mgr| m, length 1.8 |mgr| m; green colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 |mgr| m, length 1.8 |mgr| m; yellow colored objects). 
 
 |
 
@@ -29,7 +29,7 @@ Create a shape
    :caption: 11_create_dend.py
 
 
-4. Then, we use the CreateSurface class to generate smoothed surfaces of each object (Lines 53, 63, and 67). The generated triangle surfaces are required for locating surface molecules as well as visualizing simulation results. Each of the triangle is specified by a face that is composed of three vertices (Lines 55 and 56, respectively). Also, the CreateSurface class can generate the surface areas per volume. LD can distribute surface molecules in the voxel space, depending on the surface areas per volume (Line 56). We can further select the surface triangles within the areas of PSD (face_id_psd, Lines 58, 59) to distribute molecules only in this area.
+4. Then, we use the CreateSurface class to generate smoothed surfaces of each object (Lines 53, 63, and 67). The generated surfaces are required for locating surface molecules as well as visualizing simulation results. Each surface is composed of triangles that are specified by three vertices (Lines 55 and 56, respectively). Also, the CreateSurface class can generate the surface areas per volume. LD can distribute surface molecules in the voxel space, depending on the surface areas per volume (Line 56). We can further select the surface triangles within the areas of PSD (face_id_psd, Lines 58, 59), to distribute molecules only in this area.
 
 |
 
@@ -44,5 +44,5 @@ Create a shape
    :scale: 50%
    :align: center
 
-6. Execute 'python3 11_create_dend.py'. If users have successfully created the volumes and surfaces, the execution of the subsequent script 'python3 12_show_dend.py' will show its 3D shape (Figure above). We use this spiny dendrite for simulation.
+6. Execute 'python3 11_create_dend.py'. If users have successfully created the volumes and surfaces, the subsequent script 'python3 12_show_dend.py' will show its 3D shape (Figure above). We use the spiny dendrite for simulation.
 
