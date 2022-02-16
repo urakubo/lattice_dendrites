@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.3. Set reactions" href="set_reactions.html" />
+    <link rel="next" title="3.3. Build models" href="build_model.html" />
     <link rel="prev" title="3.1. Create a shape" href="create_spiny_dendrite.html" /> 
 </head>
 
@@ -43,7 +43,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../03.html">3. Tutorial 1: schematic dendrite</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="create_spiny_dendrite.html">3.1. Create a shape</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">3.2. Label a spine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="set_reactions.html">3.3. Set reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_model.html">3.3. Build models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simulation.html">3.4. Run simulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
@@ -90,19 +90,20 @@
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
 <span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">morphology</span>
 <span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="n">add_shape</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="n">output_label_filename</span> <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Label a spine head&#39;</span><span class="p">)</span>
-<span class="linenos">10</span><span class="n">spine_head</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
-<span class="linenos">11</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">96</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">96</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">12</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">spine_head</span><span class="p">,</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">76</span><span class="p">])</span>
-<span class="linenos">13</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span>
-<span class="linenos">14</span>
-<span class="linenos">15</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Save label&#39;</span><span class="p">)</span>
-<span class="linenos">16</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output_label_filename</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">17</span>	<span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend</span>
-<span class="linenos">18</span>	<span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">output_label_filename</span> <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Label a spine head&#39;</span><span class="p">)</span>
+<span class="linenos">11</span><span class="n">spine_head</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">ball</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">96</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">96</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="linenos">13</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">add_shape</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">spine_head</span><span class="p">,</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">76</span><span class="p">])</span>
+<span class="linenos">14</span><span class="n">vol_dend</span>   <span class="o">=</span> <span class="n">lmpad</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Save label&#39;</span><span class="p">)</span>
+<span class="linenos">17</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output_label_filename</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos">18</span>	<span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend</span>
+<span class="linenos">19</span>	<span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -111,37 +112,38 @@
 <div class="code-block-caption"><span class="caption-text">22_show_label.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
-<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="n">input_file</span>        <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
-<span class="linenos"> 7</span><span class="n">input_label_file</span>  <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
-<span class="linenos"> 8</span><span class="n">output_image_file</span> <span class="o">=</span> <span class="s1">&#39;imgs/labels_ball_and_stick.png&#39;</span>
-<span class="linenos"> 9</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="n">input_file</span>        <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
+<span class="linenos"> 8</span><span class="n">input_label_file</span>  <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
+<span class="linenos"> 9</span><span class="n">output_image_file</span> <span class="o">=</span> <span class="s1">&#39;imgs/labels_ball_and_stick.png&#39;</span>
 <span class="linenos">10</span>
-<span class="linenos">11</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">12</span>	<span class="n">ref_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
-<span class="linenos">13</span>
-<span class="linenos">14</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_label_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">15</span>	<span class="n">label_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">][()]</span>
-<span class="linenos">16</span>	<span class="n">label_ids</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">][()]</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span><span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span><span class="mi">700</span><span class="p">))</span>
-<span class="linenos">19</span><span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span> <span class="p">]</span> <span class="p">)</span>
-<span class="linenos">20</span>
-<span class="linenos">21</span><span class="n">pitch</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="linenos">22</span><span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">label_ids</span><span class="p">:</span>
-<span class="linenos">23</span>	<span class="n">s</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">label_volume</span> <span class="o">==</span> <span class="nb">id</span><span class="p">,</span> <span class="n">pitch</span><span class="p">)</span>
-<span class="linenos">24</span>	<span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="linenos">25</span>	<span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
-<span class="linenos">26</span>		<span class="n">s</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="linenos">27</span>
-<span class="linenos">28</span><span class="n">d</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span> <span class="n">ref_volume</span> <span class="o">^</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>  <span class="n">pitch</span><span class="p">)</span>
-<span class="linenos">29</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="linenos">30</span><span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
-<span class="linenos">31</span>	<span class="n">d</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="linenos">32</span><span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_image_file</span><span class="p">)</span>
-<span class="linenos">33</span><span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos">13</span>	<span class="n">ref_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_label_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos">16</span>	<span class="n">label_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">17</span>	<span class="n">label_ids</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label ids&#39;</span><span class="p">][()]</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span><span class="mi">700</span><span class="p">))</span>
+<span class="linenos">20</span><span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span> <span class="p">]</span> <span class="p">)</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="n">pitch</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">23</span><span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">label_ids</span><span class="p">:</span>
+<span class="linenos">24</span>	<span class="n">s</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">label_volume</span> <span class="o">==</span> <span class="nb">id</span><span class="p">,</span> <span class="n">pitch</span><span class="p">)</span>
+<span class="linenos">25</span>	<span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="linenos">26</span>	<span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
+<span class="linenos">27</span>		<span class="n">s</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="n">d</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span> <span class="n">ref_volume</span> <span class="o">^</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>  <span class="n">pitch</span><span class="p">)</span>
+<span class="linenos">30</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="linenos">31</span><span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
+<span class="linenos">32</span>	<span class="n">d</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="linenos">33</span><span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_image_file</span><span class="p">)</span>
+<span class="linenos">34</span><span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -154,7 +156,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="create_spiny_dendrite.html" class="btn btn-neutral float-left" title="3.1. Create a shape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="set_reactions.html" class="btn btn-neutral float-right" title="3.3. Set reactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="build_model.html" class="btn btn-neutral float-right" title="3.3. Build models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -3,6 +3,7 @@ import numpy as np
 import h5py
 from skimage import morphology
 from tut1_functions import add_shape
+from pyLD import *
 
 output_label_filename = 'models/labels_ball_and_stick.h5'
 

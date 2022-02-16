@@ -44,3 +44,13 @@ def show_dendrite(input_morpho_file):
 	mlab.triangular_mesh(bound_v[:,0], bound_v[:,1], bound_v[:,2], bound_f[PSD_ids,:], color=(1,0,0), opacity=0.3)
 
 	return mlab
+
+def get_loc_molecule(lattice, targ_id):
+	m = []
+	for i in range(lattice.shape[3]):
+		m.extend( np.flatnonzero(lattice[:,:,:,i] == targ_id).tolist() )
+	if m != []:
+		m = np.unravel_index(m, lattice[:,:,:,0].shape )
+	else:
+		m = [0, 0, 0]                
+	return m

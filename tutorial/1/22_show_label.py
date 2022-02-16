@@ -1,5 +1,6 @@
 import sys, os
 import numpy as np
+import h5py
 from mayavi import mlab
 from pyLD import *
 

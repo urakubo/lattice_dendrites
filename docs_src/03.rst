@@ -18,7 +18,7 @@ In this tutorial (tutorial 1), we first build a dendritic spine that is represen
 
 	tut1/create_spiny_dendrite
 	tut1/label_spine
-	tut1/set_reactions
+	tut1/build_model
 	tut1/run_simulation
 	tut1/visualization1_matplotlib
 	tut1/visualization2_mayavi
