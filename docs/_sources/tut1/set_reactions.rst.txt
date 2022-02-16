@@ -25,7 +25,7 @@ In this subsection, a LM model is built based on the voxelized shape of a spiny 
 
 |
 
-Then, we recall the two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure below) and Ca2+ influx through NMDA receptors (right in Figure below). 
+We here recall the two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure below) and Ca2+ influx through NMDA receptors (right in Figure below). 
 
 |
 
