@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import h5py
-from pyLM.units import micron
+from pyLM.units import micron, microsecond
 from pyLD import * 
 
 from 32_FRAP import set_molecules

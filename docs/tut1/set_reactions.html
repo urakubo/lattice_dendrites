@@ -84,18 +84,19 @@
 <h1><span class="section-number">3.3. </span>Set reactions<a class="headerlink" href="#set-reactions" title="Permalink to this headline"></a></h1>
 <p>In this subsection, a LM model is built based on the voxelized shape of a spiny dendrite (31_build_model.py).</p>
 <ol class="arabic simple">
-<li><p>We first load the HDF containers that has the cytosolic region (vol_cytosol; Line 18), PSD region (vol_PSD; Line 19), and the region of cell boundary (vol_bound; Line 20).</p></li>
-<li><p>We set the dict variable ‘domains’ to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 23), and the dict variable ‘surfaces’ to designate the pairs of a name and voxelized surface areas (64-bit float; Line 24).</p></li>
-<li><p>We then call the BuildAnyShape class (Line 29) to register the domains and surfaces.</p></li>
-<li><p>We further set molecular properties, such as names, initial locations, diffusion, and interactions (set_molecules; Line 30). They are described in the files ‘32_FRAP.py’ and ‘33_CaSignal.py’, either of which can be incorporated (Lines 7-11).</p></li>
-<li><p>We set simulation timers (Lines 33-37), and save the LM model (Lines 40-43).</p></li>
+<li><p>Some HDF containers are loaded to define the cytosolic region (vol_cytosol; Line 18), PSD region (vol_PSD; Line 19), and the region of cell boundary (vol_bound; Line 20).</p></li>
+<li><p>The dict variable ‘domains’ is set to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 23), and the dict variable ‘surfaces’ is set to designate the pairs of a name and voxelized surface areas (64-bit float; Line 24).</p></li>
+<li><p>The BuildAnyShape class is called to register the domains and surfaces in the instance variable ‘cell’ (Line 29).</p></li>
+<li><p>The instance variable ‘cell’ further incorporates the following properties regarding molecules: names, initial locations, diffusion, and interactions (set_molecules; Line 30). The entities are described in the files ‘32_FRAP.py’ and ‘33_CaSignal.py’, either of which can be incorporated (Lines 7-11).</p></li>
+<li><p>Simulation timers are set under the instance ‘sim’ (Lines 33-37). Descriptions of setTimestep, setWriteInterval, setLatticeWriteInterval, and setSimulationTime are provided in <a class="reference external" href="http://faculty.scs.illinois.edu/schulten/software_manuals/InstructionGuide.pdf">the instruction guide of LM</a>. Indeed, the BuildAnyShape class is a wrapper of a class of LM ‘pyLM.RDME.RDMESimulation’, all methods of which are preserved in the instance ‘sim’.</p></li>
+<li><p>The overall setup is saved in the file ‘models/photobleach_yfp.lm’ or ‘models/Ca_influx.lm’ (Lines 7-11 and 40-43).</p></li>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">31_build_model.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
-<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="kn">import</span> <span class="n">micron</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="kn">import</span> <span class="n">micron</span><span class="p">,</span> <span class="n">microsecond</span>
 <span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span> 
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="kn">from</span> <span class="mi">32</span><span class="n">_FRAP</span> <span class="kn">import</span> <span class="nn">set_molecules</span>
@@ -141,38 +142,36 @@
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>We here recall the two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure below) and Ca2+ influx through NMDA receptors (right in Figure below).</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <a class="reference internal image-reference" href="../_images/Scheme2.jpg"><img alt="../_images/Scheme2.jpg" class="align-center" src="../_images/Scheme2.jpg" style="width: 491.20000000000005px; height: 296.8px;" /></a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>Two parts can be replace as follows to exmine the reactions (‘32_FRAP.py’):</p>
+<p>We here recall two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure above) and Ca<sup>2+</sup> influx through NMDA receptors (right in Figure above). To realize the FRAP simulation, the script below (32_FRAP.py) has a function ‘set_molecules’ to introduce two types of cytosolic molecules: ‘YFP’ and ‘bleached YFP’ (define_species; Lines 3-6), set their initial concentrations (add_molecule_uM; Lines 8-11), and diffuse them with a diffusion coefficient (set_diffusion; Lines 13-16). If we select to call the script ‘32_FRAP.py’ (Lines 7-11 in 31_build_model.py), the definitions of the molecules are incorporated in the instance variable ‘cell’.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">32_FRAP.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Define molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos"> 4</span>	<span class="n">name_yfp</span> <span class="o">=</span> <span class="s1">&#39;YFP&#39;</span>
-<span class="linenos"> 5</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">)</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Add molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos"> 8</span>	<span class="n">conc_yfp</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># uM</span>
-<span class="linenos"> 9</span>	<span class="n">cyt</span>      <span class="o">=</span> <span class="s1">&#39;cytosol&#39;</span>
-<span class="linenos">10</span>	<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule_uM</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">conc_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
-<span class="linenos">11</span>
-<span class="linenos">12</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set diffusion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="linenos">13</span>	<span class="n">d_yfp</span>    <span class="o">=</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="mf">1e-12</span> <span class="c1"># (0.7 um2/s) Kang 2012; Traffic 13:1589-1600</span>
-<span class="linenos">14</span>	<span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">name_yfp</span><span class="p">,</span> <span class="n">d_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
+<span class="linenos"> 4</span>	<span class="n">names_concs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;YFP&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bleached YFP&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="linenos"> 5</span>	<span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">names_concs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="linenos"> 6</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span> <span class="n">names</span> <span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Add molecules</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos"> 9</span>	<span class="n">cyt</span> <span class="o">=</span> <span class="s1">&#39;cytosol&#39;</span>
+<span class="linenos">10</span>	<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">conc</span> <span class="ow">in</span> <span class="n">names_concs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">11</span>		<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule_uM</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">conc</span><span class="p">,</span> <span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set diffusion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">14</span>	<span class="n">d_yfp</span> <span class="o">=</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="mf">1e-12</span> <span class="c1"># (0.7 um2/s) Kang 2012; Traffic 13:1589-1600</span>
+<span class="linenos">15</span>	<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+<span class="linenos">16</span>		<span class="n">cell</span><span class="o">.</span><span class="n">set_diffusion</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">d_yfp</span><span class="p">,</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>33_Ca.py</p>
+<p>In the case of Ca<sup>2+</sup> influx via NMDA receptors, the script ‘33_CaSignal.py’ defines a variety of molecules and their properties. A cytosolic molecule ‘Ca’ is created to represent Ca<sup>2+</sup> ions. ‘Pump’ and ‘Pump-Ca’ are created for the uptake of Ca<sup>2+</sup> ions at the cell boundary.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>

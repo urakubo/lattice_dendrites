@@ -2,6 +2,8 @@
 Overview
 ========
 
+.. |Ca2+| replace:: Ca\ :sup:`2+`
+
 Lattice Microbes (LM) is a software package for simulating stochastic reaction-diffusion processes in cell biological systems [#LM1]_. LM computes chemical and reaction-diffusion master equations (CME/RDME) using Graphics Processing Units (GPUs) [#LM2]_, and is recently used for the simulation of mRNA splicing in a HeLa cell [#LM3]_.
 
 LM has been designed for building geometrically-shaped cells. However, LM essentially can incorporate any shapes of cells and cellular structure, as demonstrated in a previous study [#LM4]_.
@@ -16,7 +18,7 @@ We here developed an extension of LM, which is named Lattice Dendrites (LD), for
 #. Data analyses for visualization.
 
 Users can use use a variety of functions below for their model development, simulation, and analyses. Their usages are described in Tutorials 1 and 2.
-In tutorial 1, we would introduce how to build a geometrically-shaped dendritic spine, and how to simulate Ca2+ influx through NMDA receptors as well as fluorescence recovery after photobleaching (FRAP).
+In tutorial 1, we would introduce how to build a geometrically-shaped dendritic spine, and how to simulate |Ca2+| influx through  N-Methyl-D-aspartate (NMDA) receptors as well as fluorescence recovery after photobleaching (FRAP).
 In tutorial 2, we would introduce how to import realistic shapes of cells from the external software Reconstruct, and how to annotate them using UNI-EM annotator. 
 
 
@@ -27,7 +29,6 @@ In tutorial 2, we would introduce how to import realistic shapes of cells from t
    :align: center
 
 |
-
 
 
 **References**
