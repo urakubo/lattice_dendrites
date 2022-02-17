@@ -82,13 +82,13 @@
              
   <section id="run-simulation">
 <h1><span class="section-number">3.4. </span>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline"></a></h1>
-<p>Models stored in LM-format files can be executed by Lattice Microbes (LM). LM is not a Python module, but a standalone software that can be executed through the command prompt:</p>
+<p>Models stored in LM-format files can be executed by Lattice Microbes (LM). LM is not a Python module, but is executed by the command prompt:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir results_photobleach
 $ cp models/photobleach.lm results_photobleach/0000.lm
 $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_photobleach/0000.lm
 </pre></div>
 </div>
-<p>These commands make a copy of ‘models/photobleach.lm’ as ‘results_photobleach/0000.lm’, which is executed by lm. This process can also be described using a Python script.</p>
+<p>The above commands make a copy of ‘models/photobleach.lm’ as ‘results_photobleach/0000.lm’, and it is executed by LM. This process can also be described using a Python script, as follow (41_single_run.py):</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">41_single_run.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
@@ -111,7 +111,7 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_phot
 </pre></div>
 </div>
 </div>
-<p>We can easily run simulation; however, using this simple run, we cannot introduce any events function, such as photobleaching and synaptic input. To handle such events, the “ConnectRun” class enables the is provided as used in ‘42_connect_run.py’.</p>
+<p>We can easily run simulation; however, in this simple run, we cannot handle any event functions, such as photobleaching and synaptic input. The “ConnectRun” class enables them by connecting multiple runs into a sequential run. Events can be inserted in between the unit runs. The ‘42_connect_run.py’ is an example:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">42_connect_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
