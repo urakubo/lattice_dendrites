@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.6. Visualization 2: video &mdash; lattice dendrites 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Tutorial 2: realistic dendrite" href="../04.html" />
+    <link rel="prev" title="3.5. Visualization 1: graph plot" href="visualization1_graph_plot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lattice dendrites
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02.html">2. Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../03.html">3. Tutorial 1: schematic dendrite</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="create_spiny_dendrite.html">3.1. Create a shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="label_spine.html">3.2. Label a spine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_model.html">3.3. Build models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_simulation.html">3.4. Run simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_graph_plot.html">3.5. Visualization 1: graph plot</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.6. Visualization 2: video</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../04.html">4. Tutorial 2: realistic dendrite</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lattice dendrites</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../03.html"><span class="section-number">3. </span>Tutorial 1: schematic dendrite</a> &raquo;</li>
+      <li><span class="section-number">3.6. </span>Visualization 2: video</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tut1/visualization2_video.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="visualization-2-video">
+<h1><span class="section-number">3.6. </span>Visualization 2: video<a class="headerlink" href="#visualization-2-video" title="Permalink to this headline"></a></h1>
+<p>Some users need to further analyze simulation results in a spatio-temporal manner, e.g., for 3D visualization. The class ConnectAnalysis allows to use user-defined function for a time series of 4D images (3D space + 16 slots for molecules).
+mayavi and ffmpeg.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">61_make_video.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">shutil</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="linenos"> 5</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># FRAP</span>
+<span class="linenos">10</span><span class="n">targ_name</span>   <span class="o">=</span> <span class="s1">&#39;YFP&#39;</span>
+<span class="linenos">11</span><span class="n">color</span>       <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">lm_files</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;results_photobleach/0000.lm&#39;</span>  <span class="p">,</span><span class="s1">&#39;results_photobleach/0001.lm&#39;</span><span class="p">]</span>
+<span class="linenos">13</span><span class="n">start_time</span>  <span class="o">=</span> <span class="o">-</span><span class="mi">4</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">16</span><span class="sd"># Ca2+ influx via NMDARs</span>
+<span class="linenos">17</span><span class="sd">targ_name   = &#39;Ca&#39;</span>
+<span class="linenos">18</span><span class="sd">color       = (0,0,1)</span>
+<span class="linenos">19</span><span class="sd">lm_files    = [&#39;results_Ca_dynamics/0000.lm&#39;  ,&#39;results_Ca_dynamics/0001.lm&#39;]</span>
+<span class="linenos">20</span><span class="sd">start_time  = -2</span>
+<span class="linenos">21</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="n">morpho_file</span> <span class="o">=</span> <span class="s2">&quot;models/ball_and_stick.h5&quot;</span>
+<span class="linenos">24</span><span class="n">output_dir</span>  <span class="o">=</span> <span class="s2">&quot;imgs_for_video&quot;</span>
+<span class="linenos">25</span><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+<span class="linenos">26</span>	<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+<span class="linenos">27</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="c1"># Show spiny dendrite</span>
+<span class="linenos">31</span><span class="n">mlab</span> <span class="o">=</span> <span class="n">show_dendrite</span><span class="p">(</span><span class="n">morpho_file</span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="c1"># Event to make an image</span>
+<span class="linenos">35</span><span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">sys_param</span><span class="p">,</span> <span class="n">event_param</span><span class="p">):</span>
+<span class="linenos">36</span>	<span class="nb">id</span>   <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+<span class="linenos">37</span>	<span class="n">time</span> <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+<span class="linenos">38</span>	<span class="n">s</span>    <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span>
+<span class="linenos">39</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Event at: </span><span class="si">{:g}</span><span class="s1">, time: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+<span class="linenos">40</span>	<span class="n">m</span>    <span class="o">=</span> <span class="n">get_loc_molecule</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">targ_name</span><span class="p">])</span>
+<span class="linenos">41</span>	<span class="n">plot_points</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">points3d</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>\
+<span class="linenos">42</span>		<span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">,</span>\
+<span class="linenos">43</span>		<span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="linenos">44</span>	<span class="n">text</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">{0:.3f}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span>	<span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span> <span class="p">]</span> <span class="p">)</span>
+<span class="linenos">47</span>	<span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+<span class="linenos">48</span>	<span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="linenos">49</span>	<span class="n">plot_points</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+<span class="linenos">50</span>	<span class="n">text</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span>	<span class="k">return</span> <span class="n">event_param</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span>
+<span class="linenos">55</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Generate images&#39;</span><span class="p">)</span>
+<span class="linenos">56</span><span class="n">c</span> <span class="o">=</span> <span class="n">ConnectAnalysis</span><span class="p">(</span><span class="n">lm_files</span><span class="p">)</span>
+<span class="linenos">57</span><span class="n">c</span><span class="o">.</span><span class="n">start_time</span>  <span class="o">=</span> <span class="n">start_time</span>
+<span class="linenos">58</span><span class="n">c</span><span class="o">.</span><span class="n">event</span>       <span class="o">=</span> <span class="n">event</span>
+<span class="linenos">59</span><span class="n">c</span><span class="o">.</span><span class="n">event_param</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="linenos">60</span><span class="n">c</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+<span class="linenos">61</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Connect images into a video&#39;</span><span class="p">)</span>
+<span class="linenos">64</span><span class="n">ffname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%04d</span><span class="s1">.png&#39;</span><span class="p">)</span>
+<span class="linenos">65</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ffmpeg&#39;</span><span class="p">,</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="n">ffname</span><span class="p">,</span>\
+<span class="linenos">66</span>       <span class="s1">&#39;-vf&#39;</span><span class="p">,</span><span class="s1">&#39;scale=trunc(iw/2)*2:trunc(ih/2)*2&#39;</span><span class="p">,</span>\
+<span class="linenos">67</span>       <span class="s1">&#39;-pix_fmt&#39;</span><span class="p">,</span> <span class="s1">&#39;yuv420p&#39;</span><span class="p">,</span> <span class="n">targ_name</span><span class="o">+</span><span class="s1">&#39;.mp4&#39;</span><span class="p">]</span>
+<span class="linenos">68</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">com</span><span class="p">))</span>
+<span class="linenos">69</span><span class="n">s</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>ConnectAnalysis calls the function “event” at each time of recording, and it produces a mayavi-based video as follows:</p>
+
+    <video   controls >
+    <source src="_static/photobleach.mp4" type="video/mp4">
+    Video
+    </video>
+    <p>That is all for visualzation 2.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="visualization1_graph_plot.html" class="btn btn-neutral float-left" title="3.5. Visualization 1: graph plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../04.html" class="btn btn-neutral float-right" title="4. Tutorial 2: realistic dendrite" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Hidetoshi Urakubo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

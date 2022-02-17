@@ -43,10 +43,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../03.html">3. Tutorial 1: schematic dendrite</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">3.1. Create a shape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="label_spine.html">3.2. Label a spine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="set_reactions.html">3.3. Set reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_model.html">3.3. Build models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simulation.html">3.4. Run simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_graph_plot.html">3.5. Visualization 1: graph plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization2_video.html">3.6. Visualization 2: video</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../04.html">4. Tutorial 2: realistic dendrite</a></li>
@@ -83,7 +83,7 @@
   <section id="create-a-shape">
 <h1><span class="section-number">3.1. </span>Create a shape<a class="headerlink" href="#create-a-shape" title="Permalink to this headline"></a></h1>
 <ol class="arabic simple">
-<li><p>We first draw a blueprint to make a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 μ m) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μ m, length 1.0 μ m), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μ m, length 1.8 μ m). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μ m, length 1.8 μ m; green colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μ m, length 1.8 μ m; yellow colored objects).</p></li>
+<li><p>We first draw a blueprint to make a spiny dendrite as a combination of geometric shapes (Figure below). A sphere (radius: 0.25 μm) represents a spine head, which is partially labeled as a postsynaptic density (PSD; red colored area). The spine head has a cylindrical spike neck (radius: 0.1 μm, length 1.0 μm), and it is further connected to a parent dendrite that also has a cylindrical shape (radius: 0.5 μm, length 1.8 μm). Not only the contour of spiny dendrite, we also introduce two types of intracellular organelles. Endoplasmic reticulum (ER) is set as thin cylinders (radius: 0.08 μm, length 1.8 μm; green colored objects), and a mitochondrion is set as a thich cylinder (radius: 0.2 μm, length 1.8 μm; yellow colored objects).</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -93,7 +93,7 @@
 <div class="line"><br /></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>The designed shape is embedded in a voxel space for simulation (Lines 1-35, 11_create_dend.py). First, a voxel space of 96 × 60 × 96 voxels (20 nm/voxel) is set as a numpy 3D array ‘vol_dend’ (Line 14). Then, the spine head is created using a Python module function morphology.ball (skimage; Line 10; 0.25 μ m, 12 voxels), which is added to ‘vol_dend’ (add_shape; Line 15). Similarly, we make the spine neck and dendrite as cylinders (Lines 11 and 12, respectively), and add them to ‘vol_dend’ (Lines 16 and 17, respectively). The in-house function ‘add_shape,’ simply overlays overwrapped regions, and represents the filled areas as 1 (cytosolic region) and the void areas as 0 (extracellular region). Thus, we have already built the contour of the spiny dendrite in ‘vol_dend.’ Similarly, the PSD, Mitochondrion, and ER are embedded in vol_psd, vol_mito, and vol_er, respectively.</p></li>
+<li><p>The designed shape is embedded in a voxel space for simulation (Lines 1-35, 11_create_dend.py). First, a voxel space of 96 × 60 × 96 voxels (20 nm/voxel) is set as a numpy 3D array ‘vol_dend’ (Line 14). Then, the spine head is created using a Python module function morphology.ball (skimage; Line 10; 0.25 μm, 12 voxels), which is added to ‘vol_dend’ (add_shape; Line 15). Similarly, we make the spine neck and dendrite as cylinders (Lines 11 and 12, respectively), and add them to ‘vol_dend’ (Lines 16 and 17, respectively). The in-house function ‘add_shape,’ simply overlays overwrapped regions, and represents the filled areas as 1 (cytosolic region) and the void areas as 0 (extracellular region). Thus, we have already built the contour of the spiny dendrite in ‘vol_dend.’ Similarly, the PSD, Mitochondrion, and ER are embedded in vol_psd, vol_mito, and vol_er, respectively.</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><br /></div>

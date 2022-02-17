@@ -2,16 +2,15 @@
 Run simulation
 ==============
 
-We would like to keep "models/ball_and_stick.lm" as a template, and store the simulation reults in "results/run_ball_and_stick.lm". To do this, we first copy the lm file then execute the simulation through the command prompt:
+Models stored in LM-format files can be executed by Lattice Microbes (LM). LM is not a Python module, but a standalone software that can be executed through the command prompt:
 
 .. code-block:: bash
 
-	$ mkdir results
-	$ cp models/ball_and_stick.lm results/run_ball_and_stick.lm
-	$ lm -r 1 -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
+	$ mkdir results_photobleach
+	$ cp models/photobleach.lm results_photobleach/0000.lm
+	$ lm -r 1 -sp -sl lm::rdme::MpdRdmeSolver -f results_photobleach/0000.lm
 
-
-We can also write a Python script like:
+These commands make a copy of 'models/photobleach.lm' as 'results_photobleach/0000.lm', which is executed by lm. This process can also be described using a Python script.
 
 .. literalinclude:: ../../tutorial/1/41_single_run.py
    :language: python
@@ -19,11 +18,7 @@ We can also write a Python script like:
    :caption: 41_single_run.py
 
 
-We can easily run such a simulation; however, it would not satisfy aims of simulation.
-For example, one may want to see a fluorescence recovery after photobleaching (FRAP).
-In this case, a preparatory run should be followed by an instantaneous action, i.e., photobleach.
-Then, the recovery process should be simulated.
-To handle such events, we can use the "ConnectRun" class as follows:
+We can easily run simulation; however, using this simple run, we cannot introduce any events function, such as photobleaching and synaptic input. To handle such events, the "ConnectRun" class enables the is provided as used in '42_connect_run.py'.
 
 .. literalinclude:: ../../tutorial/1/42_connect_run.py
    :language: python

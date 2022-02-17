@@ -76,7 +76,7 @@
 <dt class="sig sig-object py" id="pyLD.BuildAnyShape">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">BuildAnyShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing_in_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.BuildAnyShape" title="Permalink to this definition"></a></dt>
 <dd><p>Build a buildAnyShape object.</p>
-<p>sim.siteTypes[‘domain name’] may be different from volume_id.</p>
+<p>Caution: sim.siteTypes[‘domain name’] may be different from volume_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -293,13 +293,13 @@ Thus, users can set/modify them anytime before “exec”.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.ConnectTotalConcs">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectTotalConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectTotalConcs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectTotalConcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lm_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectTotalConcs" title="Permalink to this definition"></a></dt>
 <dd><p>Obtain time developments of the total numbers/concentrations of target molecules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>label_conc_filenames</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Simulated lm files.</p></li>
-<li><p><strong>domain_ids</strong> (<em>int / list</em><em>[</em><em>int</em><em>] </em><em>/ tuple</em><em>[</em><em>int</em><em>]</em>) – Target domain ids. They are summed if multiple domains are specified.</p></li>
+<li><p><strong>domain_names</strong> (<em>str / list</em><em>[</em><em>str</em><em>] </em><em>/ tuple</em><em>[</em><em>str</em><em>]</em>) – Target domain names. They are summed if multiple domains are specified.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

@@ -21,14 +21,15 @@ def event_replace(lattice, sys_param, event_param):
 r = ConnectRun()
 r.label_volume_file = 'models/labels_ball_and_stick.h5'
 
+# FRAP
 r.template_lm_file  = 'models/photobleach.lm'
 r.output_dir        = 'results_photobleach'
 r.event_params      = {'src':'YFP', 'dst':'bleached YFP'}
 r.exec_periods      = [4.0, 4.0]
 r.exec_events       = [event_null, event_replace]
 
-
 '''
+# Ca2+ influx via NMDARs
 r.template_lm_file  = 'models/Ca_dynamics.lm'
 r.output_dir        = 'results_Ca_dynamics'
 r.event_params      = {'src':'inactive NMDAR', 'dst':'active NMDAR'}
@@ -37,9 +38,11 @@ r.exec_events       = [event_null, event_replace]
 '''
 
 '''
+# Multiple GPUs
 GPU_ids  = '0,1'
 num_GPUs = '2'
 num_CPUs = '2'
 r.lm_option   = ['-g', GPU_ids, '-gr', num_GPUs,'-cr', num_CPUs, '-sl','lm::rdme::MGPUMpdRdmeSolver']
 '''
+
 r.exec()

@@ -2,13 +2,13 @@ import os, sys, shutil
 import subprocess as s
 
 filename_lm     = 'models/photobleach.lm'
-filename_run    = 'results/result_photobleach.lm'
+filename_run    = 'results_photobleach/0000.lm'
 
 if os.path.isfile(filename_run):
     os.remove(filename_run)
-    print('Run file was removed.')
+    print('Previous run file was removed.')
 
-print('Create run file: ', filename_run)
+print('Create a run file: ', filename_run)
 os.makedirs('results', exist_ok=True)
 shutil.copy(filename_lm, filename_run)
 

@@ -3,12 +3,15 @@ import numpy as np
 from pyLD import *
 import matplotlib.pyplot as plt
 
+
+# FRAP
 m  = 'YFP'
 plot_filename  = 'imgs/profile_photobleach.png'
 simulation_dir = 'results_photobleach'
 t_offset       = -4
 
 '''
+# Ca2+ influx via NMDARs
 m  = 'Ca'
 plot_filename  = 'imgs/profile_Ca.png'
 simulation_dir = 'results_Ca_dynamics'

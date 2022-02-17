@@ -6,13 +6,14 @@ import subprocess as s
 from pyLD import *
 from tut1_functions import *
 
-
+# FRAP
 targ_name   = 'YFP'
 color       = (1,1,0)
 lm_files    = ['results_photobleach/0000.lm'  ,'results_photobleach/0001.lm']
 start_time  = -4
 
 '''
+# Ca2+ influx via NMDARs
 targ_name   = 'Ca'
 color       = (0,0,1)
 lm_files    = ['results_Ca_dynamics/0000.lm'  ,'results_Ca_dynamics/0001.lm']

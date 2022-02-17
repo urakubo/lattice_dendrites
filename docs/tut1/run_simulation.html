@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.5. Visualization 1: matplotlib" href="visualization1_matplotlib.html" />
+    <link rel="next" title="3.5. Visualization 1: graph plot" href="visualization1_graph_plot.html" />
     <link rel="prev" title="3.3. Build models" href="build_model.html" /> 
 </head>
 
@@ -45,8 +45,8 @@
 <li class="toctree-l2"><a class="reference internal" href="label_spine.html">3.2. Label a spine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="build_model.html">3.3. Build models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">3.4. Run simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_graph_plot.html">3.5. Visualization 1: graph plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization2_video.html">3.6. Visualization 2: video</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../04.html">4. Tutorial 2: realistic dendrite</a></li>
@@ -82,26 +82,26 @@
              
   <section id="run-simulation">
 <h1><span class="section-number">3.4. </span>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline"></a></h1>
-<p>We would like to keep “models/ball_and_stick.lm” as a template, and store the simulation reults in “results/run_ball_and_stick.lm”. To do this, we first copy the lm file then execute the simulation through the command prompt:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir results
-$ cp models/ball_and_stick.lm results/run_ball_and_stick.lm
-$ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results/run_ball_and_stick.lm
+<p>Models stored in LM-format files can be executed by Lattice Microbes (LM). LM is not a Python module, but a standalone software that can be executed through the command prompt:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir results_photobleach
+$ cp models/photobleach.lm results_photobleach/0000.lm
+$ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_photobleach/0000.lm
 </pre></div>
 </div>
-<p>We can also write a Python script like:</p>
+<p>These commands make a copy of ‘models/photobleach.lm’ as ‘results_photobleach/0000.lm’, which is executed by lm. This process can also be described using a Python script.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">41_single_run.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="n">filename_lm</span>     <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
-<span class="linenos"> 5</span><span class="n">filename_run</span>    <span class="o">=</span> <span class="s1">&#39;results/result_photobleach.lm&#39;</span>
+<span class="linenos"> 5</span><span class="n">filename_run</span>    <span class="o">=</span> <span class="s1">&#39;results_photobleach/0000.lm&#39;</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename_run</span><span class="p">):</span>
 <span class="linenos"> 8</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_run</span><span class="p">)</span>
-<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Run file was removed.&#39;</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Previous run file was removed.&#39;</span><span class="p">)</span>
 <span class="linenos">10</span>
-<span class="linenos">11</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create run file: &#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
+<span class="linenos">11</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create a run file: &#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
 <span class="linenos">12</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="linenos">13</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename_lm</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
 <span class="linenos">14</span>
@@ -111,11 +111,7 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results/run_
 </pre></div>
 </div>
 </div>
-<p>We can easily run such a simulation; however, it would not satisfy aims of simulation.
-For example, one may want to see a fluorescence recovery after photobleaching (FRAP).
-In this case, a preparatory run should be followed by an instantaneous action, i.e., photobleach.
-Then, the recovery process should be simulated.
-To handle such events, we can use the “ConnectRun” class as follows:</p>
+<p>We can easily run simulation; however, using this simple run, we cannot introduce any events function, such as photobleaching and synaptic input. To handle such events, the “ConnectRun” class enables the is provided as used in ‘42_connect_run.py’.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">42_connect_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
@@ -141,28 +137,31 @@ To handle such events, we can use the “ConnectRun” class as follows:</p>
 <span class="linenos">21</span><span class="n">r</span> <span class="o">=</span> <span class="n">ConnectRun</span><span class="p">()</span>
 <span class="linenos">22</span><span class="n">r</span><span class="o">.</span><span class="n">label_volume_file</span> <span class="o">=</span> <span class="s1">&#39;models/labels_ball_and_stick.h5&#39;</span>
 <span class="linenos">23</span>
-<span class="linenos">24</span><span class="n">r</span><span class="o">.</span><span class="n">template_lm_file</span>  <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
-<span class="linenos">25</span><span class="n">r</span><span class="o">.</span><span class="n">output_dir</span>        <span class="o">=</span> <span class="s1">&#39;results_photobleach&#39;</span>
-<span class="linenos">26</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span><span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span><span class="s1">&#39;bleached YFP&#39;</span><span class="p">}</span>
-<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
-<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
-<span class="linenos">29</span>
+<span class="linenos">24</span><span class="c1"># FRAP</span>
+<span class="linenos">25</span><span class="n">r</span><span class="o">.</span><span class="n">template_lm_file</span>  <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
+<span class="linenos">26</span><span class="n">r</span><span class="o">.</span><span class="n">output_dir</span>        <span class="o">=</span> <span class="s1">&#39;results_photobleach&#39;</span>
+<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span><span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span><span class="s1">&#39;bleached YFP&#39;</span><span class="p">}</span>
+<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
+<span class="linenos">29</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="sd">&#39;&#39;&#39;</span>
-<span class="linenos">32</span><span class="sd">r.template_lm_file  = &#39;models/Ca_dynamics.lm&#39;</span>
-<span class="linenos">33</span><span class="sd">r.output_dir        = &#39;results_Ca_dynamics&#39;</span>
-<span class="linenos">34</span><span class="sd">r.event_params      = {&#39;src&#39;:&#39;inactive NMDAR&#39;, &#39;dst&#39;:&#39;active NMDAR&#39;}</span>
-<span class="linenos">35</span><span class="sd">r.exec_periods      = [2.0, 2.0]</span>
-<span class="linenos">36</span><span class="sd">r.exec_events       = [event_null, event_replace]</span>
-<span class="linenos">37</span><span class="sd">&#39;&#39;&#39;</span>
-<span class="linenos">38</span>
-<span class="linenos">39</span><span class="sd">&#39;&#39;&#39;</span>
-<span class="linenos">40</span><span class="sd">GPU_ids  = &#39;0,1&#39;</span>
-<span class="linenos">41</span><span class="sd">num_GPUs = &#39;2&#39;</span>
-<span class="linenos">42</span><span class="sd">num_CPUs = &#39;2&#39;</span>
-<span class="linenos">43</span><span class="sd">r.lm_option   = [&#39;-g&#39;, GPU_ids, &#39;-gr&#39;, num_GPUs,&#39;-cr&#39;, num_CPUs, &#39;-sl&#39;,&#39;lm::rdme::MGPUMpdRdmeSolver&#39;]</span>
-<span class="linenos">44</span><span class="sd">&#39;&#39;&#39;</span>
-<span class="linenos">45</span><span class="n">r</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+<span class="linenos">32</span><span class="sd"># Ca2+ influx via NMDARs</span>
+<span class="linenos">33</span><span class="sd">r.template_lm_file  = &#39;models/Ca_dynamics.lm&#39;</span>
+<span class="linenos">34</span><span class="sd">r.output_dir        = &#39;results_Ca_dynamics&#39;</span>
+<span class="linenos">35</span><span class="sd">r.event_params      = {&#39;src&#39;:&#39;inactive NMDAR&#39;, &#39;dst&#39;:&#39;active NMDAR&#39;}</span>
+<span class="linenos">36</span><span class="sd">r.exec_periods      = [2.0, 2.0]</span>
+<span class="linenos">37</span><span class="sd">r.exec_events       = [event_null, event_replace]</span>
+<span class="linenos">38</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">41</span><span class="sd"># Multiple GPUs</span>
+<span class="linenos">42</span><span class="sd">GPU_ids  = &#39;0,1&#39;</span>
+<span class="linenos">43</span><span class="sd">num_GPUs = &#39;2&#39;</span>
+<span class="linenos">44</span><span class="sd">num_CPUs = &#39;2&#39;</span>
+<span class="linenos">45</span><span class="sd">r.lm_option   = [&#39;-g&#39;, GPU_ids, &#39;-gr&#39;, num_GPUs,&#39;-cr&#39;, num_CPUs, &#39;-sl&#39;,&#39;lm::rdme::MGPUMpdRdmeSolver&#39;]</span>
+<span class="linenos">46</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span><span class="n">r</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -174,7 +173,7 @@ To handle such events, we can use the “ConnectRun” class as follows:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="build_model.html" class="btn btn-neutral float-left" title="3.3. Build models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="visualization1_matplotlib.html" class="btn btn-neutral float-right" title="3.5. Visualization 1: matplotlib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visualization1_graph_plot.html" class="btn btn-neutral float-right" title="3.5. Visualization 1: graph plot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

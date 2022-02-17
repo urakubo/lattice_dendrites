@@ -45,8 +45,8 @@
 <li class="toctree-l2"><a class="reference internal" href="label_spine.html">3.2. Label a spine</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">3.3. Build models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simulation.html">3.4. Run simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization1_matplotlib.html">3.5. Visualization 1: matplotlib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization2_mayavi.html">3.6. Visualization 2: mayavi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization1_graph_plot.html">3.5. Visualization 1: graph plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization2_video.html">3.6. Visualization 2: video</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../04.html">4. Tutorial 2: realistic dendrite</a></li>
@@ -84,12 +84,12 @@
 <h1><span class="section-number">3.3. </span>Build models<a class="headerlink" href="#build-models" title="Permalink to this headline"></a></h1>
 <p>In this subsection, a LM model is built based on the voxelized shape of a spiny dendrite (31_build_model.py).</p>
 <ol class="arabic simple">
-<li><p>Some HDF containers are loaded to define the cytosolic region (vol_cytosol; Line 18), PSD region (vol_PSD; Line 19), and the region of cell boundary (vol_bound; Line 20).</p></li>
-<li><p>The dict variable ‘domains’ is set to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 23), and the dict variable ‘surfaces’ is set to designate the pairs of a name and voxelized surface areas (64-bit float; Line 24).</p></li>
-<li><p>The BuildAnyShape class is called to register the domains and surfaces in the instance variable ‘cell’ (Line 29).</p></li>
-<li><p>The instance variable ‘cell’ further incorporates the following properties regarding molecules: names, initial locations, diffusion, and interactions (set_molecules; Line 30). The entities are described in the files ‘32_FRAP.py’ and ‘33_CaSignal.py’, either of which can be incorporated (Lines 7-11).</p></li>
+<li><p>Some HDF containers are loaded to define the cytosolic region (vol_cytosol; Line 21), PSD region (vol_PSD; Line 22), and the region of cell boundary (vol_bound; Line 23).</p></li>
+<li><p>The dict variable ‘domains’ is set to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 25), and the dict variable ‘surfaces’ is set to designate the pairs of a name and voxelized surface areas (float; Line 27).</p></li>
+<li><p>The BuildAnyShape class is called to register the domains and surfaces in the instance variable ‘cell’ (Line 32).</p></li>
+<li><p>The instance variable ‘cell’ further incorporates the following properties regarding molecules: names, initial locations, diffusion, and interactions (set_molecules; Line 33). The contents of ‘set_molecules’ are described in the files ‘set_molecule_FRAP.py’ and ‘set_molecule_Ca.py’. The Python language utilizes triple quotes (''') to comment out a block of code. Thus users can comment out either of them (Lines 7-15).</p></li>
 <li><p>Simulation timers are set under the instance ‘sim’ (Lines 33-37). Descriptions of setTimestep, setWriteInterval, setLatticeWriteInterval, and setSimulationTime are provided in <a class="reference external" href="http://faculty.scs.illinois.edu/schulten/software_manuals/InstructionGuide.pdf">the instruction guide of LM</a>. Indeed, the BuildAnyShape class is a wrapper of a class of LM ‘pyLM.RDME.RDMESimulation’, all methods of which are preserved in the instance ‘sim’.</p></li>
-<li><p>The overall setup is saved in the file ‘models/photobleach_yfp.lm’ or ‘models/Ca_influx.lm’ (Lines 7-11 and 40-43).</p></li>
+<li><p>The overall setup is saved in the LM format file ‘models/photobleach_yfp.lm’ or ‘models/Ca_influx.lm’ (Lines 7-11 and 40-43).</p></li>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">31_build_model.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
@@ -99,54 +99,57 @@
 <span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">pyLM.units</span> <span class="kn">import</span> <span class="n">micron</span><span class="p">,</span> <span class="n">microsecond</span>
 <span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span> 
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">set_molecule_FRAP</span> <span class="kn">import</span> <span class="n">set_molecules</span>
-<span class="linenos"> 8</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
-<span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="c1"># from set_molecule_Ca import set_molecules</span>
-<span class="linenos">11</span><span class="c1"># output_lm_file   = &#39;models/Ca_dynamics.lm&#39;</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span>
-<span class="linenos">14</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Load geometry data.&#39;</span><span class="p">)</span>
-<span class="linenos">15</span><span class="n">input_morph_file</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
-<span class="linenos">16</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morph_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
-<span class="linenos">17</span>	<span class="n">pitch_in_um</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
-<span class="linenos">18</span>	<span class="n">vol_cytosol</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
-<span class="linenos">19</span>	<span class="n">vol_PSD</span>     <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">][()]</span>
-<span class="linenos">20</span>	<span class="n">vol_bound</span>   <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">][()]</span>
-<span class="linenos">21</span>
-<span class="linenos">22</span><span class="n">vol_cytosol</span> <span class="o">=</span> <span class="p">(</span><span class="n">vol_cytosol</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
-<span class="linenos">23</span><span class="n">domains</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;not cytosol&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;cytosol&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="linenos">24</span><span class="n">surfaces</span>    <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
-<span class="linenos">25</span>
-<span class="linenos">26</span>
-<span class="linenos">27</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.&#39;</span><span class="p">)</span>
-<span class="linenos">28</span><span class="n">pitch_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch_in_um</span><span class="p">)</span> <span class="c1"># Unit in SI</span>
-<span class="linenos">29</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">vol_cytosol</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">pitch_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
-<span class="linenos">30</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-<span class="linenos">31</span>
-<span class="linenos">32</span>
-<span class="linenos">33</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.&#39;</span><span class="p">)</span>
-<span class="linenos">34</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
-<span class="linenos">35</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">36</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="linenos">37</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
-<span class="linenos">38</span>
-<span class="linenos">39</span>
-<span class="linenos">40</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save overall setup.&#39;</span><span class="p">)</span>
-<span class="linenos">41</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
-<span class="linenos">42</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
-<span class="linenos">43</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="c1"># FRAP</span>
+<span class="linenos"> 8</span><span class="kn">from</span> <span class="nn">set_molecule_FRAP</span> <span class="kn">import</span> <span class="n">set_molecules</span>
+<span class="linenos"> 9</span><span class="n">output_lm_file</span>   <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">12</span><span class="sd"># Ca2+ influx via NMDARs</span>
+<span class="linenos">13</span><span class="sd">from set_molecule_Ca import set_molecules</span>
+<span class="linenos">14</span><span class="sd">output_lm_file   = &#39;models/Ca_dynamics.lm&#39;</span>
+<span class="linenos">15</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Load geometry data.&#39;</span><span class="p">)</span>
+<span class="linenos">18</span><span class="n">input_morph_file</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
+<span class="linenos">19</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_morph_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
+<span class="linenos">20</span>	<span class="n">pitch_in_um</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
+<span class="linenos">21</span>	<span class="n">vol_cytosol</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">22</span>	<span class="n">vol_PSD</span>     <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">23</span>	<span class="n">vol_bound</span>   <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="n">vol_cytosol</span> <span class="o">=</span> <span class="p">(</span><span class="n">vol_cytosol</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+<span class="linenos">26</span><span class="n">domains</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;not cytosol&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;cytosol&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="linenos">27</span><span class="n">surfaces</span>    <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PSD&#39;</span><span class="p">:</span> <span class="n">vol_PSD</span><span class="p">,</span> <span class="s1">&#39;cell boundary&#39;</span><span class="p">:</span> <span class="n">vol_bound</span><span class="p">}</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Build a lm model.&#39;</span><span class="p">)</span>
+<span class="linenos">31</span><span class="n">pitch_in_m</span> <span class="o">=</span> <span class="n">micron</span><span class="p">(</span><span class="n">pitch_in_um</span><span class="p">)</span> <span class="c1"># Unit in SI</span>
+<span class="linenos">32</span><span class="n">cell</span> <span class="o">=</span> <span class="n">BuildAnyShape</span><span class="p">(</span><span class="n">vol_cytosol</span><span class="p">,</span> <span class="n">domains</span><span class="p">,</span> <span class="n">pitch_in_m</span><span class="p">,</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">33</span><span class="n">molecules</span> <span class="o">=</span> <span class="n">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set time.&#39;</span><span class="p">)</span>
+<span class="linenos">37</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setTimestep</span><span class="p">(</span><span class="n">microsecond</span><span class="p">(</span><span class="mf">3.0</span><span class="p">))</span>
+<span class="linenos">38</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">39</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setLatticeWriteInterval</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">40</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setSimulationTime</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save overall setup.&#39;</span><span class="p">)</span>
+<span class="linenos">44</span><span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+<span class="linenos">45</span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
+<span class="linenos">46</span><span class="n">cell</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_lm_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<a class="reference internal image-reference" href="../_images/Scheme2.jpg"><img alt="../_images/Scheme2.jpg" class="align-center" src="../_images/Scheme2.jpg" style="width: 491.20000000000005px; height: 296.8px;" /></a>
+<a class="reference internal image-reference" href="../_images/Scheme2.jpg"><img alt="../_images/Scheme2.jpg" class="align-center" src="../_images/Scheme2.jpg" style="width: 491.20000000000005px; height: 289.6px;" /></a>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>We here recall two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure above) and Ca<sup>2+</sup> influx through NMDA receptors (right in Figure above). To realize the FRAP simulation, the script below (32_FRAP.py) has a function ‘set_molecules’ to introduce two types of cytosolic molecules: ‘YFP’ and ‘bleached YFP’ (define_species; Lines 3-6), set their initial concentrations (add_molecule_uM; Lines 8-11), and diffuse them with a diffusion coefficient (set_diffusion; Lines 13-16). If we select to call the script ‘32_FRAP.py’ (Lines 7-11 in 31_build_model.py), the definitions of the molecules are incorporated in the instance variable ‘cell’.</p>
+<p>We here recall two simulation targets: fluorescence recovery after photobleaching (FRAP; left in Figure above) and Ca<sup>2+</sup> influx via NMDA receptors (right in Figure above). To realize the FRAP simulation, the script below (set_molecule_FRAP.py) has a function ‘set_molecules’ to introduce two types of cytosolic molecules: ‘YFP’ and ‘bleached YFP’ (define_species; Lines 3-6), set their initial concentrations (add_molecule_uM; Lines 8-11), and diffuse them with a diffusion coefficient (set_diffusion; Lines 13-16). If we select to call the script ‘set_molecule_FRAP.py’ (Lines 7-15 in 31_build_model.py), these molecular settings are incorporated in the instance variable ‘cell’.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">set_molecule_FRAP.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
@@ -168,13 +171,12 @@
 </pre></div>
 </div>
 </div>
+<p>To simulate Ca<sup>2+</sup> influx via NMDA receptors, the script below (set_molecule_Ca.py) defines a variety of molecules and their properties. First, a cytosolic molecule ‘<em>Ca</em>’ is created to represent Ca<sup>2+</sup> ions (Lines 4, 9). The initial number of ‘<em>Ca</em>’ is set to be zero, which is declared using the number representation (add_molecule; Lines 13-15). Next, two PSD molecules ‘<em>active NMDAR</em>’ and ‘<em>inactive NMDAR</em>’ are created (Lines 5-6, 10), and ‘inactive NMDAR’ is set to have an initial number density of 300 /μm<sup>2</sup> (add_surface_molecule; Lines 5-6, 16-17). Similary, the cell-boundary molecules ‘<em>Pump</em>’ and ‘<em>Pump-Ca</em>’ are created for Ca<sup>2+</sup> uptake (Lines 5-6, 10), and ‘Pump’ is distributed with a density of 100 /μm<sup>2</sup> (add_surface_molecule; Lines 5-6, 16-17). Only Ca is set to be diffusible (Lines 19-21).</p>
+<p>Then, molecular interactions are modeled (Figure below). The NMDA receptors are set to be rapidly activated at time 0 s, and this abrupt change will be introduced in the process of simulation. The ‘<em>active NMDAR</em>’ mediates Ca<sup>2+</sup> influx. This is formalized by a first-order reaction, with a rate constant of ‘<em>k_channel_Ca</em>’ (reac_oneway_uM; Lines 30, 33-34). The ‘<em>active NMDAR</em>’ is gradually converted to its inactivated form ‘<em>inactive NMDAR</em>’ (first-order rate constant: ‘<em>k_nmdar_deact</em>’; Lines 31, 33-34). Cytosolic ‘<em>Ca</em>’ is uptaken by a pump to the extracellular space (Figure below). In this process, ‘<em>Ca</em>’ binds to ‘<em>Pump</em>’ in a reversible manner (reac_twoway_uM; Lines 36-39), and the Ca<sup>2+</sup>-bound pump ‘<em>Pump-Ca</em>’ releases the Ca<sup>2+</sup> to the extracellular space (first-order rate constant: ‘<em>k_pump_Ca</em>’; Lines 32-34). These interactions summarize a life cycle of spine Ca<sup>2+</sup> that is a cause of synaptic plasticity.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>In the case of Ca<sup>2+</sup> influx via NMDA receptors, the script ‘33_CaSignal.py’ defines a variety of molecules and their properties. A cytosolic molecule ‘Ca’ is created to represent Ca<sup>2+</sup> ions. ‘Pump’ and ‘Pump-Ca’ are created for the uptake of Ca<sup>2+</sup> ions at the cell boundary.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="../_images/Scheme3.jpg"><img alt="../_images/Scheme3.jpg" class="align-center" src="../_images/Scheme3.jpg" style="width: 502.40000000000003px; height: 334.40000000000003px;" /></a>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">set_molecule_Ca.py</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">set_molecules</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
@@ -189,9 +191,9 @@
 <span class="linenos">10</span>	<span class="n">cell</span><span class="o">.</span><span class="n">define_species</span><span class="p">(</span> <span class="nb">list</span><span class="p">(</span><span class="n">surf_numbers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">)</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Add molecules&#39;</span><span class="p">)</span>
-<span class="linenos">13</span>	<span class="n">conc_Ca</span>        <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">13</span>	<span class="n">number_Ca</span>      <span class="o">=</span> <span class="mi">0</span>
 <span class="linenos">14</span>	<span class="n">cyt</span>            <span class="o">=</span> <span class="s1">&#39;cytosol&#39;</span>
-<span class="linenos">15</span>	<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule</span><span class="p">(</span><span class="n">name_Ca</span><span class="p">,</span> <span class="n">conc_Ca</span><span class="p">,</span> <span class="n">cyt</span><span class="p">)</span>
+<span class="linenos">15</span>	<span class="n">cell</span><span class="o">.</span><span class="n">add_molecule</span><span class="p">(</span><span class="n">name_Ca</span><span class="p">,</span> <span class="n">number_Ca</span><span class="p">,</span> <span class="n">cyt</span><span class="p">)</span>
 <span class="linenos">16</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">surf_numbers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 <span class="linenos">17</span>		<span class="n">cell</span><span class="o">.</span><span class="n">add_surface_molecule</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">surf_local</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 <span class="linenos">18</span>
@@ -201,13 +203,13 @@
 <span class="linenos">22</span>
 <span class="linenos">23</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set reactions&#39;</span><span class="p">)</span>
 <span class="linenos">24</span>	<span class="n">k_nmdar_deact</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="linenos">25</span>	<span class="n">k_channel_Ca</span>  <span class="o">=</span> <span class="mi">1000</span>
-<span class="linenos">26</span>	<span class="n">k_pump_Ca</span>     <span class="o">=</span> <span class="mi">10</span>
-<span class="linenos">27</span>	<span class="n">kon_Ca</span>        <span class="o">=</span> <span class="mi">10</span>
+<span class="linenos">25</span>	<span class="n">k_channel_Ca</span>  <span class="o">=</span> <span class="mi">200</span>
+<span class="linenos">26</span>	<span class="n">k_pump_Ca</span>     <span class="o">=</span> <span class="mi">5</span>
+<span class="linenos">27</span>	<span class="n">kon_Ca</span>        <span class="o">=</span> <span class="mi">5</span>
 <span class="linenos">28</span>	<span class="n">koff_Ca</span>       <span class="o">=</span> <span class="mi">1</span>
 <span class="linenos">29</span>	<span class="n">oneway_reacs</span> <span class="o">=</span> \
-<span class="linenos">30</span>		<span class="p">[[</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="s1">&#39;inactive NMDAR&#39;</span> <span class="p">,</span> <span class="n">k_nmdar_deact</span><span class="p">],</span> \
-<span class="linenos">31</span>		 <span class="p">[</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca&#39;</span><span class="p">)</span> <span class="p">,</span> <span class="n">k_channel_Ca</span><span class="p">]</span> <span class="p">,</span> \
+<span class="linenos">30</span>		<span class="p">[[</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca&#39;</span><span class="p">)</span> <span class="p">,</span> <span class="n">k_channel_Ca</span><span class="p">]</span> <span class="p">,</span> \
+<span class="linenos">31</span>		 <span class="p">[</span><span class="s1">&#39;active NMDAR&#39;</span><span class="p">,</span> <span class="s1">&#39;inactive NMDAR&#39;</span> <span class="p">,</span> <span class="n">k_nmdar_deact</span><span class="p">],</span> \
 <span class="linenos">32</span>		 <span class="p">[</span><span class="s1">&#39;Pump-Ca&#39;</span>     <span class="p">,</span> <span class="s1">&#39;Pump&#39;</span> <span class="p">,</span> <span class="n">k_pump_Ca</span><span class="p">]]</span>
 <span class="linenos">33</span>	<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">oneway_reacs</span><span class="p">:</span>
 <span class="linenos">34</span>		<span class="n">cell</span><span class="o">.</span><span class="n">reac_oneway_uM</span><span class="p">(</span><span class="n">reac</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prod</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rate</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">domain_name</span><span class="o">=</span><span class="n">cyt</span><span class="p">)</span>
@@ -219,7 +221,11 @@
 </pre></div>
 </div>
 </div>
-<p>That is all for simulation setup.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The successful distribution of molecules can be confirmed by executing ‘32_show_molecule.py’ (Figure below). You can find this script in $LD_DIRECTORY/tutorial/1 .</p>
+<a class="reference internal image-reference" href="../_images/Initials.jpg"><img alt="../_images/Initials.jpg" class="align-center" src="../_images/Initials.jpg" style="width: 673.0px; height: 323.0px;" /></a>
 </section>
 
 

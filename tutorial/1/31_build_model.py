@@ -4,12 +4,15 @@ import h5py
 from pyLM.units import micron, microsecond
 from pyLD import * 
 
+# FRAP
 from set_molecule_FRAP import set_molecules
 output_lm_file   = 'models/photobleach.lm'
 
-# from set_molecule_Ca import set_molecules
-# output_lm_file   = 'models/Ca_dynamics.lm'
-
+'''
+# Ca2+ influx via NMDARs
+from set_molecule_Ca import set_molecules
+output_lm_file   = 'models/Ca_dynamics.lm'
+'''
 
 print('\nLoad geometry data.')
 input_morph_file = 'models/ball_and_stick.h5'

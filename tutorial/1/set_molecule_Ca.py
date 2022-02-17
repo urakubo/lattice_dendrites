@@ -10,9 +10,9 @@ def set_molecules(cell):
 	cell.define_species( list(surf_numbers.keys()) )
 
 	print('\nAdd molecules')
-	conc_Ca        = 0
+	number_Ca      = 0
 	cyt            = 'cytosol'
-	cell.add_molecule(name_Ca, conc_Ca, cyt)
+	cell.add_molecule(name_Ca, number_Ca, cyt)
 	for k, v in surf_numbers.items():
 		cell.add_surface_molecule(k, v, surf_local[k])
 
@@ -22,13 +22,13 @@ def set_molecules(cell):
 
 	print('\nSet reactions')
 	k_nmdar_deact = 20
-	k_channel_Ca  = 1000
-	k_pump_Ca     = 10
-	kon_Ca        = 10
+	k_channel_Ca  = 200
+	k_pump_Ca     = 5
+	kon_Ca        = 5
 	koff_Ca       = 1
 	oneway_reacs = \
-		[['active NMDAR', 'inactive NMDAR' , k_nmdar_deact], \
-		 ['active NMDAR', ('active NMDAR', 'Ca') , k_channel_Ca] , \
+		[['active NMDAR', ('active NMDAR', 'Ca') , k_channel_Ca] , \
+		 ['active NMDAR', 'inactive NMDAR' , k_nmdar_deact], \
 		 ['Pump-Ca'     , 'Pump' , k_pump_Ca]]
 	for p in oneway_reacs:
 		cell.reac_oneway_uM(reac=p[0], prod=p[1], rate=p[2], domain_name=cyt)

@@ -20,8 +20,8 @@ In this tutorial (tutorial 1), we first build a dendritic spine that is represen
 	tut1/label_spine
 	tut1/build_model
 	tut1/run_simulation
-	tut1/visualization1_matplotlib
-	tut1/visualization2_mayavi
+	tut1/visualization1_graph_plot
+	tut1/visualization2_video
 
 
 All tutorial programs are located in $LD_DIRECTORY/tutorial. Find the following script in the subdirectory "1". It provides utility functions that are used in tutorial 1. The function "make_cylinder" makes a cylinder in a voxel space. The function "add_shape" embeds a voxel object at the location specified by the barycenter. The function "show_dendrite" displays the surface objects of cellular contours, postsynaptic densities (PSD), mitochondria, and endoplasmic reticulum (ER).

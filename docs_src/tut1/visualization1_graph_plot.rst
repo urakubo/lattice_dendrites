@@ -1,5 +1,5 @@
 ===========================
-Visualization 1: matplotlib
+Visualization 1: graph plot
 ===========================
 
 Total numbers/concs of molecules were calculated in the process of simulation. The utility class ConnectTotalConcs can be used to plot concs on matplotlib.
@@ -12,7 +12,12 @@ The numbers/concs of molecules in labeled volumes (such as the spine) first need
    :caption: 51_plot_conc.py
 
 
-.. image:: imgs/timecourse_photobleach.png
+.. image:: imgs/profile_photobleach.png
+   :scale: 50%
+   :align: center
+
+
+.. image:: imgs/profile_Ca.png
    :scale: 50%
    :align: center
 
