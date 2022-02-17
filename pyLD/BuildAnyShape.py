@@ -17,7 +17,7 @@ except ImportError:
 class BuildAnyShape:
 	"""Build a buildAnyShape object.
 
-	sim.siteTypes['domain name'] may be different from volume_id.
+	Caution: sim.siteTypes['domain name'] may be different from volume_id.
 
 	Args:
 		sim (obj): RDMESimulation object

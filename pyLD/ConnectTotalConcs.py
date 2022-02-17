@@ -9,7 +9,7 @@ class ConnectTotalConcs:
 	
 	Args:
 		label_conc_filenames (str / list[str] / tuple[str]): Simulated lm files.
-		domain_ids (int / list[int] / tuple[int]): Target domain ids. They are summed if multiple domains are specified.
+		domain_names (str / list[str] / tuple[str]): Target domain names. They are summed if multiple domains are specified.
 
 	Returns:
 		(pyLD.ConnectTotalConcs: ConnectTotalConcs object that has the follwing instances:
@@ -20,21 +20,21 @@ class ConnectTotalConcs:
 		- ids_label (numpy[int]): Labels. It has [label1, label2, ...].
 	"""
 
-	def  __init__(self, lm_files, domain_ids):
+	def  __init__(self, lm_files, domain_names):
 		# Check arguments
 		if isinstance(lm_files, str):
 		    lm_files = [lm_files]
 		elif isinstance(lm_files, list) | isinstance(lm_files, tuple) :
-			pass
+		    pass
 		else:
-			raise ValueError('lm_files must be str, list, or tuple.')
+		    raise ValueError('lm_files must be str, list, or tuple.')
 
-		if isinstance(domain_ids, int):
-		    domain_ids = [domain_ids]
-		elif isinstance(domain_ids, list) | isinstance(domain_ids, tuple) :
-			pass
+		if isinstance(domain_names, str):
+		    domain_names = [domain_names]
+		elif isinstance(domain_names, list) | isinstance(domain_names, tuple) :
+		    pass
 		else:
-			raise ValueError('domain_ids must be int, list[int], or tuple[int].')
+		    raise ValueError('domain_names must be str, list[str], or tuple[str].')
 
 
 		# Timepoints
@@ -52,12 +52,13 @@ class ConnectTotalConcs:
 		# Concs
 
 		with h5py.File(lm_files[0],'r') as f:
-			spacing = f['Model']['Diffusion'].attrs['latticeSpacing']
-			volume  = f['Model']['Diffusion']['LatticeSites'][()]
-			self.species = f['Parameters'].attrs['speciesNames'].decode().split(',')
+		    spacing  = f['Model']['Diffusion'].attrs['latticeSpacing']
+		    volume   = f['Model']['Diffusion']['LatticeSites'][()]
+		    siteType = f['Parameters'].attrs['siteTypeNames'].decode().split(',')
+		    self.species = f['Parameters'].attrs['speciesNames'].decode().split(',')
 		num_voxels  = 0
-		for domain_id in domain_ids:
-			num_voxels += np.count_nonzero(volume == domain_id)
+		for name in domain_names:
+			num_voxels += np.count_nonzero(volume == siteType.index(name))
 		self.concs = num_to_uM(self.numbers, num_voxels, spacing)
 
 

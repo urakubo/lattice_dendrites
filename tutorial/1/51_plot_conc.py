@@ -8,6 +8,13 @@ plot_filename  = 'imgs/profile_photobleach.png'
 simulation_dir = 'results_photobleach'
 t_offset       = -4
 
+'''
+m  = 'Ca'
+plot_filename  = 'imgs/profile_Ca.png'
+simulation_dir = 'results_Ca_dynamics'
+t_offset       = -2
+'''
+
 label_file     = 'models/labels_ball_and_stick.h5'
 lm_files       = sorted( glob.glob(os.path.join(simulation_dir, '*.lm')) )
 conc_files     = [f[:-3]+'.h5' for f in lm_files]
@@ -25,7 +32,7 @@ c = ConnectLabeledConcs(conc_files)
 
 print('\nConnect total concs.')
 domain_id = 1 # cytosol
-t = ConnectTotalConcs(lm_files, domain_id)
+t = ConnectTotalConcs(lm_files, 'cytosol')
 
 print('\nPlot figure')
 fig = plt.figure(figsize=(6,4))
@@ -41,7 +48,7 @@ ax.plot(t.timepoints+t_offset,\
         t.get_concs( species=m ),\
         label = m+' in total' )
 
-ax.set_ylim([0, 1.5])
+# ax.set_ylim([0, 1.5])
 ax.set_xlim([t_offset,np.max(t.timepoints+t_offset)])
 plt.xlabel('Time (s)')
 plt.ylabel('Conc (uM)')

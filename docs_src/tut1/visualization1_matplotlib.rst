@@ -9,7 +9,7 @@ The numbers/concs of molecules in labeled volumes (such as the spine) first need
 .. literalinclude:: ../../tutorial/1/51_plot_conc.py
    :language: python
    :linenos:
-   :caption: 51_plot_photobleach.py
+   :caption: 51_plot_conc.py
 
 
 .. image:: imgs/timecourse_photobleach.png
