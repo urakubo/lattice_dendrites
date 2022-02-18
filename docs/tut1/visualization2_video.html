@@ -82,8 +82,8 @@
              
   <section id="visualization-2-video">
 <h1><span class="section-number">3.6. </span>Visualization 2: video<a class="headerlink" href="#visualization-2-video" title="Permalink to this headline"></a></h1>
-<p>Some users need to further analyze simulation results in a spatio-temporal manner, e.g., for 3D visualization. The class ConnectAnalysis allows to use user-defined function for a time series of 4D images (3D space + 16 slots for molecules).
-mayavi and ffmpeg.</p>
+<p>Some users may want to further analyze simulation results in a spatio-temporal manner, e.g., 3D visualization. The script ‘61_make_video.py’ introduces a method to make videos of molecular dynamics using the visualization software Mayavi and the video generation software ffmpeg. In this script, the ConnectAnalysis class offers the use of user-defined function to access all dimension of the simulation data, i.e., a time series of 4D images (3D space + 16 molecular slots; Lines 55-60). The time-developing 4D images are repeatedly passed to the function ‘event’ (Lines 34-52).</p>
+<p>The function ‘event’ has three variables: the lattice, sys_param, and usr_param. In ‘event’, the function ‘get_loc_molecules’ provides the locations of a specified molecule in the specified lattice (Lines 10, 38, 40), and the molecular locations are plotted in the pre-defined 3D space (Lines 31, 41-43). The visualized molecular distribution is saved as XXXX.png in ‘output_dir’ (Lines 24, 47-48). This process is repeated in a time-development manner.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">61_make_video.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
@@ -92,7 +92,7 @@ mayavi and ffmpeg.</p>
 <span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
 <span class="linenos"> 5</span><span class="kn">import</span> <span class="nn">subprocess</span> <span class="k">as</span> <span class="nn">s</span>
 <span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">tut1_functions</span> <span class="kn">import</span> <span class="n">show_dendrite</span><span class="p">,</span> <span class="n">get_loc_molecule</span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span><span class="c1"># FRAP</span>
 <span class="linenos">10</span><span class="n">targ_name</span>   <span class="o">=</span> <span class="s1">&#39;YFP&#39;</span>
@@ -121,10 +121,10 @@ mayavi and ffmpeg.</p>
 <span class="linenos">33</span>
 <span class="linenos">34</span><span class="c1"># Event to make an image</span>
 <span class="linenos">35</span><span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">sys_param</span><span class="p">,</span> <span class="n">event_param</span><span class="p">):</span>
-<span class="linenos">36</span>	<span class="nb">id</span>   <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+<span class="linenos">36</span>	<span class="n">i</span>    <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 <span class="linenos">37</span>	<span class="n">time</span> <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
 <span class="linenos">38</span>	<span class="n">s</span>    <span class="o">=</span> <span class="n">sys_param</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span>
-<span class="linenos">39</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Event at: </span><span class="si">{:g}</span><span class="s1">, time: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+<span class="linenos">39</span>	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Event at: </span><span class="si">{:g}</span><span class="s1">, time: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
 <span class="linenos">40</span>	<span class="n">m</span>    <span class="o">=</span> <span class="n">get_loc_molecule</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">targ_name</span><span class="p">])</span>
 <span class="linenos">41</span>	<span class="n">plot_points</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">points3d</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>\
 <span class="linenos">42</span>		<span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">,</span>\
@@ -158,14 +158,25 @@ mayavi and ffmpeg.</p>
 </pre></div>
 </div>
 </div>
-<p>ConnectAnalysis calls the function “event” at each time of recording, and it produces a mayavi-based video as follows:</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Finally, the video generation software ‘ffmpeg’ assembles the sequential images into a single video (Lines 63-69). The generated videos are shown below. In the case of FRAP (Lines 9-13), we can observe the re-filling of YFP (yellow points) to the target spine after the photobleaching.</p>
 
     <video   controls >
-    <source src="_static/photobleach.mp4" type="video/mp4">
+    <source src="_static/YFP.mp4" type="video/mp4">
     Video
     </video>
-    <p>That is all for visualzation 2.</p>
-</section>
+    <div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>In the case of Ca<sup>2+</sup> influx via NMDA receptors (Lines 16-20), we can observe the spread of Ca<sup>2+</sup> ions (blue points) from the stimulated spine.</p>
+
+    <video   controls >
+    <source src="_static/Ca.mp4" type="video/mp4">
+    Video
+    </video>
+    </section>
 
 
            </div>

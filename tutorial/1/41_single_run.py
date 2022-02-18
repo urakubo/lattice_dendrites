@@ -9,7 +9,7 @@ if os.path.isfile(filename_run):
     print('Previous run file was removed.')
 
 print('Create a run file: ', filename_run)
-os.makedirs('results', exist_ok=True)
+os.makedirs('results_photobleach', exist_ok=True)
 shutil.copy(filename_lm, filename_run)
 
 com = ['lm','-r', '1', '-sp', '-sl','lm::rdme::MpdRdmeSolver','-f', filename_run]

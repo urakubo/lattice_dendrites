@@ -4,7 +4,7 @@ import numpy as np
 from mayavi import mlab
 import subprocess as s
 from pyLD import *
-from tut1_functions import *
+from tut1_functions import show_dendrite, get_loc_molecule
 
 # FRAP
 targ_name   = 'YFP'
@@ -33,10 +33,10 @@ mlab = show_dendrite(morpho_file)
 
 # Event to make an image
 def event(lattice, sys_param, event_param):
-	id   = sys_param['id']
+	i    = sys_param['id']
 	time = sys_param['time']
 	s    = sys_param['species']
-	print('Event at: {:g}, time: {:.3f}'.format(id, time))
+	print('Event at: {:g}, time: {:.3f}'.format(i, time))
 	m    = get_loc_molecule(lattice, s[targ_name])
 	plot_points = mlab.points3d(m[0], m[1], m[2],\
 		color = color,\

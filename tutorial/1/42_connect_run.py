@@ -24,17 +24,17 @@ r.label_volume_file = 'models/labels_ball_and_stick.h5'
 # FRAP
 r.template_lm_file  = 'models/photobleach.lm'
 r.output_dir        = 'results_photobleach'
-r.event_params      = {'src':'YFP', 'dst':'bleached YFP'}
 r.exec_periods      = [4.0, 4.0]
 r.exec_events       = [event_null, event_replace]
+r.event_params      = {'src':'YFP', 'dst':'bleached YFP'}
 
 '''
 # Ca2+ influx via NMDARs
 r.template_lm_file  = 'models/Ca_dynamics.lm'
 r.output_dir        = 'results_Ca_dynamics'
-r.event_params      = {'src':'inactive NMDAR', 'dst':'active NMDAR'}
 r.exec_periods      = [2.0, 2.0]
 r.exec_events       = [event_null, event_replace]
+r.event_params      = {'src':'inactive NMDAR', 'dst':'active NMDAR'}
 '''
 
 '''

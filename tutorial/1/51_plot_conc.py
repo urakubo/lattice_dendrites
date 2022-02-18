@@ -22,6 +22,9 @@ label_file     = 'models/labels_ball_and_stick.h5'
 lm_files       = sorted( glob.glob(os.path.join(simulation_dir, '*.lm')) )
 conc_files     = [f[:-3]+'.h5' for f in lm_files]
 
+print('\nConnect total concs.')
+domain_name = 'cytosol'
+t = ConnectTotalConcs(lm_files, domain_name)
 
 print('\nConnect concs at labeled regions.')
 s = GetLabeledConcs()
@@ -32,10 +35,6 @@ for (lm_file, conc_file) in zip(lm_files, conc_files):
     s.save(conc_file)
 
 c = ConnectLabeledConcs(conc_files)
-
-print('\nConnect total concs.')
-domain_id = 1 # cytosol
-t = ConnectTotalConcs(lm_files, 'cytosol')
 
 print('\nPlot figure')
 fig = plt.figure(figsize=(6,4))
@@ -59,4 +58,3 @@ hans, labs = ax.get_legend_handles_labels()
 ax.legend(handles=hans, labels=labs, frameon=False)
 plt.savefig(plot_filename, dpi=150)
 plt.show()
-

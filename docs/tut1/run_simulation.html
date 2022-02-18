@@ -88,7 +88,8 @@ $ cp models/photobleach.lm results_photobleach/0000.lm
 $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_photobleach/0000.lm
 </pre></div>
 </div>
-<p>The above commands make a copy of ‘models/photobleach.lm’ as ‘results_photobleach/0000.lm’, and it is executed by LM. This process can also be described using a Python script, as follow (41_single_run.py):</p>
+<p>The first command makes the directory ‘results_photobleach’, and the
+second command makes a copy of ‘models/photobleach.lm’ as ‘results_photobleach/0000.lm’, then it is executed by LM in the third command. This process can also be described using a Python script (41_single_run.py):</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">41_single_run.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>
@@ -102,7 +103,7 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_phot
 <span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Previous run file was removed.&#39;</span><span class="p">)</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Create a run file: &#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
-<span class="linenos">12</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;results_photobleach&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="linenos">13</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename_lm</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">)</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span><span class="n">com</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lm&#39;</span><span class="p">,</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;-sp&#39;</span><span class="p">,</span> <span class="s1">&#39;-sl&#39;</span><span class="p">,</span><span class="s1">&#39;lm::rdme::MpdRdmeSolver&#39;</span><span class="p">,</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">filename_run</span><span class="p">]</span>
@@ -111,7 +112,7 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_phot
 </pre></div>
 </div>
 </div>
-<p>We can easily run simulation; however, in this simple run, we cannot handle any event functions, such as photobleaching and synaptic input. The “ConnectRun” class enables them by connecting multiple runs into a sequential run. Events can be inserted in between the unit runs. The ‘42_connect_run.py’ is an example:</p>
+<p>We can easily run simulation; however, in this simple run, we cannot handle any event functions such as photobleaching and synaptic input. The ‘ConnectRun’ class can handle those events by connecting multiple runs into a sequential run. Events are inserted just before the unit runs. In ‘42_connect_run.py’, the class instance ‘r’ is created in Line 21, and ‘r’ accepts many variables such as a label volume file (label_volume_file; Line 22), template LM file (template_lm_file; Line 25), simulation result directory (output_dir; Line 26). The variable ‘exec_periods’ accepts the Python list that contains the simulation time of each unit run (Line 27), and ‘exec_events’ accepts the list of functions, each of which is called just before the unit run (Lines 28). ‘event_params’ sets parameters for the functions (Line 29). The class method ‘exec’ executes the defined connected run (Line 48).</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">42_connect_run.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
@@ -140,17 +141,17 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_phot
 <span class="linenos">24</span><span class="c1"># FRAP</span>
 <span class="linenos">25</span><span class="n">r</span><span class="o">.</span><span class="n">template_lm_file</span>  <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
 <span class="linenos">26</span><span class="n">r</span><span class="o">.</span><span class="n">output_dir</span>        <span class="o">=</span> <span class="s1">&#39;results_photobleach&#39;</span>
-<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span><span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span><span class="s1">&#39;bleached YFP&#39;</span><span class="p">}</span>
-<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
-<span class="linenos">29</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
+<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
+<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
+<span class="linenos">29</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span><span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span><span class="s1">&#39;bleached YFP&#39;</span><span class="p">}</span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="linenos">32</span><span class="sd"># Ca2+ influx via NMDARs</span>
 <span class="linenos">33</span><span class="sd">r.template_lm_file  = &#39;models/Ca_dynamics.lm&#39;</span>
 <span class="linenos">34</span><span class="sd">r.output_dir        = &#39;results_Ca_dynamics&#39;</span>
-<span class="linenos">35</span><span class="sd">r.event_params      = {&#39;src&#39;:&#39;inactive NMDAR&#39;, &#39;dst&#39;:&#39;active NMDAR&#39;}</span>
-<span class="linenos">36</span><span class="sd">r.exec_periods      = [2.0, 2.0]</span>
-<span class="linenos">37</span><span class="sd">r.exec_events       = [event_null, event_replace]</span>
+<span class="linenos">35</span><span class="sd">r.exec_periods      = [2.0, 2.0]</span>
+<span class="linenos">36</span><span class="sd">r.exec_events       = [event_null, event_replace]</span>
+<span class="linenos">37</span><span class="sd">r.event_params      = {&#39;src&#39;:&#39;inactive NMDAR&#39;, &#39;dst&#39;:&#39;active NMDAR&#39;}</span>
 <span class="linenos">38</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="linenos">39</span>
 <span class="linenos">40</span><span class="sd">&#39;&#39;&#39;</span>
@@ -165,7 +166,10 @@ $ lm -r <span class="m">1</span> -sp -sl lm::rdme::MpdRdmeSolver -f results_phot
 </pre></div>
 </div>
 </div>
-<p>That is all for simulation run.</p>
+<p>The method ‘exec’ first calls ‘null_event’ (do nothing), and executes a 4-s pre-run. It then calls ‘event_replace’, which is described in Lines 6-18, and executes a 4-s post-run. The simulation results are stored in the directory ‘output_dir’ as ‘0000.lm’ and ‘0001.lm’.</p>
+<p>All event functions in the ‘ConnectRun’ class must accept three variables: lattice, sys_param, and event_param (Lines 6).
+The variable ‘lattice’ is a numpy 4D array that has a dimension of X × Y × Z × 16, the last of which denotes the slots of molecules (16) at each lattice site. The variable ‘sys_param’ conveys the system parameters such as the number of calls (sys_param[‘i’]; Line 7), current simulation time (sys_param[‘time’]; Line 8), a dict variable that specifies molecular species id (sys_param[‘species’]; Line 9), and a label volume (sys_param[‘label volume’]; Lines 14, 22). The variable ‘event_param’ contains the variable that is described in ‘event_params’ (Line 29). Here, we obtain the molecular ids of ‘YFP’ and ‘bleached YFP’ in the variables ‘src’ and ‘dst’, respectively. Then, the molecules ‘YFP’ are replaced with the molecules ‘bleached YFP’ if they are located in the labeled area (Lines 15-17).</p>
+<p>All the event functions in the ‘ConnectRun’ must return the two variables: ‘lattice’ and ‘event_param’ (Lines 18). Both of them can be altered, and used for the subsequent simulation and event. In the case of Ca<sup>2+</sup> influx via NMDA receptors (Lines 32-37), the simulation time is decreased to 2 + 2 s, and ‘event_replace’ replaces the molecules ‘inactive NMDAR’ with the molecules ‘active NMDAR’.</p>
 </section>
 
 
