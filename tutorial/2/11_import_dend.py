@@ -7,12 +7,12 @@ from pyLD import *
 zpitch   = 0.04 # XX um per EM slice
 xyzpitch = 0.02 # XX um per xyz-voxel in the volume
 
-folder = r'dxf'
-dend   = 'dend_cyan01'
-er     = 'dend_cyan01_ER'
-mito   = 'dend_cyan01_Mito'
-psd    = 'dend_cyan01_PSD'
-filename     = 'dend01.h5'
+folder = r'dxf_files'
+dend   = 'contour'
+er     = 'endoplasmic_reticulum'
+mito   = 'mitochondrion'
+psd    = 'postsynaptic_density'
+filename     = 'realistic_dendrite.h5'
 annot_folder = 'annot_dend01'
 
 
