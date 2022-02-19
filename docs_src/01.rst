@@ -31,12 +31,12 @@ In tutorial 2, we would introduce how to import realistic shapes of cells from t
 |
 
 
-**References**
+.. rubric:: References
 
 .. [#LM1] Roberts E, Stone JE, and Luthey-Schulten Z (2013) Lattice Microbes: high-performance stochastic simulation method for the reaction-diffusion master equation, J. Comput. Chem. 34(3):245-255, http://faculty.scs.illinois.edu/schulten/lm/ , http://faculty.scs.illinois.edu/schulten/Software2.0.html#1
 
-.. [#LM2] Hallock MJ, Stone JE, Roberts E, Fry C, Luthey-Schulten Z (2014) Simulation of reaction diffusion processes over biologically-relevant size and time scales using multi-GPU workstations, Parallel Comput. 40:86-99
+.. [#LM2] Hallock MJ, Stone JE, Roberts E, Fry C, and Luthey-Schulten Z (2014) Simulation of reaction diffusion processes over biologically-relevant size and time scales using multi-GPU workstations, Parallel Comput. 40:86-99
 
 .. [#LM3] Ghaemi Z, Peterson JR, Gruebele M, and Luthey-Schulten Z (2020) An in-silico human cell model reveals the influence of organization on RNA splicing, PLOS Comput. Biol. 16(3): e1007717, https://eukaryoticcellbuilder.github.io/HeLa_Builder/
 
-.. [#LM4] Earnest, TM, Watanabe, R, Stone, JE, Mahamid, J, Baumeister, W, Villa, E, & Luthey-Schulten, Z (2017) Challenges of integrating stochastic dynamics and cryo-electron tomograms in whole-cell simulations. J. Phys. Chem. B, 121(15):3871-3881
+.. [#LM4] Earnest, TM, Watanabe, R, Stone, JE, Mahamid, J, Baumeister, W, Villa, E,  and Luthey-Schulten, Z (2017) Challenges of integrating stochastic dynamics and cryo-electron tomograms in whole-cell simulations. J. Phys. Chem. B, 121(15):3871-3881

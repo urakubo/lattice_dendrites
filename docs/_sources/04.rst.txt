@@ -2,20 +2,31 @@
 Tutorial 2: realistic dendrite
 ==============================
 
-In tutorial 1, we utilized a schematic shape of spiny dendrite.
-However, LD can incorporate any shape, including morphologically realistic shapes of cells.
-In pariticular, LD has utility functions to incorporate 3D shapes based on volumetric EM images in the software Reconstruct [#Fiala]_ . In tutorial 2, HU would introduce such utility functions.
+In tutorial 1, the shape of spiny dendrite has been developed as a combination of geometric shapes. Some users may further want to incorporate a morphologically realistic shape of spiny dendrite or the other cellular structure. As expected, any voxelized data of cellular shapes can be incorporated in LM, e.g., the voxelized data obtained using the Python client CouldVolume [#Volume]_  from a Neuroglancer volume [#Glancer]_ .
+
+
+However, because LM can only simulate molecules within a cuboid space, the spatial re-arrangement of the shape data may be required to decrease a dead space for efficient computation. In addition, the widely-used labeling software 'Reconstruct' stores data in a vector-style format [#Fiala]_ , thus the data conversion is required. Further, it is not easy to label parts of such a morphologically realistic shape.
+
+
+In the first section of tutorial 2, We would introduce some utility functions to incorporate 3D shapes from the software Reconstruct [#Fiala]_ . Convex hull.
+
+
+In the second section, we would label parts of dendrites 
 
 Morphologically realistics shapes of cellular structure also requires ...
-LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_.
+LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_ .
 
-We would like to introduce how to do it.
 
 .. toctree::
+	:caption: Table of Contents
 
 	tut2/import_reconstruct
 	tut2/label_uniem
 
 
+.. rubric:: References
+
+.. [#Volume] https://github.com/seung-lab/cloud-volume
+.. [#Glancer] https://github.com/google/neuroglancer/
 .. [#Fiala] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy, J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
 .. [#Urakubo] Urakubo H, Bullmann T, Kubota Y, Oba S, and Ishii S (2019) UNI-EM: An environment for deep neural network-based automated segmentation of neuronal electron microscopic images, Sci. Rep. 9: 19413, https://github.com/urakubo/UNI-EM

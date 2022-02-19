@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'lattice dendrites'
-copyright = '2021, Hidetoshi Urakubo'
+copyright = '2022, Hidetoshi Urakubo'
 author = 'Hidetoshi Urakubo'
 
 # The full version, including alpha/beta/rc tags

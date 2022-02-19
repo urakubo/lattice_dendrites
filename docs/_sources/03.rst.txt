@@ -12,9 +12,8 @@ In this tutorial (tutorial 1), we first build a dendritic spine that is represen
 
 |
 
-**Table of contents**
-
 .. toctree::
+	:caption: Table of Contents
 
 	tut1/create_spiny_dendrite
 	tut1/label_spine
