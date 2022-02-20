@@ -26,6 +26,10 @@ vol_dend = volumes[0]
 r = RotateVolume(vol_dend, 1)
 volumes = [r.rotate(v) for v in volumes]
 
+vol_dend = volumes[0]
+r = RotateVolume(vol_dend, 0)
+volumes = [r.rotate(v) for v in volumes]
+
 
 # print('\nSwap axes to obtain the longest z direction.)
 #volumes = [v.swapaxes(1, 2) for v in volumes]
@@ -75,6 +79,10 @@ m['er faces']              = er.faces
 m['unit length (um)']      = xyzpitch
 m['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
 
+dend_mito_er             = (vol_dend>0).astype('uint8')
+dend_mito_er[vol_mito>0] = 2
+dend_mito_er[vol_er>0]   = 3
+m['1:dend,2:mito,3:er']  = dend_mito_er
 
 with h5py.File(filename,'w') as w:
 	for k, v in m.items():

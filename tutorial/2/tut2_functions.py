@@ -21,21 +21,11 @@ def show_dendrite(input_morpho_file):
 
 	# Plot surface mesh
 	mlab.figure(bgcolor=(1.0,1.0,1.0), size=(700,700))
-	mlab.view(0.0, 0.0, 900, [144., 192.,  96.])
+	mlab.view(0.0, 0.0, 900, [144., 192., 96.])
 
-	mlab.triangular_mesh(mito_v[:,0] , mito_v[:,1] , mito_v[:,2] , mito_f, color=(1.0,1.0,0.6), opacity=0.6)
-	mlab.triangular_mesh(er_v[:,0] , er_v[:,1] , er_v[:,2] , er_f, color=(0.7,1.0,0.7), opacity=0.6)
+	mlab.triangular_mesh( mito_v[:,0],  mito_v[:,1],  mito_v[:,2],  mito_f, color=(1.0,1.0,0.6), opacity=0.6)
+	mlab.triangular_mesh(   er_v[:,0],    er_v[:,1],    er_v[:,2],    er_f, color=(0.7,1.0,0.7), opacity=0.6)
 	mlab.triangular_mesh(bound_v[:,0], bound_v[:,1], bound_v[:,2], bound_f, color=(0.7,0.7,0.7), opacity=0.3)
 	mlab.triangular_mesh(bound_v[:,0], bound_v[:,1], bound_v[:,2], bound_f[PSD_ids,:], color=(1,0,0), opacity=0.3)
 
 	return mlab
-
-def get_loc_molecule(lattice, targ_id):
-	m = []
-	for i in range(lattice.shape[3]):
-		m.extend( np.flatnonzero(lattice[:,:,:,i] == targ_id).tolist() )
-	if m != []:
-		m = np.unravel_index(m, lattice[:,:,:,0].shape )
-	else:
-		m = [0, 0, 0]                
-	return m

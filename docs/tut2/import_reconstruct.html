@@ -89,94 +89,80 @@
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="n">zpitch</span>   <span class="o">=</span> <span class="mf">0.04</span> <span class="c1"># XX um per EM slice</span>
-<span class="linenos"> 8</span><span class="n">xyzpitch</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="c1"># XX um per xyz-voxel in the volume</span>
+<span class="linenos"> 8</span><span class="n">xyzpitch</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="c1"># xyz-pitch (XX um) in the decoded volume</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="n">folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;dxf_files&#39;</span>
+<span class="linenos">10</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;dxf_files&#39;</span>
 <span class="linenos">11</span><span class="n">dend</span>   <span class="o">=</span> <span class="s1">&#39;contour&#39;</span>
 <span class="linenos">12</span><span class="n">er</span>     <span class="o">=</span> <span class="s1">&#39;endoplasmic_reticulum&#39;</span>
 <span class="linenos">13</span><span class="n">mito</span>   <span class="o">=</span> <span class="s1">&#39;mitochondrion&#39;</span>
 <span class="linenos">14</span><span class="n">psd</span>    <span class="o">=</span> <span class="s1">&#39;postsynaptic_density&#39;</span>
-<span class="linenos">15</span><span class="n">filename</span>     <span class="o">=</span> <span class="s1">&#39;realistic_dendrite.h5&#39;</span>
-<span class="linenos">16</span><span class="n">annot_folder</span> <span class="o">=</span> <span class="s1">&#39;annot_dend01&#39;</span>
+<span class="linenos">15</span><span class="n">filename</span>     <span class="o">=</span> <span class="s1">&#39;models/realistic_dendrite.h5&#39;</span>
+<span class="linenos">16</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="linenos">17</span>
 <span class="linenos">18</span>
-<span class="linenos">19</span><span class="c1"># Create volume</span>
+<span class="linenos">19</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Create volumes.&#39;</span><span class="p">)</span>
 <span class="linenos">20</span><span class="n">c</span> <span class="o">=</span> <span class="n">CreateVolumeFromReconstruct</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">zpitch</span><span class="p">,</span> <span class="n">dend</span><span class="p">)</span>
 <span class="linenos">21</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dend</span><span class="p">,</span> <span class="n">er</span><span class="p">,</span> <span class="n">mito</span><span class="p">,</span> <span class="n">psd</span><span class="p">]]</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span>
-<span class="linenos">24</span><span class="c1"># Rotate volumes into a minimal bounding box of the xz plane</span>
+<span class="linenos">24</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Rotate volumes on the xz plane, to obtain a minimal bounding box.&#39;</span><span class="p">)</span>
 <span class="linenos">25</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">volumes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="linenos">26</span><span class="n">r</span> <span class="o">=</span> <span class="n">RotateVolume</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="linenos">27</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">]</span>
 <span class="linenos">28</span>
 <span class="linenos">29</span>
-<span class="linenos">30</span><span class="c1"># Swap axes for the longest z direction, depending on dendrites.</span>
+<span class="linenos">30</span><span class="c1"># print(&#39;\nSwap axes to obtain the longest z direction.)</span>
 <span class="linenos">31</span><span class="c1">#volumes = [v.swapaxes(1, 2) for v in volumes]</span>
 <span class="linenos">32</span>
 <span class="linenos">33</span>
-<span class="linenos">34</span><span class="c1"># Pad spaces for lm simulation</span>
+<span class="linenos">34</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set spaces as the multiples of 32 x 32 x 32 voxels.&#39;</span><span class="p">)</span>
 <span class="linenos">35</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">lmpad</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">]</span>
 <span class="linenos">36</span>
 <span class="linenos">37</span>
-<span class="linenos">38</span><span class="c1"># Extract domains from a list of volumes</span>
+<span class="linenos">38</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Obtain domain volumes from the list of volumes.&#39;</span><span class="p">)</span>
 <span class="linenos">39</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">vol_er</span><span class="p">,</span> <span class="n">vol_mito</span><span class="p">,</span> <span class="n">vol_psd</span> <span class="o">=</span> <span class="n">volumes</span>
 <span class="linenos">40</span>
 <span class="linenos">41</span>
-<span class="linenos">42</span><span class="c1"># Smooth volumes</span>
+<span class="linenos">42</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Smooth edges.&#39;</span><span class="p">)</span>
 <span class="linenos">43</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">smooth_volume_erosion_then_dilation</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span> 
 <span class="linenos">44</span><span class="n">vol_er</span>   <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_er</span><span class="p">)</span>
 <span class="linenos">45</span><span class="n">vol_psd</span>  <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span> 
 <span class="linenos">46</span>
 <span class="linenos">47</span>
-<span class="linenos">48</span><span class="c1"># Logical operation of volumes</span>
+<span class="linenos">48</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Logical operation of volumes.&#39;</span><span class="p">)</span>
 <span class="linenos">49</span><span class="n">vol_not_mito</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_mito</span> <span class="p">)</span>
 <span class="linenos">50</span><span class="n">vol_not_er</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_er</span> <span class="p">)</span>
-<span class="linenos">51</span><span class="n">vol_dend_not_mito_not_ER</span> <span class="o">=</span> <span class="n">vol_dend</span> <span class="o">^</span> <span class="p">(</span><span class="n">vol_mito</span> <span class="o">|</span> <span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos">51</span><span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">vol_dend</span> <span class="o">^</span> <span class="p">(</span><span class="n">vol_mito</span> <span class="o">|</span> <span class="n">vol_er</span><span class="p">)</span>
 <span class="linenos">52</span>
 <span class="linenos">53</span>
-<span class="linenos">54</span><span class="c1"># Create surface</span>
-<span class="linenos">55</span><span class="n">bound_verts</span><span class="p">,</span> <span class="n">bound_faces</span><span class="p">,</span> <span class="n">bound_area_per_face</span><span class="p">,</span> <span class="n">bound_areas</span><span class="p">,</span> <span class="n">id_face_psd</span> <span class="o">=</span> \
-<span class="linenos">56</span>	<span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_dend</span><span class="p">,</span> <span class="n">PSD</span> <span class="o">=</span> <span class="n">vol_psd</span><span class="p">,</span> <span class="n">num_smoothing</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">method_smoothing</span> <span class="o">=</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">)</span>
-<span class="linenos">57</span><span class="n">mito_verts</span><span class="p">,</span> <span class="n">mito_faces</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">mito_areas</span> <span class="o">=</span> <span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_not_mito</span><span class="p">)</span>
-<span class="linenos">58</span><span class="n">er_verts</span><span class="p">,</span> <span class="n">er_faces</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">er_areas</span> <span class="o">=</span> <span class="n">create_surface</span><span class="p">(</span><span class="n">xyzpitch</span><span class="p">,</span> <span class="n">vol_not_er</span><span class="p">)</span>
-<span class="linenos">59</span>
-<span class="linenos">60</span><span class="n">mito_areas</span>  <span class="o">=</span> <span class="n">mito_areas</span>  <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">61</span><span class="n">er_areas</span>    <span class="o">=</span> <span class="n">er_areas</span>    <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">62</span><span class="n">bound_areas</span> <span class="o">=</span> <span class="n">bound_areas</span> <span class="o">*</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">63</span>
-<span class="linenos">64</span>
-<span class="linenos">65</span><span class="c1"># Save</span>
-<span class="linenos">66</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-<span class="linenos">67</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;unit length per voxel (um)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyzpitch</span>
-<span class="linenos">68</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;dendrite&#39;</span><span class="p">]</span>                   <span class="o">=</span> <span class="n">vol_dend</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">69</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;PSD&#39;</span><span class="p">]</span>                        <span class="o">=</span> <span class="n">vol_psd</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">70</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">vol_mito</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">71</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er&#39;</span><span class="p">]</span>                         <span class="o">=</span> <span class="n">vol_er</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="linenos">72</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">73</span>
-<span class="linenos">74</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary areas in volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">bound_areas</span>
-<span class="linenos">75</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary vertices&#39;</span><span class="p">]</span>          <span class="o">=</span> <span class="n">bound_verts</span>
-<span class="linenos">76</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;boundary faces&#39;</span><span class="p">]</span>             <span class="o">=</span> <span class="n">bound_faces</span>
-<span class="linenos">77</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;PSD ids in boundary faces&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">id_face_psd</span>
+<span class="linenos">54</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Create surface.&#39;</span><span class="p">)</span>
+<span class="linenos">55</span><span class="n">dend</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">num_smoothing</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">method_smoothing</span> <span class="o">=</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">)</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="linenos">58</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">59</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">60</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">()</span>
+<span class="linenos">61</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">62</span><span class="n">face_id_psd</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_face_ids_inside</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span>
+<span class="linenos">63</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">(</span><span class="n">face_id_psd</span><span class="p">)</span>
+<span class="linenos">64</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">65</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;face id psd&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">face_id_psd</span>
+<span class="linenos">66</span>
+<span class="linenos">67</span><span class="n">mito</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_mito</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
+<span class="linenos">68</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito vertices&#39;</span><span class="p">]</span>         <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">69</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito faces&#39;</span><span class="p">]</span>            <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">70</span>
+<span class="linenos">71</span><span class="n">er</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_er</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
+<span class="linenos">72</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">73</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">74</span>
+<span class="linenos">75</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">xyzpitch</span>
+<span class="linenos">76</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">77</span>
 <span class="linenos">78</span>
-<span class="linenos">79</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion areas in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mito_areas</span>
-<span class="linenos">80</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">mito_verts</span>
-<span class="linenos">81</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;mitochondrion faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">mito_faces</span>
-<span class="linenos">82</span>
-<span class="linenos">83</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er areas in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">er_areas</span>
-<span class="linenos">84</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">er_verts</span>
-<span class="linenos">85</span>    <span class="n">w</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">er_faces</span>
-<span class="linenos">86</span>
-<span class="linenos">87</span>
-<span class="linenos">88</span><span class="c1"># Save UNI-EM annot</span>
-<span class="linenos">89</span><span class="n">bound_color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">]</span>
-<span class="linenos">90</span><span class="n">mito_color</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">152</span><span class="p">]</span>
-<span class="linenos">91</span><span class="n">er_color</span>    <span class="o">=</span> <span class="p">[</span><span class="mi">179</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">179</span><span class="p">]</span>
-<span class="linenos">92</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="n">bound_verts</span><span class="p">,</span> <span class="n">bound_faces</span><span class="p">,</span> <span class="n">bound_color</span><span class="p">],</span>\
-<span class="linenos">93</span>			<span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="n">mito_verts</span><span class="p">,</span> <span class="n">mito_faces</span><span class="p">,</span> <span class="n">mito_color</span><span class="p">],</span>\
-<span class="linenos">94</span>			<span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="n">er_verts</span><span class="p">,</span> <span class="n">er_faces</span><span class="p">,</span> <span class="n">er_color</span><span class="p">]}</span>
-<span class="linenos">95</span><span class="n">save_uniem_annotator</span><span class="p">(</span><span class="n">annot_folder</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="p">(</span><span class="n">vol_dend</span><span class="o">+</span><span class="n">vol_mito</span><span class="o">+</span><span class="n">vol_er</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">),</span> <span class="n">surfaces</span><span class="p">)</span>
+<span class="linenos">79</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+<span class="linenos">80</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">81</span>		<span class="n">w</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

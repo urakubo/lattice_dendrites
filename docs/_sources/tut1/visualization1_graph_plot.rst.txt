@@ -19,6 +19,7 @@ Some users may want to obtain the concentration of molecules in the labeled regi
    :caption: 51_plot_conc.py
 
 |
+
 In the case of FRAP (Lines 7-11), we can see the fluorescence recovery after photobleaching (FRAP) of YFP in the target spine.
 
 .. image:: imgs/profile_photobleach.png
@@ -26,6 +27,7 @@ In the case of FRAP (Lines 7-11), we can see the fluorescence recovery after pho
    :align: center
 
 |
+
 In the case of |Ca2+| influx via NMDA receptors (Lines 14-18), we can see the transient increase in |Ca2+| concentration in the target spine.
 
 .. image:: imgs/profile_Ca.png
