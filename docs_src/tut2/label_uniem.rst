@@ -1,16 +1,13 @@
+.. include:: ../isonum.txt
+.. include:: ../isogrk1.txt
+
 =========================
 Label spines using UNI-EM
 =========================
 
-We would like to label a spine volume to obtain molecular concentration of this region. To enable it, HU also developed software, UNI-EM annotator, to manually label any region-of-interests on the surface of objects, and it also serves to obtain volumes within the labeled regions. 
+In tutorial 1, the target spine was labeled by its re-definition. This method cannot be used for morphologically realistic spines. We thus developed the other software to manually label the realistic spines or any other region-of-interests, which is named as UNI-EM annotator. 
 
-Launch UNI-EM and open the 'dend01' folder from 'Open Annotator Folder' of the pulldown menu 'Annotator'. Label the spine head in the UNI-EM annotator. Labeled areas are automatically saved.
-
-.. image:: imgs/UNI-EM_annot2.jpg
-   :scale: 50%
-   :align: center
-
-Convert the labeled areas to labeled volumes, and save them.
+The installation and usage of UNI-EM annotator are described elsewhere. We here introduce the function save_uniem_annotator for data conversion to the format of UNI-EM annotator (Line 26 in 21_convert_to_annotator.py). In this function, 'pitch' denotes the unit length of each voxel, and 'volume' contains the objects of the realistic dendrite (1: cytosol, 2: mitochondrion, 3: ER). The dict variable 'surfaces' specifies the corresponding surfaces. This save_uniem_annotator generates the files of UNI-EM annotator in the directory that is specified by 'annot_folder'.
 
 
 .. literalinclude:: ../../tutorial/2/21_convert_to_annotator.py
@@ -18,10 +15,19 @@ Convert the labeled areas to labeled volumes, and save them.
    :linenos:
    :caption: 21_convert_to_annotator.py
 
+|
 
-.. image:: imgs/painted.jpg
+UNI-EM annotator has a paint function to label 3D surfaces. Users can label any region-of-interests (Figure below).
+
+
+.. image:: imgs/UNI-EM.png
    :scale: 50%
    :align: center
+
+|
+
+
+Then, the labeled surface regions are re-converted to filled voxels (22_obtain_from_annotator.py). The CreateLabelVolumeFromUniEM class handles this (Line 8). The class method 'exec' generates such a volume based on the Python module 'Pymeshfix' that makes surface meshes closed, and re-voxelizes the closed surfaces (Line 9; Figure below). The label volume is saved in the container 'label volume' of the HDF file 'models/labels_realistic.h5' (Lines 6, 10).
 
 
 .. literalinclude:: ../../tutorial/2/22_obtain_from_annotator.py
@@ -29,18 +35,24 @@ Convert the labeled areas to labeled volumes, and save them.
    :linenos:
    :caption: 22_obtain_from_annotator.py
 
-Confirm the successful segmentation in the voxel space by visualizing it.
 
-
-.. literalinclude:: ../../tutorial/1/22_show_label.py
-   :language: python
-   :linenos:
-   :caption: 22_show_label.py
-
-
-.. image:: imgs/labels_ball_and_stick.png
+.. image:: imgs/spines.png
    :scale: 50%
    :align: center
 
+|
 
-That is all for labeling.
+Finally, the labeled surface regions are visualized by the script '23_show_label.py'. The labeled spines would be colored as shown in Figure below. Based on the labeled shape, users can simulate molecular interactions and evaluate the simulation results.
+
+.. literalinclude:: ../../tutorial/2/23_show_label.py
+   :language: python
+   :linenos:
+   :caption: 23_show_label.py
+
+|
+
+.. image:: imgs/labels_realistic.png
+   :scale: 100%
+   :align: center
+
+

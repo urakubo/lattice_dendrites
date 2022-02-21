@@ -10,7 +10,7 @@ For analyses, we often need to obtain molecular concentration at a specific regi
    :linenos:
    :caption: 21_label_head.py
 
-If the spine label has been successfully saved, users can confirm it using the script for visualzation '22_show_label.py.' The labeled area appears as a colored part.
+If the spine label has been successfully saved, users can visualze it using the script '22_show_label.py.' The labeled spine appears to be colored.
 
 .. literalinclude:: ../../tutorial/1/22_show_label.py
    :language: python

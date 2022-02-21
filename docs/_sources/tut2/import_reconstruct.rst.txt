@@ -33,10 +33,10 @@ Then, the generated volumes are rotated to obtain a minimum bounding box of the 
 
 |
 
-The rotated volumes are then padded with spaces to have the size of a multiple of 32 |times| 32 |times| 32 (Lines 33-34 in 11_import_dend.py). In addition, their boundaries are smoothed using a one-step pair of erosion and dilution (Lines 47-50). Finally, as in the case of the schematic dendrite, their surface meshes are generated and all of them are saved in the HDF file 'models/realistic_dendrite.h5' (Lines 53-86).
+The rotated volumes are then padded with spaces to have the size of a multiple of 32 |times| 32 |times| 32 (Lines 33-34 in 11_import_dend.py). In addition, their boundaries are smoothed using one-step pairs of erosion and dilution (Lines 47-50). Finally, as in the case of schematic dendrite, their surface meshes are generated, and all of them are saved in the HDF file 'models/realistic_dendrite.h5' (Lines 53-86).
 
 
-The generated dendrite can be confirmed by the script '12_show_dend.py' as follows:
+The generated dendrite can be visualized by the script '12_show_dend.py' as follows:
 
 .. literalinclude:: ../../tutorial/2/12_show_dend.py
    :language: python
