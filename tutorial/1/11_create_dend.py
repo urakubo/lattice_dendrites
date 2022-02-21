@@ -69,7 +69,12 @@ m['er vertices']           = er.vertices
 m['er faces']              = er.faces
 
 m['unit length (um)']      = xyzpitch
-m['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
+
+tot_volume = np.zeros_like(vol_dend, dtype='uint8')
+tot_volume[vol_dend > 0] = 1
+tot_volume[vol_mito>0]   = 2
+tot_volume[vol_er>0]     = 3
+m['volume'] = tot_volume
 
 # Save
 filename = 'models/ball_and_stick.h5'

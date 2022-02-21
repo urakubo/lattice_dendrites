@@ -13,16 +13,21 @@ Launch UNI-EM and open the 'dend01' folder from 'Open Annotator Folder' of the p
 Convert the labeled areas to labeled volumes, and save them.
 
 
-.. literalinclude:: ../../tutorial/2/21_convert_label.py
+.. literalinclude:: ../../tutorial/2/21_convert_to_annotator.py
    :language: python
    :linenos:
-   :caption: 21_convert_label.py
+   :caption: 21_convert_to_annotator.py
 
 
 .. image:: imgs/painted.jpg
    :scale: 50%
    :align: center
 
+
+.. literalinclude:: ../../tutorial/2/22_obtain_from_annotator.py
+   :language: python
+   :linenos:
+   :caption: 22_obtain_from_annotator.py
 
 Confirm the successful segmentation in the voxel space by visualizing it.
 

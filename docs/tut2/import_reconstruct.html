@@ -78,10 +78,14 @@
              
   <section id="import-a-shape-from-reconstruct">
 <h1><span class="section-number">4.1. </span>Import a shape from Reconstruct<a class="headerlink" href="#import-a-shape-from-reconstruct" title="Permalink to this headline"></a></h1>
-<p>Convert the labeled areas to labeled volumes, and save them.</p>
-<a class="reference internal image-reference" href="../_images/Snapshot_Reconstruct.png"><img alt="../_images/Snapshot_Reconstruct.png" class="align-center" src="../_images/Snapshot_Reconstruct.png" style="width: 690.9px; height: 481.59999999999997px;" /></a>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">11_import_dend.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<p>This section begins with a result of manual labeling in the software ‘Reconstruct’ <a class="footnote-reference brackets" href="#fiala" id="id1">1</a>. The EM data comes from a previous research (FIB-SEM) <a class="footnote-reference brackets" href="#laxmi1" id="id2">2</a> <a class="footnote-reference brackets" href="#laxmi2" id="id3">3</a>, and we have already labeled the objects of a dendrite (cyan), endoplasmic reticula (ER; magenta), mitochondrion (red), and postsynaptic densities (PSDs; orange) (below). Those labels were exported by the command in the pull-down menu ‘Series → Export → Lines’. A series of the ‘dxf’ files were saved to a specified directory. The exported files are stored in the directory $LD_DIRECTORY/tutorial/2/dxf_files (newSeries.0.dxf, newSeries.1.dxf, …) for this tutorial.</p>
+<a class="reference internal image-reference" href="../_images/Snapshot_Reconstruct_.png"><img alt="../_images/Snapshot_Reconstruct_.png" class="align-center" src="../_images/Snapshot_Reconstruct_.png" style="width: 632.0px; height: 548.0px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The ‘dxf’ files can be read by the CreateVolumeFromReconstruct class (Lines 20-21 in 11_import_dend.py). This class obtains an ordered list of dxf files in the specified directory (dir_dxfs, Lines 10, 20), and the class method ‘create’ generates a volume that contains the specified named object (Lines 11-14, 21). In this case, the volumes of the dendrite, ER, mitochondrion, and PSDs are generated as numpy 3D arrays of dend, er, mito, and psd, respectively.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">11_import_dend.py</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">errno</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
@@ -91,17 +95,17 @@
 <span class="linenos"> 7</span><span class="n">zpitch</span>   <span class="o">=</span> <span class="mf">0.04</span> <span class="c1"># XX um per EM slice</span>
 <span class="linenos"> 8</span><span class="n">xyzpitch</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="c1"># xyz-pitch (XX um) in the decoded volume</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;dxf_files&#39;</span>
-<span class="linenos">11</span><span class="n">dend</span>   <span class="o">=</span> <span class="s1">&#39;contour&#39;</span>
-<span class="linenos">12</span><span class="n">er</span>     <span class="o">=</span> <span class="s1">&#39;endoplasmic_reticulum&#39;</span>
-<span class="linenos">13</span><span class="n">mito</span>   <span class="o">=</span> <span class="s1">&#39;mitochondrion&#39;</span>
-<span class="linenos">14</span><span class="n">psd</span>    <span class="o">=</span> <span class="s1">&#39;postsynaptic_density&#39;</span>
-<span class="linenos">15</span><span class="n">filename</span>     <span class="o">=</span> <span class="s1">&#39;models/realistic_dendrite.h5&#39;</span>
+<span class="linenos">10</span><span class="n">dir_dxfs</span> <span class="o">=</span> <span class="s1">&#39;dxf_files&#39;</span>
+<span class="linenos">11</span><span class="n">dend</span>     <span class="o">=</span> <span class="s1">&#39;contour&#39;</span>
+<span class="linenos">12</span><span class="n">er</span>       <span class="o">=</span> <span class="s1">&#39;endoplasmic_reticulum&#39;</span>
+<span class="linenos">13</span><span class="n">mito</span>     <span class="o">=</span> <span class="s1">&#39;mitochondrion&#39;</span>
+<span class="linenos">14</span><span class="n">psd</span>      <span class="o">=</span> <span class="s1">&#39;postsynaptic_density&#39;</span>
+<span class="linenos">15</span><span class="n">save_filename</span> <span class="o">=</span> <span class="s1">&#39;models/realistic_dendrite.h5&#39;</span>
 <span class="linenos">16</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="linenos">17</span>
 <span class="linenos">18</span>
 <span class="linenos">19</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Create volumes.&#39;</span><span class="p">)</span>
-<span class="linenos">20</span><span class="n">c</span> <span class="o">=</span> <span class="n">CreateVolumeFromReconstruct</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">zpitch</span><span class="p">,</span> <span class="n">dend</span><span class="p">)</span>
+<span class="linenos">20</span><span class="n">c</span> <span class="o">=</span> <span class="n">CreateVolumeFromReconstruct</span><span class="p">(</span><span class="n">dir_dxfs</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">zpitch</span><span class="p">,</span> <span class="n">dend</span><span class="p">)</span>
 <span class="linenos">21</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dend</span><span class="p">,</span> <span class="n">er</span><span class="p">,</span> <span class="n">mito</span><span class="p">,</span> <span class="n">psd</span><span class="p">]]</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span>
@@ -110,63 +114,108 @@
 <span class="linenos">26</span><span class="n">r</span> <span class="o">=</span> <span class="n">RotateVolume</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="linenos">27</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">]</span>
 <span class="linenos">28</span>
-<span class="linenos">29</span>
-<span class="linenos">30</span><span class="c1"># print(&#39;\nSwap axes to obtain the longest z direction.)</span>
-<span class="linenos">31</span><span class="c1">#volumes = [v.swapaxes(1, 2) for v in volumes]</span>
+<span class="linenos">29</span><span class="c1">#print(&#39;\nSwap axes to obtain the longest z direction.)</span>
+<span class="linenos">30</span><span class="c1">#volumes = [v.swapaxes(1, 2) for v in volumes]</span>
+<span class="linenos">31</span>
 <span class="linenos">32</span>
-<span class="linenos">33</span>
-<span class="linenos">34</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set spaces as the multiples of 32 x 32 x 32 voxels.&#39;</span><span class="p">)</span>
-<span class="linenos">35</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">lmpad</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">]</span>
+<span class="linenos">33</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Set space as a multiple of 32 x 32 x 32 voxels.&#39;</span><span class="p">)</span>
+<span class="linenos">34</span><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">lmpad</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">]</span>
+<span class="linenos">35</span>
 <span class="linenos">36</span>
-<span class="linenos">37</span>
-<span class="linenos">38</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Obtain domain volumes from the list of volumes.&#39;</span><span class="p">)</span>
-<span class="linenos">39</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">vol_er</span><span class="p">,</span> <span class="n">vol_mito</span><span class="p">,</span> <span class="n">vol_psd</span> <span class="o">=</span> <span class="n">volumes</span>
+<span class="linenos">37</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Obtain domain volumes from the list of volumes.&#39;</span><span class="p">)</span>
+<span class="linenos">38</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">vol_er</span><span class="p">,</span> <span class="n">vol_mito</span><span class="p">,</span> <span class="n">vol_psd</span> <span class="o">=</span> <span class="n">volumes</span>
+<span class="linenos">39</span>
 <span class="linenos">40</span>
-<span class="linenos">41</span>
-<span class="linenos">42</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Smooth edges.&#39;</span><span class="p">)</span>
-<span class="linenos">43</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">smooth_volume_erosion_then_dilation</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span> 
-<span class="linenos">44</span><span class="n">vol_er</span>   <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_er</span><span class="p">)</span>
-<span class="linenos">45</span><span class="n">vol_psd</span>  <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span> 
+<span class="linenos">41</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Smooth edges.&#39;</span><span class="p">)</span>
+<span class="linenos">42</span><span class="n">vol_dend</span> <span class="o">=</span> <span class="n">smooth_volume_erosion_then_dilation</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">)</span> 
+<span class="linenos">43</span><span class="n">vol_er</span>   <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos">44</span><span class="n">vol_psd</span>  <span class="o">=</span> <span class="n">smooth_volume_dilation_then_erosion</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span> 
+<span class="linenos">45</span>
 <span class="linenos">46</span>
-<span class="linenos">47</span>
-<span class="linenos">48</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Logical operation of volumes.&#39;</span><span class="p">)</span>
-<span class="linenos">49</span><span class="n">vol_not_mito</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_mito</span> <span class="p">)</span>
-<span class="linenos">50</span><span class="n">vol_not_er</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_er</span> <span class="p">)</span>
-<span class="linenos">51</span><span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">vol_dend</span> <span class="o">^</span> <span class="p">(</span><span class="n">vol_mito</span> <span class="o">|</span> <span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos">47</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Logical operation of volumes.&#39;</span><span class="p">)</span>
+<span class="linenos">48</span><span class="n">vol_not_mito</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_mito</span> <span class="p">)</span>
+<span class="linenos">49</span><span class="n">vol_not_er</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span> <span class="n">vol_er</span> <span class="p">)</span>
+<span class="linenos">50</span><span class="n">vol_dend_not_mito_not_er</span> <span class="o">=</span> <span class="n">vol_dend</span> <span class="o">^</span> <span class="p">(</span><span class="n">vol_mito</span> <span class="o">|</span> <span class="n">vol_er</span><span class="p">)</span>
+<span class="linenos">51</span>
 <span class="linenos">52</span>
-<span class="linenos">53</span>
-<span class="linenos">54</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Create surface.&#39;</span><span class="p">)</span>
-<span class="linenos">55</span><span class="n">dend</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">num_smoothing</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">method_smoothing</span> <span class="o">=</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">)</span>
-<span class="linenos">56</span>
-<span class="linenos">57</span><span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="linenos">58</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">vertices</span>
-<span class="linenos">59</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">faces</span>
-<span class="linenos">60</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">()</span>
-<span class="linenos">61</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">62</span><span class="n">face_id_psd</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_face_ids_inside</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span>
-<span class="linenos">63</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">(</span><span class="n">face_id_psd</span><span class="p">)</span>
-<span class="linenos">64</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">65</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;face id psd&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">face_id_psd</span>
-<span class="linenos">66</span>
-<span class="linenos">67</span><span class="n">mito</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_mito</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
-<span class="linenos">68</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito vertices&#39;</span><span class="p">]</span>         <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">vertices</span>
-<span class="linenos">69</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito faces&#39;</span><span class="p">]</span>            <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">faces</span>
-<span class="linenos">70</span>
-<span class="linenos">71</span><span class="n">er</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_er</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
-<span class="linenos">72</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">vertices</span>
-<span class="linenos">73</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">faces</span>
-<span class="linenos">74</span>
-<span class="linenos">75</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">xyzpitch</span>
-<span class="linenos">76</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">77</span>
-<span class="linenos">78</span>
-<span class="linenos">79</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-<span class="linenos">80</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="linenos">81</span>		<span class="n">w</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+<span class="linenos">53</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Create surface.&#39;</span><span class="p">)</span>
+<span class="linenos">54</span><span class="n">dend</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">,</span> <span class="n">num_smoothing</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">method_smoothing</span> <span class="o">=</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">)</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="linenos">57</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound vertices&#39;</span><span class="p">]</span>        <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">58</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">59</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">()</span>
+<span class="linenos">60</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;bound faces in volume&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">61</span><span class="n">face_id_psd</span> <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_face_ids_inside</span><span class="p">(</span><span class="n">vol_psd</span><span class="p">)</span>
+<span class="linenos">62</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">dend</span><span class="o">.</span><span class="n">get_surface_to_volume</span><span class="p">(</span><span class="n">face_id_psd</span><span class="p">)</span>
+<span class="linenos">63</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;psd faces in volume&#39;</span><span class="p">]</span>   <span class="o">*=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">64</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;face id psd&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">face_id_psd</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="n">mito</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_mito</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
+<span class="linenos">67</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito vertices&#39;</span><span class="p">]</span>         <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">68</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;mito faces&#39;</span><span class="p">]</span>            <span class="o">=</span> <span class="n">mito</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">69</span>
+<span class="linenos">70</span><span class="n">er</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span><span class="n">vol_not_er</span><span class="p">,</span> <span class="n">xyzpitch</span><span class="p">)</span>
+<span class="linenos">71</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">]</span>           <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">vertices</span>
+<span class="linenos">72</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">faces</span>
+<span class="linenos">73</span>
+<span class="linenos">74</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">xyzpitch</span>
+<span class="linenos">75</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
+<span class="linenos">76</span>
+<span class="linenos">77</span><span class="n">tot_volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+<span class="linenos">78</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_dend</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>   <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">79</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_mito</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">2</span>
+<span class="linenos">80</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_er</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>       <span class="o">=</span> <span class="mi">3</span>
+<span class="linenos">81</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span>                <span class="o">=</span> <span class="n">tot_volume</span>
+<span class="linenos">82</span>
+<span class="linenos">83</span>
+<span class="linenos">84</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">save_filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+<span class="linenos">85</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">86</span>		<span class="n">w</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>That is all for importing.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Then, the generated volumes are rotated to obtain a minimum bounding box of the objects (Figure below). This is because LM computes the reaction-diffusion of molecules in the cuboid space, the minimization of a dead space decreases the total amount of computation. We have already known that the dendritic object spans the largest volume; therefore, the RotateVolume class keeps the rotation of the dendrite as a reference (vol_dend, Line 26), the other objects (er, mito, psd) are rotated in a same manner (Lines 27). This process is executed only in the X-Z plane, because the same process has already been done in the generation of the target volumes, regarding the X-Y plane (Lines 20-21).</p>
+<a class="reference internal image-reference" href="../_images/Rot.jpg"><img alt="../_images/Rot.jpg" class="align-center" src="../_images/Rot.jpg" style="width: 585.0px; height: 426.0px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The rotated volumes are then padded with spaces to have the size of a multiple of 32 × 32 × 32 (Lines 33-34 in 11_import_dend.py). In addition, their boundaries are smoothed using a one-step pair of erosion and dilution (Lines 47-50). Finally, as in the case of the schematic dendrite, their surface meshes are generated and all of them are saved in the HDF file ‘models/realistic_dendrite.h5’ (Lines 53-86).</p>
+<p>The generated dendrite can be confirmed by the script ‘12_show_dend.py’ as follows:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">12_show_dend.py</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">tut2_functions</span> <span class="kn">import</span> <span class="n">show_dendrite</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">input_morpho_file</span> <span class="o">=</span> <span class="s2">&quot;models/realistic_dendrite.h5&quot;</span>
+<span class="linenos"> 5</span><span class="n">output_image_file</span> <span class="o">=</span> <span class="s2">&quot;imgs/realistic_dendrite.png&quot;</span>
+<span class="linenos"> 6</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;imgs&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">mlab</span> <span class="o">=</span> <span class="n">show_dendrite</span><span class="p">(</span><span class="n">input_morpho_file</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_image_file</span><span class="p">)</span>
+<span class="linenos">10</span><span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../_images/realistic_dendrite.png"><img alt="../_images/realistic_dendrite.png" class="align-center" src="../_images/realistic_dendrite.png" style="width: 700.0px; height: 358.0px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="fiala"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Fiala JC (2005) Reconstruct: A free editor for serial section microscopy, J. Microscopy 218: 52-61, <a class="reference external" href="https://synapseweb.clm.utexas.edu/software-0">https://synapseweb.clm.utexas.edu/software-0</a></p>
+</dd>
+<dt class="label" id="laxmi1"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Parajuli LK, Urakubo H, Takahashi-Nakazato A, Ogelman R, Iwasaki H, Koike M, Kwon HB, Ishii S, Oh WC, Fukazawa Y, and Okabe S (2020) Geometry and the organizational principle of spine synapses along a dendrite, eNeuro 27, ENEURO.0248-20.2020</p>
+</dd>
+<dt class="label" id="laxmi2"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Parajuli LK and Koike M (2021) Three-Dimensional Structure of Dendritic Spines Revealed by Volume Electron Microscopy Techniques, Front. Neuroanat. 15:627368.</p>
+</dd>
+</dl>
 </section>
 
 

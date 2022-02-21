@@ -18,18 +18,17 @@ print('\nLoad geometry data.')
 input_morph_file = 'models/ball_and_stick.h5'
 with h5py.File(input_morph_file,'r') as r:
 	pitch_in_um = r['unit length (um)'][()]
-	vol_cytosol = r['dendrite not mitochondrion not ER'][()]
-	vol_PSD     = r['psd faces in volume'][()]
-	vol_bound   = r['bound faces in volume'][()]
+	volume      = r['volume'][()]
+	face_PSD    = r['psd faces in volume'][()]
+	face_bound  = r['bound faces in volume'][()]
 
-vol_cytosol = (vol_cytosol > 0).astype('uint8')
-domains     = {'not cytosol': 0, 'cytosol': 1}
-surfaces    = {'PSD': vol_PSD, 'cell boundary': vol_bound}
+domains     = {'ecs': 0, 'cytosol': 1, 'mito': 2, 'er': 3}
+surfaces    = {'PSD': face_PSD, 'cell boundary': face_bound}
 
 
 print('\nBuild a lm model.')
 pitch_in_m = micron(pitch_in_um) # Unit in SI
-cell = BuildAnyShape(vol_cytosol, domains, pitch_in_m, surfaces)
+cell = BuildAnyShape(cytosol, domains, pitch_in_m, surfaces)
 molecules = set_molecules(cell)
 
 

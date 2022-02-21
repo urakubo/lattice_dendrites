@@ -174,15 +174,20 @@
 <span class="linenos">69</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">]</span>              <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">faces</span>
 <span class="linenos">70</span>
 <span class="linenos">71</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">xyzpitch</span>
-<span class="linenos">72</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_dend_not_mito_not_er</span>
-<span class="linenos">73</span>
-<span class="linenos">74</span><span class="c1"># Save</span>
-<span class="linenos">75</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
-<span class="linenos">76</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">77</span>
-<span class="linenos">78</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-<span class="linenos">79</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="linenos">80</span>		<span class="n">w</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+<span class="linenos">72</span>
+<span class="linenos">73</span><span class="n">tot_volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vol_dend</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+<span class="linenos">74</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_dend</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">75</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_mito</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="linenos">76</span><span class="n">tot_volume</span><span class="p">[</span><span class="n">vol_er</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">3</span>
+<span class="linenos">77</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tot_volume</span>
+<span class="linenos">78</span>
+<span class="linenos">79</span><span class="c1"># Save</span>
+<span class="linenos">80</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;models/ball_and_stick.h5&#39;</span>
+<span class="linenos">81</span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">82</span>
+<span class="linenos">83</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+<span class="linenos">84</span>	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">85</span>		<span class="n">w</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -193,7 +198,7 @@
 <div class="line"><br /></div>
 </div>
 <ol class="arabic simple" start="5">
-<li><p>Finally, the generated variables are assembled in a Python dictionary variable ‘m’ (Lines 51-72), and ‘m’ is saved into the HDF container file ‘models/ball_and_stick.h5’ (Lines 75-80).</p></li>
+<li><p>Finally, the generated variables are assembled in a Python dictionary variable ‘m’ (Lines 51-77), and ‘m’ is saved into the HDF container file ‘models/ball_and_stick.h5’ (Lines 79-85).</p></li>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">12_show_dend.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>

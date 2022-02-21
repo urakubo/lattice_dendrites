@@ -33,7 +33,7 @@ Create a shape
 
 |
 
-5. Finally, the generated variables are assembled in a Python dictionary variable 'm' (Lines 51-72), and 'm' is saved into the HDF container file 'models/ball_and_stick.h5' (Lines 75-80).  
+5. Finally, the generated variables are assembled in a Python dictionary variable 'm' (Lines 51-77), and 'm' is saved into the HDF container file 'models/ball_and_stick.h5' (Lines 79-85).
 
 .. literalinclude:: ../../tutorial/1/12_show_dend.py
    :language: python

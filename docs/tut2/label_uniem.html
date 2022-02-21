@@ -83,7 +83,39 @@
 <a class="reference internal image-reference" href="../_images/UNI-EM_annot2.jpg"><img alt="../_images/UNI-EM_annot2.jpg" class="align-center" src="../_images/UNI-EM_annot2.jpg" style="width: 599.5px; height: 415.0px;" /></a>
 <p>Convert the labeled areas to labeled volumes, and save them.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">21_convert_label.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">21_convert_to_annotator.py</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="n">save_uniem_annotator</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="n">filename</span>     <span class="o">=</span> <span class="s1">&#39;models/realistic_dendrite.h5&#39;</span>
+<span class="linenos"> 6</span><span class="n">annot_folder</span> <span class="o">=</span> <span class="s1">&#39;annot_realistic&#39;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="linenos"> 9</span>	<span class="n">bound_v</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bound vertices&#39;</span><span class="p">][()]</span>
+<span class="linenos">10</span>	<span class="n">bound_f</span>   <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bound faces&#39;</span><span class="p">][()]</span>
+<span class="linenos">11</span>	<span class="n">mito_v</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mito vertices&#39;</span><span class="p">][()]</span>
+<span class="linenos">12</span>	<span class="n">mito_f</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;mito faces&#39;</span><span class="p">][()]</span>
+<span class="linenos">13</span>	<span class="n">er_v</span>      <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;er vertices&#39;</span><span class="p">][()]</span>
+<span class="linenos">14</span>	<span class="n">er_f</span>      <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;er faces&#39;</span><span class="p">][()]</span>
+<span class="linenos">15</span>	<span class="n">volume</span>    <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">][()]</span>
+<span class="linenos">16</span>	<span class="n">pitch</span>     <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;unit length (um)&#39;</span><span class="p">][()]</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="n">bound_color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">,</span><span class="mi">192</span><span class="p">]</span>
+<span class="linenos">20</span><span class="n">mito_color</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">152</span><span class="p">]</span>
+<span class="linenos">21</span><span class="n">er_color</span>    <span class="o">=</span> <span class="p">[</span><span class="mi">179</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">179</span><span class="p">]</span>
+<span class="linenos">22</span><span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="n">bound_v</span><span class="p">,</span> <span class="n">bound_f</span><span class="p">,</span> <span class="n">bound_color</span><span class="p">],</span>\
+<span class="linenos">23</span>			<span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="n">mito_v</span> <span class="p">,</span> <span class="n">mito_f</span> <span class="p">,</span> <span class="n">mito_color</span><span class="p">],</span>\
+<span class="linenos">24</span>			<span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="n">er_v</span>   <span class="p">,</span> <span class="n">er_f</span>   <span class="p">,</span> <span class="n">er_color</span><span class="p">]}</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="n">save_uniem_annotator</span><span class="p">(</span><span class="n">annot_folder</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">volume</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">),</span> <span class="n">surfaces</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../_images/painted.jpg"><img alt="../_images/painted.jpg" class="align-center" src="../_images/painted.jpg" style="width: 293.0px; height: 246.5px;" /></a>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">22_obtain_from_annotator.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">pyLD</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="linenos"> 3</span>
@@ -97,10 +129,9 @@
 </pre></div>
 </div>
 </div>
-<a class="reference internal image-reference" href="../_images/painted.jpg"><img alt="../_images/painted.jpg" class="align-center" src="../_images/painted.jpg" style="width: 293.0px; height: 246.5px;" /></a>
 <p>Confirm the successful segmentation in the voxel space by visualizing it.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">22_show_label.py</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">22_show_label.py</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">h5py</span>
@@ -113,7 +144,7 @@
 <span class="linenos">10</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="linenos">13</span>	<span class="n">ref_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;dendrite not mitochondrion not ER&#39;</span><span class="p">][()]</span>
+<span class="linenos">13</span>	<span class="n">ref_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">][()]</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">input_label_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="linenos">16</span>	<span class="n">label_volume</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;label volume&#39;</span><span class="p">][()]</span>
@@ -129,7 +160,7 @@
 <span class="linenos">26</span>	<span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
 <span class="linenos">27</span>		<span class="n">s</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="linenos">28</span>
-<span class="linenos">29</span><span class="n">d</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span> <span class="n">ref_volume</span> <span class="o">^</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>  <span class="n">pitch</span><span class="p">)</span>
+<span class="linenos">29</span><span class="n">d</span> <span class="o">=</span> <span class="n">CreateSurface</span><span class="p">(</span> <span class="p">(</span><span class="n">ref_volume</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">label_volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>  <span class="n">pitch</span><span class="p">)</span>
 <span class="linenos">30</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="linenos">31</span><span class="n">mlab</span><span class="o">.</span><span class="n">triangular_mesh</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>\
 <span class="linenos">32</span>	<span class="n">d</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>

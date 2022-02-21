@@ -9,17 +9,17 @@ Build models
 
 In this subsection, a LM model is built based on the voxelized shape of a spiny dendrite (31_build_model.py). 
 
-1. Some HDF containers are loaded to define the cytosolic region (vol_cytosol; Line 21), PSD region (vol_PSD; Line 22), and the region of cell boundary (vol_bound; Line 23).
+1. Some containers in the HDF file are loaded to define the cytosolic region (volume; Line 21), PSD region (face_PSD; Line 22), and the region of cell boundary (face_bound; Line 23).
 
-2. The dict variable 'domains' is set to designate the names of each integer in vol_cytosol (8-bit unsigned int; Line 25), and the dict variable 'surfaces' is set to designate the pairs of a name and voxelized surface areas (float; Line 27).
+2. The dict variable 'domains' defines the names of each integer in 'volume' (8-bit unsigned int; Line 25), and the dict variable 'surfaces' denotes the pairs of a name and voxelized surface areas (float; Line 26).
 
-3. The BuildAnyShape class is called to register the domains and surfaces in the instance variable 'cell' (Line 32).
+3. The BuildAnyShape class is called to register the domains and surfaces in the instance variable 'cell' (Line 31).
 
-4. The instance variable 'cell' further incorporates the following properties regarding molecules: names, initial locations, diffusion, and interactions (set_molecules; Line 33). The contents of 'set_molecules' are described in the files 'set_molecule_FRAP.py' and 'set_molecule_Ca.py'. The Python language utilizes triple quotes (|'''|) to comment out a block of code. Thus users can comment out either of them (Lines 7-15).
+4. The instance variable 'cell' further incorporates the following properties regarding molecules: names, initial locations, diffusion, and interactions (set_molecules; Line 32). The contents of 'set_molecules' are described in the files 'set_molecule_FRAP.py' and 'set_molecule_Ca.py'. The Python language utilizes triple quotes (|'''|) to comment out a block of code. Users can comment out either of them (Lines 7-15).
 
-5. Simulation timers are set under the instance 'sim' (Lines 33-37). Descriptions of setTimestep, setWriteInterval, setLatticeWriteInterval, and setSimulationTime are provided in `the instruction guide of LM <http://faculty.scs.illinois.edu/schulten/software_manuals/InstructionGuide.pdf>`_. Indeed, the BuildAnyShape class is a wrapper of a class of LM 'pyLM.RDME.RDMESimulation', all methods of which are preserved in the instance 'sim'. 
+5. Simulation timers are set under the instance 'sim' (Lines 35-39). Descriptions of setTimestep, setWriteInterval, setLatticeWriteInterval, and setSimulationTime are provided in `the instruction guide of LM <http://faculty.scs.illinois.edu/schulten/software_manuals/InstructionGuide.pdf>`_. Indeed, the BuildAnyShape class is a wrapper of a class of LM 'pyLM.RDME.RDMESimulation', all methods of which are preserved in the instance 'sim'. 
 
-6. The overall setup is saved in the LM format file 'models/photobleach_yfp.lm' or 'models/Ca_influx.lm' (Lines 7-11 and 40-43).
+6. The overall setup is saved in the LM format file 'models/photobleach_yfp.lm' or 'models/Ca_influx.lm' (Lines 9, 14, 42-45).
 
 
 .. literalinclude:: ../../tutorial/1/31_build_model.py

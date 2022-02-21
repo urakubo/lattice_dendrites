@@ -12,7 +12,7 @@ with h5py.File(filename,'r') as f:
 	mito_f    = f['mito faces'][()]
 	er_v      = f['er vertices'][()]
 	er_f      = f['er faces'][()]
-	volume    = f['1:dend,2:mito,3:er'][()]
+	volume    = f['volume'][()]
 	pitch     = f['unit length (um)'][()]
 
 
@@ -24,4 +24,3 @@ surfaces = {1: [bound_v, bound_f, bound_color],\
 			3: [er_v   , er_f   , er_color]}
 
 save_uniem_annotator(annot_folder, pitch, volume.astype('uint16'), surfaces)
-

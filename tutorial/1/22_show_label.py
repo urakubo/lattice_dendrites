@@ -10,7 +10,7 @@ output_image_file = 'imgs/labels_ball_and_stick.png'
 
 
 with h5py.File(input_file, 'r') as f:
-	ref_volume = f['dendrite not mitochondrion not ER'][()]
+	ref_volume = f['volume'][()]
 
 with h5py.File(input_label_file, 'r') as f:
 	label_volume = f['label volume'][()]
@@ -26,7 +26,7 @@ for id in label_ids:
 	mlab.triangular_mesh(s.vertices[:,0], s.vertices[:,1], s.vertices[:,2],\
 		s.faces, color=color, opacity=0.3)
 
-d = CreateSurface( ref_volume ^ (label_volume > 0),  pitch)
+d = CreateSurface( (ref_volume == 1) ^ (label_volume > 0),  pitch)
 color = (0.8,0.8,0.8)
 mlab.triangular_mesh(d.vertices[:,0], d.vertices[:,1], d.vertices[:,2],\
 	d.faces, color=color, opacity=0.3)

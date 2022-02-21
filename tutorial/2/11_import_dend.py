@@ -7,17 +7,17 @@ from pyLD import *
 zpitch   = 0.04 # XX um per EM slice
 xyzpitch = 0.02 # xyz-pitch (XX um) in the decoded volume
 
-folder = 'dxf_files'
-dend   = 'contour'
-er     = 'endoplasmic_reticulum'
-mito   = 'mitochondrion'
-psd    = 'postsynaptic_density'
-filename     = 'models/realistic_dendrite.h5'
+dir_dxfs = 'dxf_files'
+dend     = 'contour'
+er       = 'endoplasmic_reticulum'
+mito     = 'mitochondrion'
+psd      = 'postsynaptic_density'
+save_filename = 'models/realistic_dendrite.h5'
 os.makedirs('models', exist_ok=True)
 
 
 print('\nCreate volumes.')
-c = CreateVolumeFromReconstruct(folder, xyzpitch, zpitch, dend)
+c = CreateVolumeFromReconstruct(dir_dxfs, xyzpitch, zpitch, dend)
 volumes = [c.create(d) for d in [dend, er, mito, psd]]
 
 
@@ -26,16 +26,11 @@ vol_dend = volumes[0]
 r = RotateVolume(vol_dend, 1)
 volumes = [r.rotate(v) for v in volumes]
 
-vol_dend = volumes[0]
-r = RotateVolume(vol_dend, 0)
-volumes = [r.rotate(v) for v in volumes]
-
-
-# print('\nSwap axes to obtain the longest z direction.)
+#print('\nSwap axes to obtain the longest z direction.)
 #volumes = [v.swapaxes(1, 2) for v in volumes]
 
 
-print('\nSet spaces as the multiples of 32 x 32 x 32 voxels.')
+print('\nSet space as a multiple of 32 x 32 x 32 voxels.')
 volumes = [lmpad(v) for v in volumes]
 
 
@@ -79,11 +74,13 @@ m['er faces']              = er.faces
 m['unit length (um)']      = xyzpitch
 m['dendrite not mitochondrion not ER'] = vol_dend_not_mito_not_er
 
-dend_mito_er             = (vol_dend>0).astype('uint8')
-dend_mito_er[vol_mito>0] = 2
-dend_mito_er[vol_er>0]   = 3
-m['1:dend,2:mito,3:er']  = dend_mito_er
+tot_volume = np.zeros_like(vol_dend, dtype='uint8')
+tot_volume[vol_dend > 0]   = 1
+tot_volume[vol_mito>0]     = 2
+tot_volume[vol_er>0]       = 3
+m['volume']                = tot_volume
 
-with h5py.File(filename,'w') as w:
+
+with h5py.File(save_filename,'w') as w:
 	for k, v in m.items():
 		w.create_dataset(k, data=v)
