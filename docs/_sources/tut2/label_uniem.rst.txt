@@ -48,7 +48,6 @@ Finally, the labeled surface regions are visualized by the script '23_show_label
    :linenos:
    :caption: 23_show_label.py
 
-|
 
 .. image:: imgs/labels_realistic.png
    :scale: 100%
