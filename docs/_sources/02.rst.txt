@@ -9,7 +9,6 @@ Requirements
 * Python3.6.X/CUDA11.0 or Python3.8.X/CUDA11.4
 * pip3
 
-Further, 'ffmpeg' and the Python modules 'Matplotlib' and 'Mayavi' are used in tutorials.
 Users can use a virtual environment such as venv, virtualenv, and conda.
 Many of morphological operations in LD work also on Microsoft Windows 10 and 11.
 
@@ -21,8 +20,7 @@ Obtain requirements.txt from `the github site <https://github.com/urakubo/lattic
 
     $ pip3 install -r requirements.txt
 
-Essentially, LD requires numpy, h5py, skimage, trimesh, gzip, pymeshfix, pyvista, and opencv. Tutorials further require matplolib and mayavi.
-
+Essentially, LD requires the following Python modules: numpy, h5py, skimage, trimesh, pymeshfix, pyvista, and opencv. Tutorials further require 'ffmpeg' and the Python modules 'Matplotlib' and 'Mayavi'.
 
 Installation and settings
 =========================
