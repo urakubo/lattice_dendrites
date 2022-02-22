@@ -5,9 +5,9 @@
 Label spines using UNI-EM
 =========================
 
-In tutorial 1, the target spine was labeled by its re-definition. This method cannot be used for morphologically realistic spines. We thus developed the other software to manually label the realistic spines or any other region-of-interests, which is named as UNI-EM annotator. 
+In tutorial 1, the target spine was labeled by its re-generation. This method cannot be used for morphologically realistic spines. We thus developed the software to manually label the realistic spines or any other region-of-interests, which is named as UNI-EM annotator. 
 
-The installation and usage of UNI-EM annotator are described elsewhere. We here introduce the function save_uniem_annotator for data conversion to the format of UNI-EM annotator (Line 26 in 21_convert_to_annotator.py). In this function, 'pitch' denotes the unit length of each voxel, and 'volume' contains the objects of the realistic dendrite (1: cytosol, 2: mitochondrion, 3: ER). The dict variable 'surfaces' specifies the corresponding surfaces. This save_uniem_annotator generates the files of UNI-EM annotator in the directory that is specified by 'annot_folder'.
+The installation and usage of UNI-EM annotator are described elsewhere. We here introduce the function save_uniem_annotator to convert data to the format of UNI-EM annotator (Line 26 in 21_convert_to_annotator.py). In this function, 'pitch' denotes the unit length of each voxel, and 'volume' contains the objects of the realistic dendrite (1: cytosol, 2: mitochondrion, 3: ER).The dict variable 'surfaces' contains the volume ids, surface vertices and faces, and colors. This function generates the files of UNI-EM annotator in the directory specified by 'annot_folder'.
 
 
 .. literalinclude:: ../../tutorial/2/21_convert_to_annotator.py
@@ -26,8 +26,7 @@ UNI-EM annotator has a paint function to label 3D surfaces. Users can label any 
 
 |
 
-
-Then, the labeled surface regions are re-converted to filled voxels (22_obtain_from_annotator.py). The CreateLabelVolumeFromUniEM class handles this (Line 8). The class method 'exec' generates such a volume based on the Python module 'Pymeshfix' that makes surface meshes closed, and re-voxelizes the closed surfaces (Line 9; Figure below). The label volume is saved in the container 'label volume' of the HDF file 'models/labels_realistic.h5' (Lines 6, 10).
+The class method 'exec' generates the volume that contains labeled volumes. This function is realized by the Python module Pymeshfix that makes closed surface meshes and re-voxelizes the closed surfaces (Line 9; Figure below). The label volume is saved in the container 'label volume' of the HDF file 'models/labels_realistic.h5' (Lines 6, 10).
 
 
 .. literalinclude:: ../../tutorial/2/22_obtain_from_annotator.py

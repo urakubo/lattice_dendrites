@@ -2,20 +2,21 @@
 Tutorial 2: realistic dendrite
 ==============================
 
-In tutorial 1, the shape of spiny dendrite has been developed as a combination of geometric shapes. Some users may further want to incorporate a morphologically realistic shape of spiny dendrite or the other cellular structure. As expected, any voxelized data of cellular shapes can be incorporated in LM, e.g., the voxelized data obtained using the Python client CouldVolume [#Volume]_  from a Neuroglancer volume [#Glancer]_ .
+
+In tutorial 1, the shape of spiny dendrite has been developed as a combination of geometric shapes. Some users may further want to incorporate morphologically realistic shapes of spiny dendrite or the other cellular structure. As expected, any voxelized data of cellular shapes can be incorporated in LD/LM, e.g., the data obtained using the Python client CouldVolume [#Volume]_  from a Neuroglancer volume [#Glancer]_ .
 
 
-However, because LM can only simulate molecules within a cuboid space, the spatial re-arrangement of the shape data may be required to decrease a dead space for efficient computation. In addition, the widely-used labeling software 'Reconstruct' stores data in a vector-style format [#Fiala]_ , thus the data conversion is required. Further, it is not easy to label parts of such a morphologically realistic shape.
+However, because LM can only simulate molecular interactions within a cuboid space, the spatial re-arrangement of the imported shape may be necessary to decrease a dead volume for faster computation. In addition, the widely-used labeling software 'Reconstruct' stores data in a vector-style format [#Fiala]_ , thus requires the data conversion for the use in LD/LM. 
 
 
-In the first section of tutorial 2, We would introduce some utility functions to incorporate 3D shapes from the software Reconstruct [#Fiala]_ . Convex hull.
+For this purpose, LD provides the utility functions to incorporate 3D shapes from the software Reconstruct [#Fiala]_ , and to minimize the size of a boundary box (voxel space) based on the convex hull. Further, LD provides the utility functions to convert shape data into the format for UNI-EM annotator [#Urakubo]_ , because it has function to label morphologically realistic spines or any other region-of-interest. In tutorial 2, we would introduce those functions for real use.
 
 
-In the second section, we would label parts of dendrites 
+.. image:: tut2/imgs/realistic_dendrite.png
+   :scale: 100%
+   :align: center
 
-Morphologically realistics shapes of cellular structure also requires ...
-LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_ .
-
+|
 
 .. toctree::
 	:caption: Table of Contents
@@ -27,6 +28,6 @@ LD also has importer from manual annotation from UNI-EM anntator [#Urakubo]_ .
 .. rubric:: References
 
 .. [#Volume] https://github.com/seung-lab/cloud-volume
-.. [#Glancer] https://github.com/google/neuroglancer/
+.. [#Glancer] https://github.com/google/neuroglancer
 .. [#Fiala] Fiala JC (2005) Reconstruct: A free editor for serial section microscopy, J. Microscopy 218: 52-61, https://synapseweb.clm.utexas.edu/software-0
 .. [#Urakubo] Urakubo H, Bullmann T, Kubota Y, Oba S, and Ishii S (2019) UNI-EM: An environment for deep neural network-based automated segmentation of neuronal electron microscopic images, Sci. Rep. 9: 19413, https://github.com/urakubo/UNI-EM

@@ -77,12 +77,13 @@
              
   <section id="tutorial-2-realistic-dendrite">
 <h1><span class="section-number">4. </span>Tutorial 2: realistic dendrite<a class="headerlink" href="#tutorial-2-realistic-dendrite" title="Permalink to this headline"></a></h1>
-<p>In tutorial 1, the shape of spiny dendrite has been developed as a combination of geometric shapes. Some users may further want to incorporate a morphologically realistic shape of spiny dendrite or the other cellular structure. As expected, any voxelized data of cellular shapes can be incorporated in LM, e.g., the voxelized data obtained using the Python client CouldVolume <a class="footnote-reference brackets" href="#volume" id="id1">1</a>  from a Neuroglancer volume <a class="footnote-reference brackets" href="#glancer" id="id2">2</a> .</p>
-<p>However, because LM can only simulate molecules within a cuboid space, the spatial re-arrangement of the shape data may be required to decrease a dead space for efficient computation. In addition, the widely-used labeling software ‘Reconstruct’ stores data in a vector-style format <a class="footnote-reference brackets" href="#fiala" id="id3">3</a> , thus the data conversion is required. Further, it is not easy to label parts of such a morphologically realistic shape.</p>
-<p>In the first section of tutorial 2, We would introduce some utility functions to incorporate 3D shapes from the software Reconstruct <a class="footnote-reference brackets" href="#fiala" id="id4">3</a> . Convex hull.</p>
-<p>In the second section, we would label parts of dendrites</p>
-<p>Morphologically realistics shapes of cellular structure also requires …
-LD also has importer from manual annotation from UNI-EM anntator <a class="footnote-reference brackets" href="#urakubo" id="id5">4</a> .</p>
+<p>In tutorial 1, the shape of spiny dendrite has been developed as a combination of geometric shapes. Some users may further want to incorporate morphologically realistic shapes of spiny dendrite or the other cellular structure. As expected, any voxelized data of cellular shapes can be incorporated in LD/LM, e.g., the data obtained using the Python client CouldVolume <a class="footnote-reference brackets" href="#volume" id="id1">1</a>  from a Neuroglancer volume <a class="footnote-reference brackets" href="#glancer" id="id2">2</a> .</p>
+<p>However, because LM can only simulate molecular interactions within a cuboid space, the spatial re-arrangement of the imported shape may be necessary to decrease a dead volume for faster computation. In addition, the widely-used labeling software ‘Reconstruct’ stores data in a vector-style format <a class="footnote-reference brackets" href="#fiala" id="id3">3</a> , thus requires the data conversion for the use in LD/LM.</p>
+<p>For this purpose, LD provides the utility functions to incorporate 3D shapes from the software Reconstruct <a class="footnote-reference brackets" href="#fiala" id="id4">3</a> , and to minimize the size of a boundary box (voxel space) based on the convex hull. Further, LD provides the utility functions to convert shape data into the format for UNI-EM annotator <a class="footnote-reference brackets" href="#urakubo" id="id5">4</a> , because it has function to label morphologically realistic spines or any other region-of-interest. In tutorial 2, we would introduce those functions for real use.</p>
+<a class="reference internal image-reference" href="_images/realistic_dendrite.png"><img alt="_images/realistic_dendrite.png" class="align-center" src="_images/realistic_dendrite.png" style="width: 700.0px; height: 358.0px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
 <ul>
@@ -96,7 +97,7 @@ LD also has importer from manual annotation from UNI-EM anntator <a class="footn
 <dd><p><a class="reference external" href="https://github.com/seung-lab/cloud-volume">https://github.com/seung-lab/cloud-volume</a></p>
 </dd>
 <dt class="label" id="glancer"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
-<dd><p><a class="reference external" href="https://github.com/google/neuroglancer/">https://github.com/google/neuroglancer/</a></p>
+<dd><p><a class="reference external" href="https://github.com/google/neuroglancer">https://github.com/google/neuroglancer</a></p>
 </dd>
 <dt class="label" id="fiala"><span class="brackets">3</span><span class="fn-backref">(<a href="#id3">1</a>,<a href="#id4">2</a>)</span></dt>
 <dd><p>Fiala JC (2005) Reconstruct: A free editor for serial section microscopy, J. Microscopy 218: 52-61, <a class="reference external" href="https://synapseweb.clm.utexas.edu/software-0">https://synapseweb.clm.utexas.edu/software-0</a></p>
