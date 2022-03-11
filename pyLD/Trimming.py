@@ -14,7 +14,7 @@ class Trimming():
 	    	volume (numpy[int/bool]): Target volume
 
 		Returns:
-			(numpy[int/bool]): Rotated volume
+			(numpy[int/bool]): Trimmed volume
 		"""
 		volume = volume[self.rmin:self.rmax, self.cmin:self.cmax, self.zmin:self.zmax]
 		return target_volume

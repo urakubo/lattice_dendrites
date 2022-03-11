@@ -650,6 +650,33 @@ volume (numpy[int/bool]): Target volume</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLD.Trimming">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">Trimming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.Trimming" title="Permalink to this definition"></a></dt>
+<dd><p>Trim unused areas from a volume to obtain a minimal bounding box.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reference_volume</strong> (<em>numpy</em><em>[</em><em>int/bool</em><em>]</em>) – Reference volume to calcutate a minimal bounding box</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLD.Trimming.trim">
+<span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.Trimming.trim" title="Permalink to this definition"></a></dt>
+<dd><p>Execute the trimming of a specified volume.</p>
+<p>Args:
+volume (numpy[int/bool]): Target volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Trimmed volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(numpy[int/bool])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="pyLD.binaries_directory">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">binaries_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.binaries_directory" title="Permalink to this definition"></a></dt>
