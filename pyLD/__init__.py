@@ -14,6 +14,7 @@ from .CreateVolumeFromReconstruct import *
 from .GetLabeledConcs import *
 from .LoadLabelVolume import *
 from .RotateVolume import *
+from .Trimming import *
 
 """
 __all__ = ['buildAnyShape','calcSurfaceArea','createVolumeFromReconstruct','rotateVolume']
