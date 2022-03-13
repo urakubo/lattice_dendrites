@@ -31,37 +31,37 @@ class CreateSurface:
 		- areas (numpy[int]): Area per face (Y array)
 	"""
 
-	def get_face_ids_inside(self, psd):
+	def get_face_ids_inside(self, label_volume):
 		"""Get face ids inside a specified volume.
 
 		Args:
-		    PSD (numpy): PSD volume  (3D array)
+		    label_volume (numpy): label volume  (3D array)
 
 		Returns:
 			(tuple): Tuple containing:
 
-			- id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)
+			- id_face (numpy[bool]): Faces that are located within label_volume (X array, bool)
 		"""
-		if not isinstance(psd, np.ndarray):
-			raise ValueError('psd must be np.ndarray.')
-		elif psd.ndim != 3:
-			raise ValueError('psd must have a three dimensional space, but psd.ndim = ', psd.ndim)
-		elif np.any(psd.shape != self.volume.shape):
-			raise ValueError('psd.shape must be equal to volume.shape.')
+		if not isinstance(label_volume, np.ndarray):
+			raise ValueError('label_volume must be np.ndarray.')
+		elif label_volume.ndim != 3:
+			raise ValueError('label_volume must have a three dimensional space, but label_volume.ndim = ', label_volume.ndim)
+		elif np.any(label_volume.shape != self.volume.shape):
+			raise ValueError('label_volume.shape must be equal to volume.shape.')
 
-		xvnum, yvnum, zvnum = psd.shape
+		xvnum, yvnum, zvnum = label_volume.shape
 
 		v = self.vertices / self.pitch
 		f = self.faces
 		face_loc   = ( v[f[:,0]]+v[f[:,1]]+v[f[:,2]] ) / 3.0
-		face_voxel = np.round( face_loc ).astype(np.int)
+		face_voxel = np.round( face_loc ).astype('int')
 		face_voxel = (face_voxel < 0) + (face_voxel >= 0) * face_voxel
 		face_voxel[:,0] = (face_voxel[:,0] >= xvnum) * (xvnum-1) + (face_voxel[:,0] < xvnum) * face_voxel[:,0]
 		face_voxel[:,1] = (face_voxel[:,1] >= yvnum) * (yvnum-1) + (face_voxel[:,1] < yvnum) * face_voxel[:,1]
 		face_voxel[:,2] = (face_voxel[:,2] >= zvnum) * (zvnum-1) + (face_voxel[:,2] < zvnum) * face_voxel[:,2]
-		id_face_psd = (psd[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
+		id_face = (label_volume[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
 
-		return id_face_psd
+		return id_face
 
 
 	def __init__(self, volume, pitch, num_smoothing = 30, method_smoothing = 'humphrey'):
