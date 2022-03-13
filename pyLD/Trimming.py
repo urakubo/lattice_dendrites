@@ -19,7 +19,7 @@ class Trimming():
 			(numpy[int/bool]): Trimmed volume
 		"""
 		volume = volume[self.rmin:self.rmax, self.cmin:self.cmax, self.zmin:self.zmax]
-		return target_volume
+		return volume
 
 	def _bbox_3D(self, vol):
 		r = np.any(vol, axis=(1, 2))
