@@ -1,3 +1,5 @@
+import numpy as np
+
 class Trimming():
 	"""Trim unused areas from a volume to obtain a minimal bounding box.
 
