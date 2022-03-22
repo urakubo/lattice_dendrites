@@ -449,16 +449,16 @@ Faces within PSD regions are labeled.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyLD.CreateSurface.get_face_ids_inside">
-<span class="sig-name descname"><span class="pre">get_face_ids_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateSurface.get_face_ids_inside" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_face_ids_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateSurface.get_face_ids_inside" title="Permalink to this definition"></a></dt>
 <dd><p>Get face ids inside a specified volume.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>PSD</strong> (<em>numpy</em>) – PSD volume  (3D array)</p>
+<dd class="field-odd"><p><strong>label_volume</strong> (<em>numpy</em>) – label volume  (3D array)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Tuple containing:</p>
 <ul class="simple">
-<li><p>id_face_psd (numpy[bool]): Faces that are located at PSD (X array, bool)</p></li>
+<li><p>id_face (numpy[bool]): Faces that are located within label_volume (X array, bool)</p></li>
 </ul>
 </p>
 </dd>

@@ -11,7 +11,7 @@ Lattice Microbes (LM) is a software package for efficiently sampling trajectorie
 
 Lattice Dendrites (LD) is an extension of LM that can incorporate morphologically realistic shapes of cells, in particular, from 3-dimentional (3D) reconstruction of electron microscopic (EM) images. LD is fully written in Python.
 
-LD is licensed under the MIT license. The original LM is licensed under the University of Illinois Open Source License. More info on LM can be found at http://www.scs.illinois.edu/schulten/lm/.
+LD is licensed under **the GNU General Public License version 3**. The original LM is licensed under the University of Illinois Open Source License. More info on LM can be found at http://www.scs.illinois.edu/schulten/lm/.
 
 
 Contents
