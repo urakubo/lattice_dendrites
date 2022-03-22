@@ -11,8 +11,8 @@ LM has been designed for building geometrically-shaped cells. However, LM essent
 We here developed an extension of LM, which is named Lattice Dendrites (LD), for the efficient incorporation of realistic shapes of cells and cellular structure. In particular, LD is designed to incorporate segmented volumes from the images of electron microscopy (EM). LD provides a variety of utility classes/functions for:
 
 #. Import of the shape data formatted in a software for EM segmentation (Reconstruct).
-#. Object rotation to minimize their volume in a rectangular solid.
-#. Manual annotation using UNI-EM annotator. 
+#. Object rotation to minimize the volume of the lattice space.
+#. Manual annotation using the UNI-EM annotator. 
 #. Distribution of surface molecules whose densities are proportional to surface area.
 #. Simulation with events.
 #. Data analyses for visualization.
