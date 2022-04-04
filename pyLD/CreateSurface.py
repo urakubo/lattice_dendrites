@@ -76,7 +76,7 @@ class CreateSurface:
 		xvnum, yvnum, zvnum = volume.shape
 
 		# Marching cube
-		v_march, f_march, normals, values = measure.marching_cubes(volume, 0.5, spacing=(1,1,1))
+		v_march, f_march, normals, values = measure.marching_cubes(volume, 0.5, spacing=(1,1,1), gradient_direction='ascent')
 		v_march = v_march - 1
 
 
