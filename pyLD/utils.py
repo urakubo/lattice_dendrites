@@ -8,6 +8,27 @@ import numpy as np
 from skimage import morphology
 import h5py
 
+def get_face_ids_inside(label_volume, v, f):
+	"""Obtain the face ids that are located in label_volume.
+
+	Args:
+		label_volume (numpy[bool/int/float]): Target volume
+		v[:,3] (float): Vertices
+		f[:,3] (int)  : faces
+
+	Returns:
+		(id_face[int]): Ids of faces
+	"""
+	xvnum, yvnum, zvnum = label_volume.shape
+	face_loc   = ( v[f[:,0]]+v[f[:,1]]+v[f[:,2]] ) / 3.0
+	face_voxel = np.round( face_loc ).astype('int')
+	face_voxel = (face_voxel < 0) + (face_voxel >= 0) * face_voxel
+	face_voxel[:,0] = (face_voxel[:,0] >= xvnum) * (xvnum-1) + (face_voxel[:,0] < xvnum) * face_voxel[:,0]
+	face_voxel[:,1] = (face_voxel[:,1] >= yvnum) * (yvnum-1) + (face_voxel[:,1] < yvnum) * face_voxel[:,1]
+	face_voxel[:,2] = (face_voxel[:,2] >= zvnum) * (zvnum-1) + (face_voxel[:,2] < zvnum) * face_voxel[:,2]
+	id_face = (label_volume[face_voxel[:,0],face_voxel[:,1],face_voxel[:,2]] > 0)
+
+	return id_face
 
 def get_volume(filename, id_domains):
 	with h5py.File(filename,'r') as f:
