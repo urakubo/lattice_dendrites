@@ -102,7 +102,7 @@ class GetLabeledConcs:
 		return True
 
 
-	def exec(self):
+	def get(self):
 		"""Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 		label_volume must be specified, which also can be obtained by "load_label_volume".
 
