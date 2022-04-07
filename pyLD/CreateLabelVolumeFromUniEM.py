@@ -79,8 +79,8 @@ class CreateLabelVolumeFromUniEM():
 		print('Existent surface(s): ', ', '.join( self.whole_mesh_names_wo_ext ) )
 		print()
 
-	def exec(self, domain_id, dilation_radius = 1):
-		"""Generate label volumes.
+	def create(self, domain_id, dilation_radius = 1):
+		"""Create label volumes.
 
 		Args:
 		    domain_id (int): Target domain id

@@ -42,7 +42,7 @@ def event_null(lattice, sys_param, event_param):
 		lattice (numpy[uint8]): Lattice space (4D array, 3D space plus 16 slots)
 		sys_param (dict): System parameters that contains
 
-			- 'i' (int): Exec id,
+			- 'i' (int): Run id,
 			- 'time' (float): Start time
 			- 'species' (dict): Molecular names that have their own ids
 			- 'label volume' (numpy[int]): Label volume if specified (3D array, optional)
@@ -102,13 +102,13 @@ class ConnectRun:
 	"""Connect multiple runs of simulation. Output of each run is set to be an inital state of the next run.
 	Users can modify the initial state (4D array; 3D volume + 16 species space through user-defined event functions.
 	All the argments below are assigned as instance variables of this class.
-	Thus, users can set/modify them anytime before "exec".
+	Thus, users can set/modify them anytime before each run.
 
 	Args:
 		template_lm_file (str): Template lm file
 		lm_option (list): Optional arguments passing to lm
-		exec_periods (list[float]): Simulation period in each run
-		exec_events (list[obj]): Event function to modify the lattice space before each run
+		run_periods (list[float]): Simulation period in each run
+		run_events (list[obj]): Event function to modify the lattice space before each run
 		event_params (dict/list[dict]/tuple[dict]): Parameters passing to event function
 		output_dir (str): Directory that stores simulation results
 		output_prefix (str): Prefix of output lm filenames that stores simulation results
@@ -122,8 +122,8 @@ class ConnectRun:
 	def __init__(self,
 		template_lm_file = None,
 		lm_option     = ['-r', '1', '-sp', '-sl','lm::rdme::MpdRdmeSolver'],
-		exec_periods  = [1],
-		exec_events   = [event_null],
+		run_periods  = [1],
+		run_events   = [event_null],
 		event_params  = None,
 		output_dir    = 'results',
 		output_prefix = '',
@@ -134,8 +134,8 @@ class ConnectRun:
 
 		self.template_lm_file = template_lm_file
 		self.lm_option        = lm_option
-		self.exec_periods     = exec_periods
-		self.exec_events      = exec_events
+		self.run_periods      = run_periods
+		self.run_events       = run_events
 		self.event_params     = event_params
 		self.output_dir       = output_dir
 		self.output_prefix    = output_prefix
@@ -144,7 +144,7 @@ class ConnectRun:
 		self.start_id         = start_id
 
 
-	def exec(self):
+	def run(self):
 		"""Execute repeat runs,
 
 		Args:
@@ -152,14 +152,14 @@ class ConnectRun:
 		Returns: bool 
 			(bool): True if succeeded. Also simulation results are stored in lm files in output_dir.
 		"""
-		self.exec_periods     = list(self.exec_periods)
-		self.exec_events      = list(self.exec_events)
+		self.run_periods     = list(self.run_periods)
+		self.run_events      = list(self.run_events)
 		if self.template_lm_file==None or not os.path.isfile(self.template_lm_file):
 			raise ValueError('No template lm file.')
-		elif len(self.exec_periods) != len(self.exec_events):
-			raise ValueError('Num of exec_periods must be the same as the num of exec_events.')
-		elif not isinstance(self.event_params, dict) and (len(self.event_params) != len(self.exec_events)):
-			raise ValueError('usr_params must be dict or a list/tuple of dict that has the same length with exe_events')
+		elif len(self.run_periods) != len(self.run_events):
+			raise ValueError('Num of run_periods must be the same as the num of run_events.')
+		elif not isinstance(self.run_params, dict) and (len(self.run_params) != len(self.run_events)):
+			raise ValueError('usr_params must be dict or a list/tuple of dict that has the same length with run_events')
 
 		# Set system params
 		sys_param = {}
@@ -172,10 +172,10 @@ class ConnectRun:
 		filename = ''
 		filename_prerun = ''
 		sys_param['i'] = self.start_id
-		for i, (period, event) in enumerate(zip(self.exec_periods, self.exec_events)):
+		for i, (period, run) in enumerate(zip(self.run_periods, self.run_events)):
 			# Copy results from a previous run or inits from the orignal template.
 			if i > 0:
-				sys_param['time'] = sys_param['time'] + self.exec_periods[i-1]
+				sys_param['time'] = sys_param['time'] + self.run_periods[i-1]
 				with h5py.File(filename_prerun,'r') as f:
 				    TimePoints = list( f['Simulations']['0000001']['Lattice'].keys() )
 				    TimePoints.sort()

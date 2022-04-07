@@ -31,7 +31,7 @@ s = GetLabeledConcs()
 s.load_label_volume(label_file)
 for (lm_file, conc_file) in zip(lm_files, conc_files):
     s.lm_file = lm_file
-    s.exec()
+    s.get()
     s.save(conc_file)
 
 c = ConnectLabeledConcs(conc_files)

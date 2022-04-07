@@ -130,7 +130,7 @@
 <span class="linenos">31</span><span class="n">s</span><span class="o">.</span><span class="n">load_label_volume</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
 <span class="linenos">32</span><span class="k">for</span> <span class="p">(</span><span class="n">lm_file</span><span class="p">,</span> <span class="n">conc_file</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lm_files</span><span class="p">,</span> <span class="n">conc_files</span><span class="p">):</span>
 <span class="linenos">33</span>    <span class="n">s</span><span class="o">.</span><span class="n">lm_file</span> <span class="o">=</span> <span class="n">lm_file</span>
-<span class="linenos">34</span>    <span class="n">s</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+<span class="linenos">34</span>    <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="linenos">35</span>    <span class="n">s</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">conc_file</span><span class="p">)</span>
 <span class="linenos">36</span>
 <span class="linenos">37</span><span class="n">c</span> <span class="o">=</span> <span class="n">ConnectLabeledConcs</span><span class="p">(</span><span class="n">conc_files</span><span class="p">)</span>

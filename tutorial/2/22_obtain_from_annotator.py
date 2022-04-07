@@ -6,5 +6,5 @@ object_id         = 1
 output_label_file = 'models/labels_realistic.h5'
 
 c = CreateLabelVolumeFromUniEM(annot_folder)
-c.exec(object_id)
+c.create(object_id)
 c.save(output_label_file)

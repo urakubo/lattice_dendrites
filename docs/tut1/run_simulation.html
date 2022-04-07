@@ -151,16 +151,16 @@ second command makes a copy of ‘models/photobleach.lm’ as ‘results_photobl
 <span class="linenos">24</span><span class="c1"># FRAP</span>
 <span class="linenos">25</span><span class="n">r</span><span class="o">.</span><span class="n">template_lm_file</span>  <span class="o">=</span> <span class="s1">&#39;models/photobleach.lm&#39;</span>
 <span class="linenos">26</span><span class="n">r</span><span class="o">.</span><span class="n">output_dir</span>        <span class="o">=</span> <span class="s1">&#39;results_photobleach&#39;</span>
-<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">exec_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
-<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">exec_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
+<span class="linenos">27</span><span class="n">r</span><span class="o">.</span><span class="n">run_periods</span>      <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]</span>
+<span class="linenos">28</span><span class="n">r</span><span class="o">.</span><span class="n">run_events</span>       <span class="o">=</span> <span class="p">[</span><span class="n">event_null</span><span class="p">,</span> <span class="n">event_replace</span><span class="p">]</span>
 <span class="linenos">29</span><span class="n">r</span><span class="o">.</span><span class="n">event_params</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span><span class="s1">&#39;YFP&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span><span class="s1">&#39;bleached YFP&#39;</span><span class="p">}</span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="linenos">32</span><span class="sd"># Ca2+ influx via NMDARs</span>
 <span class="linenos">33</span><span class="sd">r.template_lm_file  = &#39;models/Ca_dynamics.lm&#39;</span>
 <span class="linenos">34</span><span class="sd">r.output_dir        = &#39;results_Ca_dynamics&#39;</span>
-<span class="linenos">35</span><span class="sd">r.exec_periods      = [2.0, 2.0]</span>
-<span class="linenos">36</span><span class="sd">r.exec_events       = [event_null, event_replace]</span>
+<span class="linenos">35</span><span class="sd">r.run_periods      = [2.0, 2.0]</span>
+<span class="linenos">36</span><span class="sd">r.run_events       = [event_null, event_replace]</span>
 <span class="linenos">37</span><span class="sd">r.event_params      = {&#39;src&#39;:&#39;inactive NMDAR&#39;, &#39;dst&#39;:&#39;active NMDAR&#39;}</span>
 <span class="linenos">38</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="linenos">39</span>
@@ -172,7 +172,7 @@ second command makes a copy of ‘models/photobleach.lm’ as ‘results_photobl
 <span class="linenos">45</span><span class="sd">r.lm_option   = [&#39;-g&#39;, GPU_ids, &#39;-gr&#39;, num_GPUs,&#39;-cr&#39;, num_CPUs, &#39;-sl&#39;,&#39;lm::rdme::MGPUMpdRdmeSolver&#39;]</span>
 <span class="linenos">46</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="linenos">47</span>
-<span class="linenos">48</span><span class="n">r</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+<span class="linenos">48</span><span class="n">r</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

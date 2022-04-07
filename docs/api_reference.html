@@ -163,8 +163,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.ConnectAnalysis.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectAnalysis.exec" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.ConnectAnalysis.analysis">
+<span class="sig-name descname"><span class="pre">analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectAnalysis.analysis" title="Permalink to this definition"></a></dt>
 <dd><p>Trace the time development of voxel space.
 At each time step, the 4D variable “lattice” (3D + 16 slots) is passed to a user defined function “event”,
 and users can analyze the lattice on their own use. The parameter file “event_param” is</p>
@@ -261,18 +261,18 @@ and users can analyze the lattice on their own use. The parameter file “event_
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyLD.ConnectRun">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">exec_periods=[1],</span> <span class="pre">exec_events=[&lt;function</span> <span class="pre">event_null&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None,</span> <span class="pre">start_id=0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">ConnectRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">template_lm_file=None,</span> <span class="pre">lm_option=['-r',</span> <span class="pre">'1',</span> <span class="pre">'-sp',</span> <span class="pre">'-sl',</span> <span class="pre">'lm::rdme::MpdRdmeSolver'],</span> <span class="pre">run_periods=[1],</span> <span class="pre">run_events=[&lt;function</span> <span class="pre">event_null&gt;],</span> <span class="pre">event_params=None,</span> <span class="pre">output_dir='results',</span> <span class="pre">output_prefix='',</span> <span class="pre">output_num_zero_padding=4,</span> <span class="pre">label_volume_file=None,</span> <span class="pre">start_id=0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun" title="Permalink to this definition"></a></dt>
 <dd><p>Connect multiple runs of simulation. Output of each run is set to be an inital state of the next run.
 Users can modify the initial state (4D array; 3D volume + 16 species space through user-defined event functions.
 All the argments below are assigned as instance variables of this class.
-Thus, users can set/modify them anytime before “exec”.</p>
+Thus, users can set/modify them anytime before each run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>template_lm_file</strong> (<em>str</em>) – Template lm file</p></li>
 <li><p><strong>lm_option</strong> (<em>list</em>) – Optional arguments passing to lm</p></li>
-<li><p><strong>exec_periods</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Simulation period in each run</p></li>
-<li><p><strong>exec_events</strong> (<em>list</em><em>[</em><em>obj</em><em>]</em>) – Event function to modify the lattice space before each run</p></li>
+<li><p><strong>run_periods</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Simulation period in each run</p></li>
+<li><p><strong>run_events</strong> (<em>list</em><em>[</em><em>obj</em><em>]</em>) – Event function to modify the lattice space before each run</p></li>
 <li><p><strong>event_params</strong> (<em>dict/list</em><em>[</em><em>dict</em><em>]</em><em>/tuple</em><em>[</em><em>dict</em><em>]</em>) – Parameters passing to event function</p></li>
 <li><p><strong>output_dir</strong> (<em>str</em>) – Directory that stores simulation results</p></li>
 <li><p><strong>output_prefix</strong> (<em>str</em>) – Prefix of output lm filenames that stores simulation results</p></li>
@@ -289,8 +289,8 @@ Thus, users can set/modify them anytime before “exec”.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.ConnectRun.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun.exec" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.ConnectRun.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.ConnectRun.run" title="Permalink to this definition"></a></dt>
 <dd><p>Execute repeat runs,</p>
 <p>Args:</p>
 <dl class="simple">
@@ -378,9 +378,9 @@ Thus, users can set/modify them anytime before “exec”.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.CreateLabelVolumeFromUniEM.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabelVolumeFromUniEM.exec" title="Permalink to this definition"></a></dt>
-<dd><p>Generate label volumes.</p>
+<dt class="sig sig-object py" id="pyLD.CreateLabelVolumeFromUniEM.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.CreateLabelVolumeFromUniEM.create" title="Permalink to this definition"></a></dt>
+<dd><p>Create label volumes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -539,8 +539,8 @@ Domains are transformed into a minimal bounding box of the X-Y space, based on c
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.exec">
-<span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.exec" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyLD.GetLabeledConcs.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.GetLabeledConcs.get" title="Permalink to this definition"></a></dt>
 <dd><p>Get time series of moleuclar numbers/concentrations within labeled volumes from LM simulation result.
 label_volume must be specified, which also can be obtained by “load_label_volume”.</p>
 <dl class="field-list simple">
@@ -787,7 +787,7 @@ Users can modify the initial state of molelcules of each run (lattice; 4D array,
 <li><p><strong>lattice</strong> (<em>numpy</em><em>[</em><em>uint8</em><em>]</em>) – Lattice space (4D array, 3D space plus 16 slots)</p></li>
 <li><p><strong>sys_param</strong> (<em>dict</em>) – <p>System parameters that contains</p>
 <ul>
-<li><p>’i’ (int): Exec id,</p></li>
+<li><p>’i’ (int): Run id,</p></li>
 <li><p>’time’ (float): Start time</p></li>
 <li><p>’species’ (dict): Molecular names that have their own ids</p></li>
 <li><p>’label volume’ (numpy[int]): Label volume if specified (3D array, optional)</p></li>
@@ -835,6 +835,27 @@ Users can modify the initial state of molelcules of each run (lattice; 4D array,
 <dt class="sig sig-object py" id="pyLD.get_cuda_version">
 <span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_cuda_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cuda_home</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_cuda_version" title="Permalink to this definition"></a></dt>
 <dd><p>Locate the CUDA version</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLD.get_face_ids_inside">
+<span class="sig-prename descclassname"><span class="pre">pyLD.</span></span><span class="sig-name descname"><span class="pre">get_face_ids_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLD.get_face_ids_inside" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain the face ids that are located in label_volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_volume</strong> (<em>numpy</em><em>[</em><em>bool/int/float</em><em>]</em>) – Target volume</p></li>
+<li><p><strong>v</strong><strong>[</strong> – ,3] (float): Vertices</p></li>
+<li><p><strong>f</strong><strong>[</strong> – ,3] (int)  : faces</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Ids of faces</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(id_face[int])</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

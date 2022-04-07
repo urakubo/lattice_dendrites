@@ -42,7 +42,7 @@ class ConnectAnalysis:
 		self.event_param       = None
 		self.start_time        = 0.0
 
-	def exec(self):
+	def analysis(self):
 		"""Trace the time development of voxel space.
 		At each time step, the 4D variable "lattice" (3D + 16 slots) is passed to a user defined function "event",
 		and users can analyze the lattice on their own use. The parameter file "event_param" is 
