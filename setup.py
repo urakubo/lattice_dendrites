@@ -25,7 +25,7 @@ class PostInstallCommand(install):
 		minor_version = sys.version_info[1] # Minor
 
 		print('Processed here.')
-		if os.name== 'posix' and major_version == 3 and major_version == 6:
+		if os.name== 'posix' and major_version == 3 and minor_version == 6:
 			cuda_version = locate_cuda()
 			if cuda_version == '11.0':
 				print('Postprocess: posix (linux, mac), python3.6, cuda11.0.')
