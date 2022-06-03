@@ -36,7 +36,7 @@ Download a deb file (Python 3.X, CUDA Y) from the folder "compiledLM" of `the gi
 
 .. code-block:: bash
 
-    $ sudo dkpg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
+    $ sudo dpkg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
 
 Download/install pyLD, pyLM, and pySTDLM:
 
