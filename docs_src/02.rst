@@ -14,6 +14,13 @@ Many of morphological operations in LD work also on Microsoft Windows 10 and 11.
 
 Preparation
 ===========
+
+First, install dependencies on your Ubuntu system:
+
+.. code-block:: bash
+
+    $ sudo apt install libc6 libstdc++6 libgcc1 zlib1g libexpat1
+
 Obtain requirements.txt from `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install dependencies:
 
 .. code-block:: bash
@@ -24,44 +31,29 @@ Essentially, LD requires the following Python modules: numpy, h5py, skimage, tri
 
 Installation and settings
 =========================
-Download/install pyLD, pyLM, and pySTDLM:
+
+Download the deb files from the folder "deb_files" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
+
+.. code-block:: bash
+
+    $ sudo dkpg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
+
+Download/install pyLD, pyLM, and pySTDLM by the following command:
 
 .. code-block:: bash
 
     $ pip install git+https://github.com/urakubo/lattice_dendrites.git
 
 
-Find the installation paths by executing the following command:
-
-.. code-block:: bash
-
-    $ check_lm_install_dir
-
-This command shows two paths: $LM_BIN_PATH and $LM_LIB_PATH.
 Then, set environment paths. Add the following lines in $HOME/.bashrc:
 
 
 .. code-block:: bash
 
-	# LM paths
-	export PATH=$LM_BIN_PATH:$PATH
-	export LD_LIBRARY_PATH=$LM_LIB_PATH:$LD_LIBRARY_PATH
-
 	# CUDA paths
 	export PATH=/usr/local/cuda/bin:$PATH
 	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
-	# System paths
-	export LD_LIBRARY_PATH=/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-
-	# Requirements in /usr/local/cuda/lib64:
-	# libcudart.so.11.0
-	# Requirements in /lib64:
-	# ld-linux-x86-64.so.2
-	# Requirements in /usr/lib/x86_64-linux-gnu:
-	# libstdc++.so.6, libpython3.6m.so.1.0
-	# Requirements in /lib/x86_64-linux-gnu:
-	# libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1
 
 and execute the following command:
 

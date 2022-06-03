@@ -15,28 +15,7 @@ class PostInstallCommand(install):
 	def run(self):
 		install.run(self)
 		# PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
-		print(self.install_lib)
-
-		filename    = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
-		extract_dir = os.path.join(self.install_lib, 'lm')
-		with tarfile.open(filename, "r:*") as f:
-			f.extractall(path=extract_dir, numeric_owner=True)
-		major_version = sys.version_info[0] # Major
-		minor_version = sys.version_info[1] # Minor
-
-		print('Processed here.')
-		if os.name== 'posix' and major_version == 3 and minor_version == 6:
-			cuda_version = locate_cuda()
-			if cuda_version == '11.0':
-				print('Postprocess: posix (linux, mac), python3.6, cuda11.0.')
-				print('Postprocess: lm_py3.6_cuda11.0 is extracted.')
-				target_file = os.path.join(self.install_lib, 'lm', "lm_py3.6_cuda11.0.tar.gz")
-				extract_dir = os.path.join(self.install_lib, 'lm')
-				with tarfile.open(target_file, "r:*") as f:
-					f.extractall(path=extract_dir, numeric_owner=True)
-				print('Please set the following two paths.')
-				print('Please export PATH={}:$PATH',  os.path.join(extract_dir,'bin') )
-				print('Please export LD_LIBRARY_PATH={}:$LD_LIBRARY_PATH',  os.path.join(extract_dir,'lib') )
+		# print(self.install_lib)
 
 
 class PostDevelopCommand(develop):
@@ -78,7 +57,7 @@ s = setup(
 		"scikit-image>=0.17.2",
 		"trimesh>=3.9.36"
 	],
-	packages = ['pyLM','pySTDLM','pyLD','lm'],
+	packages = ['pyLM','pySTDLM','pyLD'],
 	package_data={"lm": ['*']},
 	python_requires="~=3.6", # >= 3.6 < 4.0
 	cmdclass={

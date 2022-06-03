@@ -102,6 +102,10 @@ Many of morphological operations in LD work also on Microsoft Windows 10 and 11.
 </section>
 <section id="preparation">
 <h2><span class="section-number">2.2. </span>Preparation<a class="headerlink" href="#preparation" title="Permalink to this headline"></a></h2>
+<p>First, install dependencies on your Ubuntu system:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt install libc6 libstdc++6 libgcc1 zlib1g libexpat1
+</pre></div>
+</div>
 <p>Obtain requirements.txt from <a class="reference external" href="https://github.com/urakubo/lattice_dendrites.git">the github site</a> , and install dependencies:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install -r requirements.txt
 </pre></div>
@@ -110,35 +114,18 @@ Many of morphological operations in LD work also on Microsoft Windows 10 and 11.
 </section>
 <section id="installation-and-settings">
 <h2><span class="section-number">2.3. </span>Installation and settings<a class="headerlink" href="#installation-and-settings" title="Permalink to this headline"></a></h2>
-<p>Download/install pyLD, pyLM, and pySTDLM:</p>
+<p>Download the deb files from the folder “deb_files” of <a class="reference external" href="https://github.com/urakubo/lattice_dendrites.git">the github site</a> , and install it for lm and binaries:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo dkpg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
+</pre></div>
+</div>
+<p>Download/install pyLD, pyLM, and pySTDLM by the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/urakubo/lattice_dendrites.git
 </pre></div>
 </div>
-<p>Find the installation paths by executing the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ check_lm_install_dir
-</pre></div>
-</div>
-<p>This command shows two paths: $LM_BIN_PATH and $LM_LIB_PATH.
-Then, set environment paths. Add the following lines in $HOME/.bashrc:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LM paths</span>
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$LM_BIN_PATH</span>:<span class="nv">$PATH</span>
-<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LM_LIB_PATH</span>:<span class="nv">$LD_LIBRARY_PATH</span>
-
-<span class="c1"># CUDA paths</span>
+<p>Then, set environment paths. Add the following lines in $HOME/.bashrc:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CUDA paths</span>
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
 <span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
-
-<span class="c1"># System paths</span>
-<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:<span class="nv">$LD_LIBRARY_PATH</span>
-
-<span class="c1"># Requirements in /usr/local/cuda/lib64:</span>
-<span class="c1"># libcudart.so.11.0</span>
-<span class="c1"># Requirements in /lib64:</span>
-<span class="c1"># ld-linux-x86-64.so.2</span>
-<span class="c1"># Requirements in /usr/lib/x86_64-linux-gnu:</span>
-<span class="c1"># libstdc++.so.6, libpython3.6m.so.1.0</span>
-<span class="c1"># Requirements in /lib/x86_64-linux-gnu:</span>
-<span class="c1"># libm.so.6, libgcc_s.so.1, libpthread.so.0, libc.so.6, libz.so.1, libdl.so.2, librt.so.1, libexpat.so.1, libutil.so.1</span>
 </pre></div>
 </div>
 <p>and execute the following command:</p>
