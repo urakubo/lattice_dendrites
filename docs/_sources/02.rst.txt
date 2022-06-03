@@ -32,7 +32,7 @@ Essentially, LD requires the following Python modules: numpy, h5py, skimage, tri
 Installation and settings
 =========================
 
-Download a deb file (Python 3.X, CUDA Y) from the folder "deb_files" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
+Download a deb file (Python 3.X, CUDA Y) from the folder "compiledLM" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
 
 .. code-block:: bash
 
