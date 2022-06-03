@@ -21,7 +21,7 @@ First, install dependencies on your Ubuntu system:
 
     $ sudo apt install libc6 libstdc++6 libgcc1 zlib1g libexpat1
 
-Obtain requirements.txt from `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install dependencies:
+Obtain requirements.txt from `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install dependencies in Python3:
 
 .. code-block:: bash
 
@@ -32,13 +32,13 @@ Essentially, LD requires the following Python modules: numpy, h5py, skimage, tri
 Installation and settings
 =========================
 
-Download the deb files from the folder "deb_files" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
+Download a deb file (Python 3.X, CUDA Y) from the folder "deb_files" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
 
 .. code-block:: bash
 
     $ sudo dkpg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
 
-Download/install pyLD, pyLM, and pySTDLM by the following command:
+Download/install pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
