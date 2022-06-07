@@ -11,7 +11,7 @@ Requirements
 * CUDA11.0 or 11.6
 
 Users can also use the virtual environments of venv and virtualenv. Anadconda/miniconda is not supported, but it may work.
-Many of morphological operations in LD work also on the Windows native python3.
+Many of morphological operations in LD also work on the Windows native python3.
 
 Preparation
 ===========
