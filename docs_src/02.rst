@@ -16,7 +16,7 @@ Many of morphological operations in LD work also on the Windows native python3.
 Preparation
 ===========
 
-First, install dependencies on your Ubuntu system (3.X: your python version, i.e., 3.6, 3.8, or 3.10):
+First, install dependencies on your Ubuntu system (3.X: your python version, i.e., 3.6 or 3.10):
 
 .. code-block:: bash
 
