@@ -5,11 +5,11 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Linux operating system (e.g., Ubuntu18.04 or 20.04)
+* Ubuntu Linux operating system / Microsoft Windows
 * Python3.6.X/CUDA11.0 or Python3.8.X/CUDA11.4
 * pip3
 
-Users can use a virtual environment such as venv, virtualenv, and conda.
+Users should be able to use the virtual environments of venv and virtualenv. Anadconda/miniconda is not supported.
 Many of morphological operations in LD work also on Microsoft Windows 10 and 11.
 
 Preparation
@@ -36,13 +36,13 @@ Download a deb file (Python 3.X, CUDA Y) from the directory "LM" of `the github 
 
 .. code-block:: bash
 
-    $ sudo dpkg -i lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
+    $ sudo apt install ./lattice-dendrites_2.3.0.1-py36-cuda11.0_amd64.deb
 
 Download/install pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/urakubo/lattice_dendrites.git
+    $ pip install --install-option="--py36" git+https://github.com/urakubo/lattice_dendrites.git
 
 
 Then, set environment paths. Add the following lines in $HOME/.bashrc:
