@@ -5,7 +5,7 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Ubuntu/linux operating system (Native / wsl2 on Microsoft Windows)
+* Ubuntu/linux operating system (Native, or wsl2 on Microsoft Windows)
 * Python3.6, 3.8, or 3.10; CUDA11.0 or 11.6
 * pip3
 
