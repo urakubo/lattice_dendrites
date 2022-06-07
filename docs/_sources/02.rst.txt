@@ -4,8 +4,9 @@ Installation
 
 Requirements
 ============
+* X86_64 (amd64) computer
 * Ubuntu/linux operating system (Native, or wsl2 on Microsoft Windows)
-* Python3.6, or 3.10
+* Python3.6 or 3.10
 * pip3
 * NVIDIA GPU-powered computers
 * CUDA11.0 or 11.6
