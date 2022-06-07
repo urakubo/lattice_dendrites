@@ -4,10 +4,11 @@ Installation
 
 Requirements
 ============
-* NVIDIA GPU-powered computers
 * Ubuntu/linux operating system (Native, or wsl2 on Microsoft Windows)
-* Python3.6, 3.8, or 3.10; CUDA11.0 or 11.6
+* Python3.6, or 3.10
 * pip3
+* NVIDIA GPU-powered computers
+* CUDA11.0 or 11.6
 
 Users can also use the virtual environments of venv and virtualenv. Anadconda/miniconda is not supported, but it may work.
 Many of morphological operations in LD work also on the Windows native python3.
