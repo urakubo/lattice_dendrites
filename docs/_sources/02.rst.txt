@@ -5,7 +5,7 @@ Installation
 Requirements
 ============
 * NVIDIA GPU-powered computers
-* Ubuntu Linux operating system / Microsoft Windows wsl2
+* Ubuntu/linux operating system (Native / wsl2 on Microsoft Windows)
 * Python3.6, 3.8, or 3.10; CUDA11.0 or 11.6
 * pip3
 
@@ -87,6 +87,7 @@ Also, confirm the successful import of LM/LD modules in python3:
 	Python 3.6.9 (default, Jan 26 2021, 15:33:00)
 	[GCC 8.4.0] on linux
 	Type "help", "copyright", "credits" or "license" for more information.
+	>>> import lm
 	>>> import pyLM
 	>>> import pySTDLM
 	>>> import pyLD
