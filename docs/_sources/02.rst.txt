@@ -10,7 +10,7 @@ Requirements
 * pip3
 * CUDA11.0 or 11.6
 
-Users can also use the virtual environments of venv and virtualenv. Anadconda/miniconda is not supported, but it may work.
+Users can also use the virtual environments: venv and virtualenv. Anadconda/miniconda is not supported, but it may work.
 Many of morphological operations in LD also work on the Windows native python3.
 
 Preparation
@@ -33,13 +33,13 @@ Essentially, LD requires the following Python modules: numpy, h5py, skimage, tri
 Installation and settings
 =========================
 
-Download a deb file (Python 3.X, CUDA 11.0) from the directory "LM" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for lm and binaries:
+Download a deb file (Python 3.X, CUDA 11.0) from the directory "LM" of `the github site <https://github.com/urakubo/lattice_dendrites.git>`_ , and install it for the binaries of lm:
 
 .. code-block:: bash
 
     $ sudo apt install ./lattice-dendrites_2.3.0.1-py3X-cuda11.0_amd64.deb
 
-Download/install pyLD, pyLM, and pySTDLM:
+Download/install lm, pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
