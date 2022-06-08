@@ -1,7 +1,4 @@
 from setuptools import setup
-from setuptools.command.develop import develop
-from setuptools.command.install import install
-
 import os, sys
 
 
@@ -43,7 +40,7 @@ elif major_version == 3:
 	python_requires='>=3.0'
 
 else :
-    sys.exit("This version and/or system is not supported.".format(sys.version_info, os.name))
+	sys.exit("This version and/or system is not supported.".format(sys.version_info, os.name))
 
 
 s = setup(
