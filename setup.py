@@ -8,7 +8,7 @@ import os, sys
 with open("README.md") as f:
 	long_description = f.read()
 
-claasifiers = [
+classifiers = [
 		"License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
 		"Programming Language :: Python",
 		"Topic :: Scientific/Engineering",
@@ -23,19 +23,19 @@ minor_version = sys.version_info[1] # Minor
 
 print("Python{} on {} is detected.".format(sys.version_info, os.name))
 if os.name == 'posix' and major_version == 3 and major_version == 6:
-	claasifiers.extend(["Programming Language :: Python :: 3.6",
+	classifiers.extend(["Programming Language :: Python :: 3.6",
 		"Operating System :: POSIX"])
 	package_dir['lm'] = 'LM3.6'
 	python_requires='3.6'
 
 elif os.name == 'posix' and major_version == 3 and major_version == 10:
-	claasifiers.extend(["Programming Language :: Python :: 3.8",
+	classifiers.extend(["Programming Language :: Python :: 3.8",
 		"Operating System :: POSIX"])
 	package_dir['lm'] = 'LM3.10'
 	python_requires='3.10'
 
 elif major_version == 3:
-	claasifiers.extend(["Programming Language :: Python :: 3",
+	classifiers.extend(["Programming Language :: Python :: 3",
 		"Operating System :: Microsoft :: Windows :: Windows 10"])
 	package_dir['lm'] = 'LM_null'
 	python_requires='>=3.0'
