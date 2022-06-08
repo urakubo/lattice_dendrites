@@ -22,22 +22,24 @@ major_version = sys.version_info[0] # Major
 minor_version = sys.version_info[1] # Minor
 
 print("Python{} on {} is detected.".format(sys.version_info, os.name))
-if os.name == 'posix' and major_version == 3 and major_version == 6:
+if os.name == 'posix' and major_version == 3 and minor_version == 6:
 	classifiers.extend(["Programming Language :: Python :: 3.6",
 		"Operating System :: POSIX"])
-	package_dir['lm'] = 'LM3.6'
+	package_dir['lm'] = 'lm_py3.6'
 	python_requires='3.6'
 
-elif os.name == 'posix' and major_version == 3 and major_version == 10:
-	classifiers.extend(["Programming Language :: Python :: 3.8",
+elif os.name == 'posix' and major_version == 3 and minor_version == 10:
+	classifiers.extend(["Programming Language :: Python :: 3.10",
 		"Operating System :: POSIX"])
-	package_dir['lm'] = 'LM3.10'
+	package_dir['lm'] = 'lm_py3.10'
 	python_requires='3.10'
 
 elif major_version == 3:
 	classifiers.extend(["Programming Language :: Python :: 3",
+		"Operating System :: POSIX",
+		"Operating System :: POSIX",
 		"Operating System :: Microsoft :: Windows :: Windows 10"])
-	package_dir['lm'] = 'LM_null'
+	package_dir['lm'] = 'lm_null'
 	python_requires='>=3.0'
 
 else :
