@@ -3,7 +3,7 @@ Version: 2.3.0.1
 Architecture: amd64
 Section: python
 Priority: optional
-Depends: libc6, libstdc++6, libgcc1, zlib1g, libexpat1
+Depends: libc6, libstdc++6, libgcc1, zlib1g, libexpat1, libpython3.X-dev
 Homepage: https://github.com/urakubo/lattice_dendrites
 Maintainer: Hidetoshi Urakubo
 Description: This is a part of lattice microbes 2.3.0.1
