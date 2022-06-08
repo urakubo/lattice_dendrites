@@ -43,7 +43,7 @@ Download/install pyLD, pyLM, and pySTDLM:
 
 .. code-block:: bash
 
-    $ pip install --install-option="--py3X" git+https://github.com/urakubo/lattice_dendrites.git
+    $ pip3 install git+https://github.com/urakubo/lattice_dendrites.git
 
 
 Then, set environment paths. Add the following lines in $HOME/.bashrc:
