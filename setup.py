@@ -23,13 +23,13 @@ if os.name == 'posix' and major_version == 3 and minor_version == 6:
 	classifiers.extend(["Programming Language :: Python :: 3.6",
 		"Operating System :: POSIX"])
 	package_dir['lm'] = 'lm_py3.6'
-	python_requires='==3.6'
+	python_requires='==3.6.*'
 
 elif os.name == 'posix' and major_version == 3 and minor_version == 10:
 	classifiers.extend(["Programming Language :: Python :: 3.10",
 		"Operating System :: POSIX"])
 	package_dir['lm'] = 'lm_py3.10'
-	python_requires='==3.10'
+	python_requires='==3.10.*'
 
 elif major_version == 3:
 	classifiers.extend(["Programming Language :: Python :: 3",
