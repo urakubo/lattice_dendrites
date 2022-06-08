@@ -1,2 +1,2 @@
-include *.tar.gz
+include *.so
 global-exclude *.py[cod]
