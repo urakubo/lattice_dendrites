@@ -34,7 +34,7 @@ elif os.name == 'posix' and major_version == 3 and minor_version == 10:
 elif major_version == 3:
 	classifiers.extend(["Programming Language :: Python :: 3",
 		"Operating System :: POSIX",
-		"Operating System :: POSIX",
+		"Operating System :: MacOS",
 		"Operating System :: Microsoft :: Windows :: Windows 10"])
 	package_dir['lm'] = 'lm_null'
 	python_requires='>=3.0'
