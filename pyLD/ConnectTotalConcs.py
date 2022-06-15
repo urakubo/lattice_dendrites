@@ -12,7 +12,7 @@ class ConnectTotalConcs:
 		domain_names (str / list[str] / tuple[str]): Target domain names. They are summed if multiple domains are specified.
 
 	Returns:
-		(pyLD.ConnectTotalConcs: ConnectTotalConcs object that has the follwing instances:
+		(pyLD.ConnectTotalConcs): ConnectTotalConcs object that has the follwing instances:
 
 		- timepoints (numpy[float]): Timepoints (s)
 		- concs (numpy[float]): Time series of the concentrations of molecules in labels (unit: uM) (3D array; [Timepoints, species, ids_label]).
