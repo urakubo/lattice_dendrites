@@ -15,6 +15,39 @@ import pyvista as pv
 import pymeshfix
 
 
+def load_paint_subtraction(filenames_paint_subtraction, vertices, faces):
+
+	sub_face_Flag = [True]*faces.shape[0]
+
+	for filename in filenames_paint_subtraction:
+		with open(filename, 'rb') as file:
+			data = pickle.load(file)
+		data = data['painted']
+		unzipped_tri = gzip.decompress(data)
+		for i in range( faces.shape[0] ) :
+			if (unzipped_tri[i*3:i*3+3] == b'\x01\x01\x01') :
+				sub_face_Flag[i] = False
+
+	sub_face = []
+	for i in range( faces.shape[0] ) :
+		if sub_face_Flag[i] == True:
+			sub_face.append(faces[i,:])
+	
+	if sub_face == []:
+		vclean, fclean, fcenter, farea = None, None, None, None
+		return vclean, fclean, fcenter, farea
+
+	mesh = trimesh.Trimesh(vertices, np.array(sub_face))
+	mesh.merge_vertices()
+	mesh.remove_degenerate_faces()
+	mesh.remove_duplicate_faces()
+	vclean  = np.array(mesh.vertices)
+	fclean  = np.array(mesh.faces)
+	fcenter = np.array(mesh.triangles_center)
+	farea   = np.array(mesh.area_faces)
+
+	return vclean, fclean, fcenter, farea
+		
 
 
 def load_stl(filename_mesh):
@@ -30,16 +63,16 @@ def load_paint(filename_paint, vertices, faces):
 	data = data['painted']
 
 	unzipped_tri = gzip.decompress(data)
-	sub_face_id = []
+	sub_face = []
 	for i in range( faces.shape[0] ) :
 		if (unzipped_tri[i*3:i*3+3] == b'\x01\x01\x01') :
-			sub_face_id.append(faces[i,:])
+			sub_face.append(faces[i,:])
 
-	if sub_face_id == []:
+	if sub_face == []:
 		vclean, fclean, fcenter, farea = None, None, None, None
 		return vclean, fclean, fcenter, farea
 
-	mesh = trimesh.Trimesh(vertices, np.array(sub_face_id))
+	mesh = trimesh.Trimesh(vertices, np.array(sub_face))
 	mesh.merge_vertices()
 	mesh.remove_degenerate_faces()
 	mesh.remove_duplicate_faces()

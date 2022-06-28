@@ -19,7 +19,7 @@ from PyQt5.QtGui import QFont
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from CreateCompartmentModel import CreateGraph, obtain_edges_dendrite, load_stl, load_paint, fill_hole
+from CreateCompartmentModel import CreateGraph, obtain_edges_dendrite, load_stl, load_paint, fill_hole, load_paint_subtraction
 from PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
 
 
@@ -60,8 +60,9 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 			self.v_spine.append(v_spine)
 			self.f_spine.append(f_spine)
 
-		### How do I obtain spine-neck faces?
-
+		### Spine-neck faces
+		fnames_paint.extend(fnames_paint2)
+		self.v_neck, self.f_neck, _, _ = load_paint_subtraction(fnames_paint, vertices, faces)
 
 
 	def __init__(self):
@@ -95,6 +96,9 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 			actor = self.plot_mesh(v, f, color = c(i)[:3] )
 			self.renderer.AddActor(actor)
 
+		# Plot spine necks
+		actor = self.plot_mesh(self.v_neck, self.f_neck, color = (0.8,0.8,0.8) )
+		self.renderer.AddActor(actor)
 
 		self.iren.Initialize()
 
