@@ -41,12 +41,27 @@ def load_paint_subtraction(filenames_paint_subtraction, vertices, faces):
 	mesh.merge_vertices()
 	mesh.remove_degenerate_faces()
 	mesh.remove_duplicate_faces()
-	vclean  = np.array(mesh.vertices)
-	fclean  = np.array(mesh.faces)
-	fcenter = np.array(mesh.triangles_center)
-	farea   = np.array(mesh.area_faces)
 
-	return vclean, fclean, fcenter, farea
+	graph = nx.Graph()
+	graph.add_edges_from(mesh.face_adjacency)
+	ids_face = list( nx.connected_components(graph) )
+
+	vclean  = np.array(mesh.vertices)
+	fclean  = mesh.faces
+	#print(ids_face)
+	faces = []
+	for id in ids_face:
+		print('In load_paint_subtraction, len(face_id): ', len(id))
+		if len(id) < 10:
+			continue
+		faces.append(np.array( fclean[list(id)] ) )
+
+	#print(faces)
+	#fclean  = np.array(mesh.faces)
+	#fcenter = np.array(mesh.triangles_center)
+	#farea   = np.array(mesh.area_faces)
+
+	return vclean, faces
 		
 
 

@@ -62,7 +62,7 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 
 		### Spine-neck faces
 		fnames_paint.extend(fnames_paint2)
-		self.v_neck, self.f_neck, _, _ = load_paint_subtraction(fnames_paint, vertices, faces)
+		self.v_neck, self.fs_neck = load_paint_subtraction(fnames_paint, vertices, faces)
 
 
 	def __init__(self):
@@ -90,15 +90,17 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 
 
 		# Plot spines
-		c = plt.get_cmap('cool', len(self.v_spine)+1 ) # hsv, flag
+		c = plt.get_cmap('summer', len(self.v_spine)+1 ) # hsv, flag
 		for i, (v, f) in enumerate( zip(self.v_spine, self.f_spine) ):
 			#print("f ", f)
 			actor = self.plot_mesh(v, f, color = c(i)[:3] )
 			self.renderer.AddActor(actor)
 
 		# Plot spine necks
-		actor = self.plot_mesh(self.v_neck, self.f_neck, color = (0.8,0.8,0.8) )
-		self.renderer.AddActor(actor)
+		c = plt.get_cmap('winter', len(self.fs_neck)+1 ) # hsv, flag
+		for i, f in enumerate( self.fs_neck ):
+			actor = self.plot_mesh(self.v_neck, f, color = c(i)[:3] )
+			self.renderer.AddActor(actor)
 
 		self.iren.Initialize()
 
