@@ -3,7 +3,7 @@ import h5py
 import pprint
 import networkx as nx
 import matplotlib.pyplot as plt
-from stl import mesh
+# from stl import mesh
 import pickle
 import gzip
 
@@ -12,67 +12,196 @@ import pymeshfix
 import glob
 import h5py
 import pyvista as pv
-import pymeshfix
+import itertools
+import copy
 
 
-def load_paint_subtraction(filenames_paint_subtraction, vertices, faces):
+### Obtain adjacency
 
-	sub_face_Flag = [True]*faces.shape[0]
+class AdjacentFaces():
+	def __init__(self, vertices, head_fs, neck_fs):
+		self.heads_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in head_fs]
+		self.necks_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in neck_fs]
 
-	for filename in filenames_paint_subtraction:
+	def obtain_necks_connecting_to_head(self, head_id):
+		head_vertices = self.heads_boundary_vertices[head_id]
+		adjacents = []
+		for i, neck_vertices in enumerate(self.necks_boundary_vertices):
+			if neck_vertices & head_vertices != set():
+				adjacents.append(i)
+		
+		return adjacents
+
+def obtain_boundary_vertices(vertices, faces):
+
+	if faces == []:
+		return set()
+
+	mesh = trimesh.Trimesh(vertices, np.array(faces), process=False)
+	#mesh.remove_degenerate_faces()
+	mesh.remove_duplicate_faces()
+	unique_edges = mesh.edges[trimesh.grouping.group_rows(mesh.edges_sorted, require_count=1)]
+	boundary_vertices = set(unique_edges.flatten())
+	return boundary_vertices
+
+
+def load_paint_subtraction(filenames_for_paint_subtraction, faces):
+
+	# Subtract reference meshes
+	subtracted_face_Flag = [True]*faces.shape[0]
+	for filename in filenames_for_paint_subtraction:
 		with open(filename, 'rb') as file:
 			data = pickle.load(file)
 		data = data['painted']
 		unzipped_tri = gzip.decompress(data)
 		for i in range( faces.shape[0] ) :
 			if (unzipped_tri[i*3:i*3+3] == b'\x01\x01\x01') :
-				sub_face_Flag[i] = False
+				subtracted_face_Flag[i] = False
 
-	sub_face = []
+	# Get faces (Ids of three vertices)
+	subtracted_face = []
 	for i in range( faces.shape[0] ) :
-		if sub_face_Flag[i] == True:
-			sub_face.append(faces[i,:])
-	
-	if sub_face == []:
-		vclean, fclean, fcenter, farea = None, None, None, None
-		return vclean, fclean, fcenter, farea
+		if subtracted_face_Flag[i] == True:
+			subtracted_face.append(faces[i,:])
+	subtracted_face = np.array(subtracted_face)
 
-	mesh = trimesh.Trimesh(vertices, np.array(sub_face))
-	mesh.merge_vertices()
-	mesh.remove_degenerate_faces()
-	mesh.remove_duplicate_faces()
+	# Obtain separated faces
+	subtracted_faces = _separate_unconnected_faces(subtracted_face)
+	return subtracted_faces
 
-	graph = nx.Graph()
-	graph.add_edges_from(mesh.face_adjacency)
-	ids_face = list( nx.connected_components(graph) )
 
-	vclean  = np.array(mesh.vertices)
-	fclean  = mesh.faces
-	#print(ids_face)
-	faces = []
-	for id in ids_face:
-		print('In load_paint_subtraction, len(face_id): ', len(id))
-		if len(id) < 10:
-			continue
-		faces.append(np.array( fclean[list(id)] ) )
+##
+class ClosedMesh():
+	def __init__(self, vertices, faces):
 
-	#print(faces)
-	#fclean  = np.array(mesh.faces)
-	#fcenter = np.array(mesh.triangles_center)
-	#farea   = np.array(mesh.area_faces)
-
-	return vclean, faces
+		part_mesh = pymeshfix.MeshFix(vertices, faces)
+		part_mesh.repair()
+		self.mesh = trimesh.Trimesh(part_mesh.v, part_mesh.f)
+		self.mesh.merge_vertices()
+		self.mesh.remove_degenerate_faces()
+		self.mesh.remove_duplicate_faces()
+		self.volume = self.mesh.volume
 		
+		mesh0 = trimesh.Trimesh(vertices, faces)
+		self.unclosed_area = mesh0.area
+
+	def obtain_crossing_edges(self, graph):
+		crossing_edges = []
+		for id_edge in graph.edges.keys():
+			loc0 = graph.nodes[id_edge[0]]['loc'].reshape([1,-1])
+			loc1 = graph.nodes[id_edge[1]]['loc'].reshape([1,-1])
+			in0  = self.mesh.contains(loc0)
+			in1  = self.mesh.contains(loc1)
+			if in0 != in1:
+				crossing_edges.append(id_edge)
+		return crossing_edges
+
+	def obtain_inside_length_graph(self, graph):
+		return sum( [self.obtain_inside_length_edge( edge ) for edge in graph.edges.values()] )
+
+	def obtain_inside_length_edge(self, edge):
+		path    = edge['path']
+		# points ((n, 3) float)
+		# return (n, ) bool
+		enclosed = self.mesh.contains(path)
+		sub_path = path[enclosed == True,:]
+		
+		diff_sub_path   = np.diff(sub_path, axis=0)
+		length_sub_path = np.sum(np.linalg.norm(diff_sub_path, axis=1))
+		#print('length_sub_path ', length_sub_path)
+		return length_sub_path
+
+'''
+# Obtain length
+pos_diff   = np.diff(pos, axis=0)
+pos_length = np.sum(np.linalg.norm(pos_diff, axis=1))
+# Save properties
+edges[id] = {'path': pos,\
+	'tangents': tangents,\
+	'radiuses': radiuses,\
+	'start': pos[0,:],\
+	'end': pos[-1,:],\
+	'length': pos_length,\
+	'nodes': []}
+'''
+
+
+'''
+def obtain_necks_connecting_to_each_heads(vertices, head_fs, neck_fs):
+
+		heads_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in head_fs]
+		necks_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in neck_fs]
+		neck_connecting_to_neck = []
+		for i, head_vertices in enumerate(heads_boundary_vertices):
+		for i, neck_vertices in enumerate(necks_boundary_vertices):
+			adjacents = []
+			for j, head_vertices in enumerate(heads_boundary_vertices):
+				#print('len(ref_boundary_vertices) ', len(ref_boundary_vertices))
+				if neck_vertices & head_vertices != set():
+					adjacents.append(j)
+			heads_bind_to_neck.append(adjacents)
+		print('heads_bind_to_neck ', heads_bind_to_neck )
+'''
+
+
+def obtain_mesh_barycenter(vertices, faces):
+	mesh       = trimesh.Trimesh( vertices, faces )
+	vertices   = mesh.vertices
+	barycenter = np.mean( vertices, axis=0 )
+	#print('barycenter.shape ', barycenter.shape )
+	return barycenter
 
 
 def load_stl(filename_mesh):
+	with open(filename_mesh, 'rb') as f:
+		mesh = trimesh.exchange.stl.load_stl(f) # trimesh.exchange.stl.load_stl_binary
+		vertices = mesh['vertices']
+		faces    = mesh['faces']
+
+	mesh     = trimesh.Trimesh(vertices, faces)
+	vertices = mesh.vertices
+	faces    = mesh.faces
+	return vertices, faces
+
+
+'''
+def load_stl_old(filename_mesh):
 	m = mesh.Mesh.from_file(filename_mesh)
 	shape = m.points.shape
 	vertices = m.points.reshape(-1, 3)
 	faces    = np.arange(vertices.shape[0]).reshape(-1, 3)
 	return vertices, faces
+'''
 
-def load_paint(filename_paint, vertices, faces):
+
+def _separate_unconnected_faces(faces, num_faces_to_remove_as_fragumented_face = 10 ):
+
+	# Obtain separated faces
+	if type(faces).__module__ == "numpy":
+		faces = faces.tolist()
+	if faces == []:
+		return []
+	# print('faces ', faces)
+	adjacency = trimesh.graph.face_adjacency(faces=faces, mesh=None, return_edges=False)
+	graph = nx.Graph()
+	graph.add_edges_from(adjacency)
+	ids_face = list( nx.connected_components(graph) )
+
+	# Separate unconnected faces
+	separated_faces    = []
+	boundary_vertices = []
+	faces = np.array( faces )
+	for id in ids_face:
+		#print('In load_paint_subtraction, len(face_id): ', len(id))
+		if len(id) < num_faces_to_remove_as_fragumented_face:
+			continue
+		# print("list(id) ", list(id))
+		# print("id ", id)
+		separated_faces.append(faces[list(id),:] )
+	return separated_faces
+
+
+def _obtain_paint_from_file(filename_paint, faces):
 	with open(filename_paint, 'rb') as file:
 		data = pickle.load(file)
 	data = data['painted']
@@ -82,7 +211,19 @@ def load_paint(filename_paint, vertices, faces):
 	for i in range( faces.shape[0] ) :
 		if (unzipped_tri[i*3:i*3+3] == b'\x01\x01\x01') :
 			sub_face.append(faces[i,:])
+	return np.array(sub_face)
 
+
+def load_paints(filenames_paint, faces):
+	multiple_faces = []
+	for filename_paint in filenames_paint:
+		sub_face = _obtain_paint_from_file(filename_paint, faces)
+		multiple_faces.extend( _separate_unconnected_faces(sub_face) )
+	return multiple_faces
+
+
+def load_paint(filename_paint, vertices, faces):
+	sub_face = _obtain_paint_from_file(filename_paint, faces)
 	if sub_face == []:
 		vclean, fclean, fcenter, farea = None, None, None, None
 		return vclean, fclean, fcenter, farea
@@ -95,9 +236,8 @@ def load_paint(filename_paint, vertices, faces):
 	fclean  = np.array(mesh.faces)
 	fcenter = np.array(mesh.triangles_center)
 	farea   = np.array(mesh.area_faces)
-
 	return vclean, fclean, fcenter, farea
-		
+
 
 def fill_hole(vertices, faces):
 	part_mesh = pymeshfix.MeshFix(vertices, faces)
@@ -235,6 +375,7 @@ class CreateGraph():
 				edges[id_edge]['nodes'].append(id_node)
 		return edges
 
+
 	def make_graph(self, nodes, edges):
 		graph = nx.Graph()
 		for id_node, node in nodes.items():
@@ -244,7 +385,6 @@ class CreateGraph():
 				edges_start_0_end_m1 = {i:v for i,v in zip(node['edges'], node['edges_start_0_end_m1'])}, \
 				loc                  = node['loc']
 				)
-		
 		
 		for id_edge, edge in edges.items():
 			if ( len(edge['nodes']) == 2 ):
@@ -258,6 +398,7 @@ class CreateGraph():
 		return graph
 		# http://47.112.232.56/a/stackoverflow/en/629b5e10652087181359e77a.html
 
+
 	def find_dendrite(self):
 		id_src_id_dst_dist = []
 		for id_source, ddistances in nx.all_pairs_dijkstra_path_length(self.graph,  weight='len'):
@@ -266,6 +407,7 @@ class CreateGraph():
 		max_id_src_id_dst_dist = max( id_src_id_dst_dist, key=(lambda x: x[2]) )
 		#print('src_id_dst_idt: ', max_id_src_id_dst_dist[:2], ' , distance: ', max_id_src_id_dst_dist[2])
 		return max_id_src_id_dst_dist[:2]
+
 
 	def _load_skeleton_file(self, filename_hdf5):
 		with h5py.File( filename_hdf5 ,'r') as f:
@@ -277,29 +419,48 @@ class CreateGraph():
 			self.org_tangents = f['tangents'][()]
 
 
-def obtain_edges_dendrite(graph, src_id_dst_id):
-	#
-	ids_graph_edge_dendrite = \
-		list(nx.all_simple_edge_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
-	ids_graph_node_dendrite = \
-		list(nx.all_simple_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
-
-	# Edge lines
-	ids_edge_dendrite     = []
-	lengths_edges_dendrite = []
-	for id_graph_edge in ids_graph_edge_dendrite:
-		id    = graph.edges[id_graph_edge]['id']
-		loc0  = graph.nodes[id_graph_edge[0]]['loc']
-		loc1  = graph.nodes[id_graph_edge[1]]['loc']
-		ids_edge_dendrite.append( id )
-		lengths_edges_dendrite.append( np.linalg.norm(loc0-loc1) )
-
-	# Tangents
+def obtain_nodes_location(graph, ids_node):
 	locations = []
-	for id_graph_node in ids_graph_node_dendrite:
-		loc = graph.nodes[id_graph_node]['loc']
+	for id_node in ids_node:
+		loc = graph.nodes[id_node]['loc']
 		locations.append( loc )
 	locations = np.array(locations)
+	return locations
+
+
+def obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+	return list(nx.all_simple_edge_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
+
+
+def obtain_ids_graph_node_dendrite(graph, src_id_dst_id):
+	return list(nx.all_simple_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
+
+
+def obtain_distance_between_edges_dendrite(graph, src_id_dst_id):
+	# Edge lines
+	lengths_edges_dendrite = []
+	for id_graph_edge in obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+		loc0  = graph.nodes[id_graph_edge[0]]['loc']
+		loc1  = graph.nodes[id_graph_edge[1]]['loc']
+		lengths_edges_dendrite.append( np.linalg.norm(loc0-loc1) )
+	return lengths_edges_dendrite
+
+
+def obtain_ids_edge_dendrite(graph, src_id_dst_id):
+	# Edge lines
+	ids_edge_dendrite     = []
+	for id_graph_edge in obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+		id    = graph.edges[id_graph_edge]['id']
+		ids_edge_dendrite.append( id )
+	return ids_edge_dendrite
+
+
+def obtain_locs_tangents_from_dendrite(graph, src_id_dst_id):
+	#
+	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+
+	# Tangents
+	locations = obtain_nodes_location(graph, ids_graph_node_dendrite)
 	loc2  = np.delete( locations, [-1, -2], 0)
 	loc1  = np.delete( locations, [0, 1], 0)
 	tangents  = loc2-loc1
@@ -310,9 +471,89 @@ def obtain_edges_dendrite(graph, src_id_dst_id):
 	#print(tangents.shape[0])
 	for j in range(tangents.shape[0]):
 		tangents[j,:] = tangents[j,:]/np.linalg.norm( tangents[j,:] )
+	return locations, tangents
 
-	return ids_graph_node_dendrite, ids_graph_edge_dendrite, ids_edge_dendrite, lengths_edges_dendrite, tangents, locations
+def obtain_ids_of_terminal_nodes_from_dendrite(graph, src_id_dst_id):
+	#
+	# Renumber terminal nodes along the dendrite
+	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+	ids_node_num_branches = dict( graph.degree() )
+	ids_node_terminal     = [i for i, num in ids_node_num_branches.items() if num == 1 and not i in ids_graph_node_dendrite ]
+	distances             = dict(nx.all_pairs_shortest_path_length(graph))
+	dendritic_node_has    = {i: [] for i in ids_graph_node_dendrite }
+	for id_node_terminal in ids_node_terminal:
+		dists = {id_node_dend: distances[id_node_terminal][id_node_dend] for id_node_dend in ids_graph_node_dendrite}
+		dendritic_node_has[min(dists, key=dists.get)].append(id_node_terminal)
+	#print('dendritic_node_has ', dendritic_node_has)
+	
+	return dendritic_node_has
 
+# '''
+
+def obtain_graphs_spines_along_dendrite(graph, src_id_dst_id):
+	'''Obtain graphs from each node of dendritic shaft.
+
+	Args:
+		graph (obj): RDMESimulation object
+		src_id_dst_id (list[int]): Source and destination ids of nodes of the dendritc shaft
+	
+	Returns:
+		(tuple): Tuple containing:
+		- graphs_spine (dict): 'id dend': dendritic node, 'graph': spine graph, 'terminals': terminal notes without the dendritic node,  'simple' True if the graph has only two nodes. 
+		- terminals (list[int]): Flatten 'terminals' across the dendrtic nodes.
+	'''
+	ids_graph_edge_dendrite = obtain_ids_graph_edge_dendrite(graph, src_id_dst_id)
+	graph_separated = copy.deepcopy(graph)
+	graph_separated.remove_edges_from(ids_graph_edge_dendrite)
+	separated_graphs = [graph_separated.subgraph(c) for c in nx.connected_components(graph_separated)]
+
+	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+	spines    = []
+	terminals = []
+	for i, id_node_dendrite in enumerate(ids_graph_node_dendrite):
+		spine = {'id dend': id_node_dendrite, 'graph': None, 'terminals': [], 'simple': False}
+		sub_gs = [g for g in separated_graphs if g.has_node(id_node_dendrite)]
+		if len(sub_gs) != 1:
+			raise ValueError("multiple/none spine graph(s) was assigned.")
+		else:
+			sub_g = sub_gs[0]
+			spine['graph'] = sub_g
+			ids_node_num_branches = dict( sub_g.degree() )
+			terminal = [id for id, num in ids_node_num_branches.items() if num == 1 and id != id_node_dendrite ]
+			spine['terminals'] = terminal
+			terminals.extend(terminal)
+			if len(ids_node_num_branches) == 2:
+				spine['simple'] = True
+		spines.append(spine)
+
+	return spines, terminals
+
+# '''
+
+
+class NodeBinaryTree:
+	def __init__(self, data):
+		self.left = None
+		self.right = None
+		self.data = data
+	def preorder(node):
+		if node:
+			print(node.data)
+			preorder(node.left)
+			preorder(node.right)
+
+
+	'''
+	# Renumber end-nodes along the dendrite
+	nodes_num_branches = dict( graph.degree() )
+	
+		[for id_dend in ids_graph_node_dendrite]
+	nodes_end     = [i for i, num in nodes_num_branches.items() if num == 1 and i not in src_id_dst_id] #  and i not in src_id_dst_id
+	nodes_end_len = [len(list(nx.all_simple_paths(graph, src_id_dst_id[0], node_end))[0]) for node_end in nodes_end]
+	ids_len       = sorted(range(len(nodes_end_len)), key=lambda k: nodes_end_len[k])
+	print('ids_len ', ids_len)
+	nodes_end     = [nodes_end[i] for i in ids_len]
+	'''
 
 
 if __name__ == '__main__':

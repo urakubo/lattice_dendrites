@@ -8,18 +8,26 @@ import matplotlib.pyplot as plt
 import sys
 import vtk
 
-#import networkx as nx
-#import itertools
-#from stl import mesh
-from CreateCompartmentModel import CreateGraph, obtain_edges_dendrite, load_stl, load_paint, fill_hole
+from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
+    qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
+    QPushButton, QGraphicsScene, QGraphicsView, QFrame
+from PyQt5.QtGui import QFont
+import vtk
+from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+
+from CreateCompartmentModel import * # CreateGraph, obtain_edges_dendrite, load_stl, load_paint, fill_hole
 
 
 class Interactor(vtk.vtkInteractorStyleTrackballCamera):
 	def __init__(self, parent=None):
 		self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
-		self.renderer           = None
-		self.node_src_id_dst_id = None
-		self.pickuppable_actors = vtk.vtkActorCollection()
+		# self.AddObserver("LeftButtonReleaseEvent", self.leftButtonReleaseEvent)
+		self.renderer              = None
+		self.node_src_id_dst_id    = None
+		self.pickuptable_actors    = vtk.vtkActorCollection()
+		self.three_d_text_actors   = []
+		self.text_Billboard_actors = []
+
 
 	def set_renderer(self, renderer):
 		self.renderer = renderer
@@ -35,7 +43,7 @@ class Interactor(vtk.vtkInteractorStyleTrackballCamera):
 
 		picker = vtk.vtkPropPicker()
 		# picker.Pick(clickPos[0], clickPos[1], 0, self.renderer)
-		picker.PickProp(clickPos[0], clickPos[1], self.renderer, self.pickuppable_actors)
+		picker.PickProp(clickPos[0], clickPos[1], self.renderer, self.pickuptable_actors)
 		info = picker.GetActor()
 		# Create a new actor
 		# print('info: ', info)
@@ -52,14 +60,85 @@ class Interactor(vtk.vtkInteractorStyleTrackballCamera):
 
 		self.OnLeftButtonDown()
 
+	'''
+	def leftButtonReleaseEvent(self, obj, event):
+		camera = self.renderer.GetActiveCamera()
+		#x, y, z = camera.GetDirectionOfProjection() # Get the vector in the direction from the camera position to the focal point.
+		#print('x, y, z ', x, y, z)
+		orientation = camera.GetOrientationWXYZ()
+		
+		# RotateZ = np.rad2deg(np.arctan(y/x) )
+		
+		
+		for act_txt in self.three_d_text_actors:
+			# act_txt.SetOrientation(orientation[1] ,orientation[0] ,orientation[2] )
+			# specified as X, Y and Z, and performed as RotateZ, RotateX, and finally RotateY.
+			act_txt.RotateWXYZ( *orientation )
+		self.OnLeftButtonUp()
+	'''
 
 class PlotCompartmentModelBackend():
+
+
+	def initUI(self):
+		self.setGeometry(0, 0, 700, 900) 
+		centerWidget = QWidget()
+		self.setCentralWidget(centerWidget)
+
+		layout = QVBoxLayout()
+		centerWidget.setLayout(layout)
+
+		self.frame = QFrame()
+		self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
+		layout.addWidget(self.vtkWidget, 1)
+
+		# Vtk root
+		self.renderer = vtk.vtkRenderer()
+		self.renderer.SetBackground(0.1, 0.2, 0.4)
+		self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
+		self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
+
+		# style = vtk.vtkInteractorStyleTrackballCamera()
+		self.style = Interactor()
+		self.style.set_renderer( self.renderer )
+		self.style.set_node_src_id_dst_id( self.node_src_id_dst_id )
+		self.iren.SetInteractorStyle(self.style)
+		# self.style.node_src_id_dst_id = self.set_node_src_id_dst_id
+
+		# Removable actors
+		self.removable_actors = vtk.vtkActorCollection()
+
+		# Update dendritc shaft
+		btn = QPushButton(text="Update dendritic shaft")
+		btn.clicked.connect(self.update_dendritc_shaft)
+		btn.setFont(QFont("Ricty Diminished", 14))
+		layout.addWidget(btn)
+
+		# Create multicompartment model
+		btn = QPushButton(text="Create multicompartment model")
+		btn.clicked.connect(self.create_model)
+		btn.setFont(QFont("Ricty Diminished", 14))
+		layout.addWidget(btn)
+
+		self.show()
+		#self.iren.Initialize()
+
+		"""
+		camera = self.renderer.GetActiveCamera()
+		orientation = camera.GetOrientation()
+		print('Initial orientation ', orientation)
+		"""
 
 	def delete_plots(self):
 		for i in range( self.removable_actors.GetNumberOfItems() ):
 			select_actor = self.removable_actors.GetItemAsObject(i)
 			self.renderer.RemoveActor(select_actor)
 		self.removable_actors.RemoveAllItems()
+
+	def delete_billboard(self):
+		for actor in self.style.text_Billboard_actors :
+			self.renderer.RemoveActor(actor)
+		self.style.text_Billboard_actors = []
 
 	def plot_mesh(self, vertices, faces, color = (1.0, 1.0, 1.0) ):
 	
@@ -133,7 +212,7 @@ class PlotCompartmentModelBackend():
 			actor.GetProperty().SetColor(1.0,0.0,0.0) # Yellow
 			actor.SetMapper(mapper)
 
-			self.style.pickuppable_actors.AddItem(actor)
+			self.style.pickuptable_actors.AddItem(actor)
 			self.renderer.AddActor(actor)
 
 
@@ -178,6 +257,50 @@ class PlotCompartmentModelBackend():
 		actor.key = "edge_dend_"+str(id)
 		self.removable_actors.AddItem(actor)
 		self.renderer.AddActor(actor)
+
+	def plot_text_2d(self, text = "2D text", pos = (10, 10), color = (1.0,1.0,1.0)):
+		act_txt = vtk.vtkTextActor()
+		act_txt.SetInput(text)
+		prop_txt = act_txt.GetTextProperty()
+		prop_txt.SetFontFamilyToArial()
+		prop_txt.SetFontSize(18)
+		prop_txt.SetColor(color)
+		act_txt.SetDisplayPosition(*pos)
+		self.renderer.AddActor(act_txt)
+
+	def plot_text_Billboard(self, text = "3D text", pos = (1.0,1.0,1.0), color = (1.0,1.0,1.0), size = 0.005):
+		act_txt = vtk.vtkBillboardTextActor3D()
+		act_txt.SetPosition(pos)
+		act_txt.SetInput(text)
+		act_txt.SetScale(size)
+		prop_txt = act_txt.GetTextProperty()
+		prop_txt.SetFontFamilyToArial()
+		prop_txt.SetFontSize(32)
+		prop_txt.SetColor(color)
+		self.renderer.AddActor(act_txt)
+		self.style.text_Billboard_actors.append(act_txt)
+
+
+	def plot_text_3d(self, text = "3D text", pos = (1.0,1.0,1.0), color = (1.0,1.0,1.0), size = 0.01):
+		act_txt = vtk.vtkTextActor3D()
+		act_txt.SetOrientation(90,90,0)# (0.0, -0.0, 0.0)
+		act_txt.SetPosition(pos)
+		act_txt.SetInput(text)
+		act_txt.SetScale(size)
+		prop_txt = act_txt.GetTextProperty()
+		prop_txt.SetFontFamilyToArial()
+		prop_txt.SetFontSize(32)
+		prop_txt.SetColor(color)
+		
+		#prop_txt.SetBold(0)
+		#prop_txt.SetItalic(0)
+		#prop_txt.SetShadow(0)
+		# 
+		# prop_txt.SetVerticalJustificationToCentered()
+		# 
+		
+		self.renderer.AddActor(act_txt)
+
 
 	def plot_grid(self):
 		axes = vtk.vtkAxesActor()
@@ -231,5 +354,25 @@ class PlotCompartmentModelBackend():
 
 		return volumes, areas
 		#
+
+
+	def plot_spines(self):
+		# Plot spine heads
+		c = plt.get_cmap('summer', len( self.head_fs )+1 ) # hsv, flag
+		for i, f in enumerate( self.head_fs ):
+			if f is None:
+				print('Null spine id: ', i)
+				continue
+			else:
+				actor = self.plot_mesh(self.vertices, f, color = c(i)[:3] )
+				self.renderer.AddActor(actor)
+				# pos = np.mean(v, axis=0)
+
+
+		# Plot spine necks
+		c = plt.get_cmap('winter', len(self.neck_fs)+1 ) # hsv, flag
+		for i, f in enumerate( self.neck_fs ):
+			actor = self.plot_mesh(self.vertices, f, color = c(i)[:3] )
+			self.renderer.AddActor(actor)
 
 
