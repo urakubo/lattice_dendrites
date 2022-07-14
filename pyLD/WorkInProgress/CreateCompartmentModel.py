@@ -16,15 +16,71 @@ import itertools
 import copy
 
 
-### Obtain adjacency
 
+def obtain_head_properties( closed, graph, path ):
+
+	#print('paths ', paths )
+
+	properties = {}
+	subgraph   = graph.edge_subgraph( path )
+	properties['lengths'] = closed.obtain_length_inside( subgraph )
+	properties['volumes'] = closed.volume
+	properties['areas']   = closed.unclosed_area
+	return properties
+
+def obtain_neck_properties_straight( closed_neck, graph, path ):
+
+	properties = {}
+	sub_g = graph.edge_subgraph(path)
+	properties['lengths'] = closed_neck.obtain_length_inside( sub_g )
+	properties['volumes'] = closed_neck.volume
+	properties['areas']   = closed_neck.unclosed_area
+
+	return properties
+
+def obtain_neck_properties_branched( closed_neck, graph, paths ):
+
+	properties = {}
+	sub_gs = [ graph.edge_subgraph(p) for p in paths ]
+	neck_lengths = [closed_neck.obtain_length_inside( sub_g ) for sub_g in sub_gs ]
+	ratios       = [l/sum(neck_lengths) for l in neck_lengths]
+	properties['lengths'] = neck_lengths
+	properties['volumes'] = [closed_neck.volume*ratio for ratio in ratios]
+	properties['areas']   = [closed_neck.unclosed_area*ratio for ratio in ratios]
+
+	return properties
+
+def aggregate_neck_with_mutiple_heads( ids_neck, heads ):
+	ids_unique_necks, ids = np.unique(ids_neck, return_inverse=True)
+	ids = ids.tolist()
+	heads_for_unique_necks = [[] for _ in range(ids_unique_necks.shape[0])]
+	for id, head in zip(ids, heads):
+		heads_for_unique_necks[id].append(head)
+
+	return ids_unique_necks, heads_for_unique_necks
+
+#
 class AdjacentFaces():
 	def __init__(self, vertices, head_fs, neck_fs):
 		self.heads_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in head_fs]
 		self.necks_boundary_vertices = [obtain_boundary_vertices(vertices, f) for f in neck_fs]
 
-	def obtain_necks_connecting_to_head(self, head_id):
-		head_vertices = self.heads_boundary_vertices[head_id]
+	def obtain_a_neck_connecting_to_head(self, id_head):
+		id_neck = self.obtain_necks_connecting_to_head( id_head )
+		if len(id_neck) >= 2:
+			print('Warning: more than two necks {} are connected to a head {}. The first one is selected for connection.'.format(id_neck, id_head))
+			id_neck = id_neck[0]
+		elif len(id_neck) == 0:
+			print('id_head ', id_head)
+			print('Warning: no spine neck is connected to a head.')
+			id_neck = None
+		else :
+			id_neck = id_neck[0]
+
+		return id_neck
+
+	def obtain_necks_connecting_to_head(self, id_head):
+		head_vertices = self.heads_boundary_vertices[id_head]
 		adjacents = []
 		for i, neck_vertices in enumerate(self.necks_boundary_vertices):
 			if neck_vertices & head_vertices != set():
@@ -66,7 +122,7 @@ def load_paint_subtraction(filenames_for_paint_subtraction, faces):
 	subtracted_face = np.array(subtracted_face)
 
 	# Obtain separated faces
-	subtracted_faces = _separate_unconnected_faces(subtracted_face)
+	subtracted_faces = _separate_unconnected_faces(subtracted_face, num_faces_to_remove_as_fragumented_face = 100)
 	return subtracted_faces
 
 
@@ -96,8 +152,16 @@ class ClosedMesh():
 				crossing_edges.append(id_edge)
 		return crossing_edges
 
-	def obtain_inside_length_graph(self, graph):
+	def obtain_length_inside(self, graph):
 		return sum( [self.obtain_inside_length_edge( edge ) for edge in graph.edges.values()] )
+
+	def obtain_nodes_inside(self, graph):
+		nodes_inside = []
+		for id_node in graph.nodes.keys():
+			loc0 = graph.nodes[id_node]['loc'].reshape([1,-1])
+			if self.mesh.contains(loc0):
+				nodes_inside.append(id_node)
+		return nodes_inside
 
 	def obtain_inside_length_edge(self, edge):
 		path    = edge['path']
@@ -174,7 +238,7 @@ def load_stl_old(filename_mesh):
 '''
 
 
-def _separate_unconnected_faces(faces, num_faces_to_remove_as_fragumented_face = 10 ):
+def _separate_unconnected_faces(faces, num_faces_to_remove_as_fragumented_face = 20 ):
 
 	# Obtain separated faces
 	if type(faces).__module__ == "numpy":
@@ -428,18 +492,23 @@ def obtain_nodes_location(graph, ids_node):
 	return locations
 
 
-def obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
-	return list(nx.all_simple_edge_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
+#def obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+#	return list(nx.all_simple_edge_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
 
+#def obtain_ids_graph_node_dendrite(graph, src_id_dst_id):
+#	return list(nx.all_simple_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
 
-def obtain_ids_graph_node_dendrite(graph, src_id_dst_id):
+def obtain_path_nodes(graph, src_id_dst_id):
 	return list(nx.all_simple_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
+
+def obtain_path_edges(graph, src_id_dst_id):
+	return list(nx.all_simple_edge_paths(graph, src_id_dst_id[0], src_id_dst_id[1]))[0]
 
 
 def obtain_distance_between_edges_dendrite(graph, src_id_dst_id):
 	# Edge lines
 	lengths_edges_dendrite = []
-	for id_graph_edge in obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+	for id_graph_edge in obtain_path_edges(graph, src_id_dst_id):
 		loc0  = graph.nodes[id_graph_edge[0]]['loc']
 		loc1  = graph.nodes[id_graph_edge[1]]['loc']
 		lengths_edges_dendrite.append( np.linalg.norm(loc0-loc1) )
@@ -449,7 +518,7 @@ def obtain_distance_between_edges_dendrite(graph, src_id_dst_id):
 def obtain_ids_edge_dendrite(graph, src_id_dst_id):
 	# Edge lines
 	ids_edge_dendrite     = []
-	for id_graph_edge in obtain_ids_graph_edge_dendrite(graph, src_id_dst_id):
+	for id_graph_edge in obtain_path_edges(graph, src_id_dst_id):
 		id    = graph.edges[id_graph_edge]['id']
 		ids_edge_dendrite.append( id )
 	return ids_edge_dendrite
@@ -457,7 +526,7 @@ def obtain_ids_edge_dendrite(graph, src_id_dst_id):
 
 def obtain_locs_tangents_from_dendrite(graph, src_id_dst_id):
 	#
-	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+	ids_graph_node_dendrite = obtain_path_nodes(graph, src_id_dst_id)
 
 	# Tangents
 	locations = obtain_nodes_location(graph, ids_graph_node_dendrite)
@@ -476,7 +545,7 @@ def obtain_locs_tangents_from_dendrite(graph, src_id_dst_id):
 def obtain_ids_of_terminal_nodes_from_dendrite(graph, src_id_dst_id):
 	#
 	# Renumber terminal nodes along the dendrite
-	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+	ids_graph_node_dendrite = obtain_path_nodes(graph, src_id_dst_id)
 	ids_node_num_branches = dict( graph.degree() )
 	ids_node_terminal     = [i for i, num in ids_node_num_branches.items() if num == 1 and not i in ids_graph_node_dendrite ]
 	distances             = dict(nx.all_pairs_shortest_path_length(graph))
@@ -499,34 +568,34 @@ def obtain_graphs_spines_along_dendrite(graph, src_id_dst_id):
 	
 	Returns:
 		(tuple): Tuple containing:
-		- graphs_spine (dict): 'id dend': dendritic node, 'graph': spine graph, 'terminals': terminal notes without the dendritic node,  'simple' True if the graph has only two nodes. 
+		- graphs_spine (dict): 'node dend': dendritic node, 'graph': spine graph, 'nodes terminal': terminal notes without the dendritic node,  'simple' True if the graph has only two nodes. 
 		- terminals (list[int]): Flatten 'terminals' across the dendrtic nodes.
 	'''
-	ids_graph_edge_dendrite = obtain_ids_graph_edge_dendrite(graph, src_id_dst_id)
+	ids_graph_edge_dendrite = obtain_path_edges(graph, src_id_dst_id)
 	graph_separated = copy.deepcopy(graph)
 	graph_separated.remove_edges_from(ids_graph_edge_dendrite)
 	separated_graphs = [graph_separated.subgraph(c) for c in nx.connected_components(graph_separated)]
 
-	ids_graph_node_dendrite = obtain_ids_graph_node_dendrite(graph, src_id_dst_id)
+	ids_graph_node_dendrite = obtain_path_nodes(graph, src_id_dst_id)
 	spines    = []
-	terminals = []
+	#terminals = []
 	for i, id_node_dendrite in enumerate(ids_graph_node_dendrite):
-		spine = {'id dend': id_node_dendrite, 'graph': None, 'terminals': [], 'simple': False}
+		# spine = {'node_dend': id_node_dendrite, 'graph': None, 'nodes_terminal': [], 'simple': False}
+		spine = {'node_dend': id_node_dendrite, 'nodes_terminal': [], 'simple': False}
 		sub_gs = [g for g in separated_graphs if g.has_node(id_node_dendrite)]
 		if len(sub_gs) != 1:
 			raise ValueError("multiple/none spine graph(s) was assigned.")
 		else:
 			sub_g = sub_gs[0]
-			spine['graph'] = sub_g
+			#spine['graph'] = sub_g
 			ids_node_num_branches = dict( sub_g.degree() )
 			terminal = [id for id, num in ids_node_num_branches.items() if num == 1 and id != id_node_dendrite ]
-			spine['terminals'] = terminal
-			terminals.extend(terminal)
+			spine['nodes_terminal'] = terminal
 			if len(ids_node_num_branches) == 2:
 				spine['simple'] = True
 		spines.append(spine)
 
-	return spines, terminals
+	return spines
 
 # '''
 
