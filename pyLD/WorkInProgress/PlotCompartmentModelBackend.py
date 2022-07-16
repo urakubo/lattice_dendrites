@@ -2,9 +2,7 @@
 #
 import numpy as np
 import matplotlib.pyplot as plt
-
 import sys
-import vtk
 
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
     qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
@@ -12,8 +10,6 @@ from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
 from PyQt5.QtGui import QFont
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-
-from CreateCompartmentModel import * # CreateGraph, obtain_edges_dendrite, load_stl, load_paint, fill_hole
 
 
 class Interactor(vtk.vtkInteractorStyleTrackballCamera):

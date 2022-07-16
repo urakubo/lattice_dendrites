@@ -1,18 +1,12 @@
 import numpy as np
-import h5py
-import pprint
 import networkx as nx
-
 import trimesh
 import pymeshfix
-import glob
-import h5py
-import pyvista as pv
 import itertools
 import copy
 
 from CloseMesh  import CloseMesh
-from CreateCompartmentModel import obtain_path_nodes, obtain_path_edges
+from Utils import obtain_path_nodes, obtain_path_edges
 
 
 class SpineCompartments():

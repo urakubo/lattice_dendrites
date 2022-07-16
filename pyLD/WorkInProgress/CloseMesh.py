@@ -1,15 +1,9 @@
 import numpy as np
-import h5py
-import pprint
 import networkx as nx
-
 import trimesh
 import pymeshfix
-import glob
-import h5py
-import pyvista as pv
 import itertools
-import copy
+
 
 
 class CloseMesh():

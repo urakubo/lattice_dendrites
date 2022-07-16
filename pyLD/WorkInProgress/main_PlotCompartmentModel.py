@@ -22,7 +22,8 @@ from PyQt5.QtGui import QFont
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from CreateCompartmentModel import *
+from CreateGraph import CreateGraph
+from Utils import *
 from DendriticCompartments  import DendriticCompartments
 from SpineCompartments      import SpineCompartments
 from PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
@@ -92,9 +93,6 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 	def create_model(self):
 		print('Create model')
 
-		s  =  SpineCompartments( self.graph, self.style.node_src_id_dst_id, self.vertices, self.head_fs, self.neck_fs, self.barycenters_head )
-		s.create()
-
 		# Show the ids of heads and necks.
 		self.delete_billboard()
 		for i in range(self.barycenters_head[:,0].shape[0]):
@@ -102,10 +100,11 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 		for i in range(self.barycenters_neck[:,0].shape[0]):
 			self.plot_text_Billboard(text = str(i), color = (0.0,0.0,1.0), pos = self.barycenters_neck[i,:], size = 0.003)
 
-
-		print('graphs_spine ' )
+		'''
+		print('spine compartments' )
+		s  =  SpineCompartments( self.graph, self.style.node_src_id_dst_id, self.vertices, self.head_fs, self.neck_fs, self.barycenters_head )
+		s.create()
 		pprint.pprint(s.spines)
-
 
 		with open('data_spines.pickle', 'wb') as f:
 			pickle.dump(self.graph   , f)
@@ -114,21 +113,32 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 			pickle.dump(self.head_fs , f)
 			pickle.dump(self.neck_fs , f)
 
-		# ids     = obtain_path_nodes( self.graph, self.style.node_src_id_dst_id )
-		# lengths = obtain_distance_between_edges_dendrite( self.graph, self.style.node_src_id_dst_id )
-		# lengths_accumulated = [0.0] + list(itertools.accumulate(lengths))
-
-
 		'''
-			pickle.dump(ids_graph_node_dendrite,f)
-			pickle.dump(ids_graph_edge_dendrite,f)
-			pickle.dump(ids_edge_dendrite      ,f)
-			pickle.dump(lengths_edge_dendrite  ,f)
-			pickle.dump(volumes  ,f)
-			pickle.dump(areas    ,f)
-			pickle.dump(locations,f)
-			pickle.dump(tangents ,f)
-		'''
+
+		print('dendrtic compartments' )
+
+		self.dendrite.update_nodes( self.style.node_src_id_dst_id )
+		nodes     = self.dendrite.nodes
+		distances = self.dendrite.distances
+		locations = [self.graph.nodes[node]['loc'] for node in nodes]
+		edges = obtain_path_edges( self.graph, self.style.node_src_id_dst_id )
+		vertices, faces, volumes, areas = self.dendrite.create()
+		
+		dendritic_nodes = [{'node': node, 'loc': loc} for node, loc in zip(nodes, locations)]
+		dendritic_edges = \
+			[{'edge': e, 'vertices': vert, 'faces': f, 'volumes': vol, 'areas': a} \
+			for e, vert, f, vol, a in zip(edges, vertices, faces, volumes, areas)]
+
+		pprint.pprint(dendritic_edges)
+		pprint.pprint(dendritic_nodes)
+
+		with open('data_dendrite.pickle', 'wb') as f:
+			pickle.dump(dendritic_nodes, f)
+			pickle.dump(dendritic_edges, f)
+
+		#self.plot_faces_dendrite(vertices, faces)
+		self.iren.Initialize()
+
 
 	def update_dendritc_shaft(self):
 		print('Update dendritc shaft')
@@ -138,7 +148,7 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 		nodes     = obtain_path_nodes( self.graph,  self.style.node_src_id_dst_id )
 		locations = obtain_nodes_location(self.graph, nodes)
 		self.plot_edges_dendrite(locations)
-		
+
 		self.dendrite.update_nodes( self.style.node_src_id_dst_id )
 		vertices, faces, volumes, areas = self.dendrite.create()
 		self.plot_faces_dendrite(vertices, faces)

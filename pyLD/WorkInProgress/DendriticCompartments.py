@@ -1,15 +1,7 @@
 import numpy as np
-import h5py
-import pprint
 import networkx as nx
-
 import trimesh
-import pymeshfix
-import glob
-import h5py
-import pyvista as pv
 import itertools
-import copy
 
 from CloseMesh  import CloseMesh
 
@@ -45,10 +37,7 @@ class DendriticCompartments():
 		return dists
 
 	def _obtain_nodes_location(self, nodes):
-		locations = []
-		for node in nodes:
-			loc = self.graph.nodes[node]['loc']
-			locations.append( loc )
+		locations = [self.graph.nodes[node]['loc'] for node in nodes]
 		locations = np.array(locations)
 		return locations
 
