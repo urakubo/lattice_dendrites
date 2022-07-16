@@ -23,6 +23,8 @@ import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 from CreateCompartmentModel import *
+from DendriticCompartments  import DendriticCompartments
+from SpineCompartments      import SpineCompartments
 from PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
 
 
@@ -40,14 +42,14 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 		# Skeleton
 		c          = CreateGraph(fname_hdf5)
 		self.graph = c.graph
-		self.initial_node_src_id_dst_id = c.node_src_id_dst_id
+		self.initial_node_src_id_dst_id = c.find_initial_nodes_dendrite()
 
 		# Dendritic face
 		self.vertices, self.faces   = load_stl(fname_mesh)
-		'''
-		self.v_org , self.f_org , self.fcenter_org , self.farea_org = load_paint(fnames_paint_dendrite[0], self.vertices, self.faces)
-		self.v_fill, self.f_fill, self.fcenter_fill, self.farea_fill, volume = fill_hole(self.v_org, self.f_org)
-		'''
+		#'''
+		dend_f        = load_paint(fnames_paint_dendrite[0], self.faces)
+		self.dendrite = DendriticCompartments( self.graph, self.vertices, dend_f )
+		#'''
 		
 		# Spine-head face
 		annot_dir     = r"C:\Users\uraku\Desktop\LatticeMicrobes\220610ReconstMorph\annots\dend4_220610_head"
@@ -131,27 +133,15 @@ class PlotCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 	def update_dendritc_shaft(self):
 		print('Update dendritc shaft')
 		self.delete_plots()
-
-		# self.plot_text_2d()
-		# Obtain and plot the skeleton (blue line) of dendrite
-
-		locations, tangents = obtain_locs_tangents_from_dendrite( self.graph, self.style.node_src_id_dst_id )
-		self.plot_edges_dendrite(locations)
-		#volumes, areas = self.plot_faces_dendrite(tangents, locations)
-
-		# Plot revised node IDs
 		self.delete_billboard()
-		
-		'''
-		dendritic_node_has = obtain_ids_of_terminal_nodes_from_dendrite( self.graph, self.style.node_src_id_dst_id )
-		ids_node_terminal  = list(itertools.chain.from_iterable( dendritic_node_has.values() ))
-		'''
-		
-		# spines = obtain_graphs_spines_along_dendrite( self.graph, self.style.node_src_id_dst_id )
-		# print('graphs_spine ', graphs_spine)
 
-		#for i, i_node in enumerate( ids_node_terminal ):
-		#	self.plot_text_Billboard(text = str(i_node), pos =  self.graph.nodes[i_node]['loc'])
+		nodes     = obtain_path_nodes( self.graph,  self.style.node_src_id_dst_id )
+		locations = obtain_nodes_location(self.graph, nodes)
+		self.plot_edges_dendrite(locations)
+		
+		self.dendrite.update_nodes( self.style.node_src_id_dst_id )
+		vertices, faces, volumes, areas = self.dendrite.create()
+		self.plot_faces_dendrite(vertices, faces)
 
 		self.iren.Initialize()
 

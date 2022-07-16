@@ -1,7 +1,5 @@
 #
 #
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -312,48 +310,13 @@ class PlotCompartmentModelBackend():
 		axes_widget.EnabledOn()
 		axes_widget.InteractiveOff()
 
-	def plot_faces_dendrite(self, tangents, locations_):
+	def plot_faces_dendrite(self, vertices, faces):
 
-		locations  = np.delete( locations_, [0, -1], 0)
-
-		# Obtain faces
-		ids_f_org_part  = {}
-		ids_f_fill_part = {}
-		for i in range(len(tangents)):
-			tangent  = tangents[i]
-			location = locations[i]
-			ids_f_fill_part[i] = ( np.dot(self.fcenter_fill-location, tangent) > 0 )
-			ids_f_org_part[i]  = ( np.dot(self.fcenter_org -location, tangent) > 0 )
-
-
-		# Surface areas, volumes and visualzation
-		c = plt.get_cmap('hsv', len(tangents)+1 ) # hsv, flag
-		volumes  = []
-		areas    = []
-		for i in range(len(tangents)+1):
-			if i == 0:
-				i_part_f_fill = ids_f_fill_part[i]
-				i_part_f_org  = ids_f_org_part[i]
-			elif i < len(tangents):
-				i_part_f_fill = ids_f_fill_part[i] * np.logical_not(ids_f_fill_part[i-1])
-				i_part_f_org  = ids_f_org_part[i]  * np.logical_not(ids_f_org_part[i-1])
-			elif i == len(tangents):
-				i_part_f_fill = np.logical_not(ids_f_fill_part[i-1])
-				i_part_f_org  = np.logical_not(ids_f_org_part[i-1])
-			else:
-				print('Error.')
-				break
-			part_f_fill = self.f_fill[i_part_f_fill]
-			area        = np.sum( self.farea_org[i_part_f_org] )
-			vertices, faces, fcenter, farea, volume = fill_hole(self.v_fill, part_f_fill)
-			actor = self.plot_mesh(vertices, faces, color=c(i)[:3] )
+		c = plt.get_cmap('hsv', len(vertices) ) 
+		for i in range(len(vertices)):
+			actor = self.plot_mesh(vertices[i], faces[i], color=c(i)[:3] )
 			self.removable_actors.AddItem(actor)
 			self.renderer.AddActor(actor)
-			volumes.append(volume)
-			areas.append(area)
-
-		return volumes, areas
-		#
 
 
 	def plot_spines(self):
