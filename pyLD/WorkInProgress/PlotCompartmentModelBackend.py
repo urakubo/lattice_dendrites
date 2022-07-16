@@ -101,7 +101,7 @@ class PlotCompartmentModelBackend():
 		# style = vtk.vtkInteractorStyleTrackballCamera()
 		self.style = Interactor()
 		self.style.set_renderer( self.renderer )
-		self.style.set_node_src_id_dst_id( self.node_src_id_dst_id )
+		self.style.set_node_src_id_dst_id( self.initial_node_src_id_dst_id )
 		self.iren.SetInteractorStyle(self.style)
 		# self.style.node_src_id_dst_id = self.set_node_src_id_dst_id
 
