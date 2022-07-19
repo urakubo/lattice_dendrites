@@ -15,7 +15,6 @@ from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 class Interactor(vtk.vtkInteractorStyleTrackballCamera):
 	def __init__(self, parent=None):
 		self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
-		# self.AddObserver("LeftButtonReleaseEvent", self.leftButtonReleaseEvent)
 		self.renderer              = None
 		self.node_src_id_dst_id    = None
 		self.pickuptable_actors    = vtk.vtkActorCollection()
@@ -202,10 +201,9 @@ class PlotCompartmentModelBackend():
 			actor = vtk.vtkActor()
 			actor.key = "node_"+str(id)
 			
-
 			actor.GetProperty().SetColor(1.0,0.0,0.0) # Yellow
 			actor.SetMapper(mapper)
-
+			
 			self.style.pickuptable_actors.AddItem(actor)
 			self.renderer.AddActor(actor)
 
@@ -274,7 +272,6 @@ class PlotCompartmentModelBackend():
 		self.renderer.AddActor(act_txt)
 		self.style.text_Billboard_actors.append(act_txt)
 
-
 	def plot_text_3d(self, text = "3D text", pos = (1.0,1.0,1.0), color = (1.0,1.0,1.0), size = 0.01):
 		act_txt = vtk.vtkTextActor3D()
 		act_txt.SetOrientation(90,90,0)# (0.0, -0.0, 0.0)
@@ -306,11 +303,11 @@ class PlotCompartmentModelBackend():
 		axes_widget.EnabledOn()
 		axes_widget.InteractiveOff()
 
-	def plot_faces_dendrite(self, vertices, faces):
+	def plot_faces_dendrite(self, vertices, container_faces):
 
-		c = plt.get_cmap('hsv', len(vertices) ) 
-		for i in range(len(vertices)):
-			actor = self.plot_mesh(vertices[i], faces[i], color=c(i)[:3] )
+		c = plt.get_cmap('hsv', len(container_faces) ) 
+		for i in range(len(container_faces)):
+			actor = self.plot_mesh(vertices, container_faces[i], color=c(i)[:3] )
 			self.removable_actors.AddItem(actor)
 			self.renderer.AddActor(actor)
 
@@ -325,7 +322,6 @@ class PlotCompartmentModelBackend():
 			else:
 				actor = self.plot_mesh(self.vertices, f, color = c(i)[:3] )
 				self.renderer.AddActor(actor)
-				# pos = np.mean(v, axis=0)
 
 
 		# Plot spine necks
@@ -333,5 +329,29 @@ class PlotCompartmentModelBackend():
 		for i, f in enumerate( self.neck_fs ):
 			actor = self.plot_mesh(self.vertices, f, color = c(i)[:3] )
 			self.renderer.AddActor(actor)
+
+
+	def plot_disks(self, locations, normals, radiuses, color = (1.0, 1.0, 1.0) ):
+
+		num = locations.shape[0]
+		for i in range(num):
+			self.plot_disk(locations[i,:], normals[i,:], radiuses[i], color = color)
+
+	def plot_disk(self, location, normal, radius, color = (1.0, 1.0, 1.0) ):
+		polygon_circle = vtk.vtkRegularPolygonSource()
+		polygon_circle.SetNumberOfSides(10)
+		polygon_circle.SetNormal( normal   )
+		polygon_circle.SetRadius( radius   )
+		polygon_circle.SetCenter( location )
+
+		mapper_circle = vtk.vtkPolyDataMapper()
+		mapper_circle.SetInputConnection(polygon_circle.GetOutputPort())
+
+		actor = vtk.vtkActor()
+		actor.SetMapper(mapper_circle)
+		actor.GetProperty().SetColor(*color)
+		#actor.GetProperty().SetLineWidth(width)
+		self.renderer.AddActor(actor)
+
 
 

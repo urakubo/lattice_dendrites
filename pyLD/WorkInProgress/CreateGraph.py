@@ -26,6 +26,7 @@ class CreateGraph():
 		self.graph = self.make_graph(nodes, edges)
 		self.node_src_id_dst_id = self.find_initial_nodes_dendrite()
 
+
 	def obtain_edge(self):
 		edges = {}
 		for id in self.ids_edge:
@@ -88,7 +89,8 @@ class CreateGraph():
 					connection = tmp_locs[np.argsort(tmp_locs[:, 4])]
 					connections.append( connection )
 					break
-		
+
+
 		# Remove multiplicated connections and obain nodes
 		# print('connections ', connections)
 		id_node = 0
@@ -132,7 +134,8 @@ class CreateGraph():
 				edges_start_0_end_m1 = {i:v for i,v in zip(node['edges'], node['edges_start_0_end_m1'])}, \
 				loc                  = node['loc']
 				)
-		
+
+
 		for id_edge, edge in edges.items():
 			if ( len(edge['nodes']) == 2 ):
 				graph.add_edge(edge['nodes'][0], edge['nodes'][1], \
@@ -164,8 +167,6 @@ class CreateGraph():
 			#self.org_lengths  = f['lengths'][()]
 			self.org_vertices = f['vertices'][()]
 			self.org_tangents = f['tangents'][()]
-
-
 
 
 if __name__ == '__main__':

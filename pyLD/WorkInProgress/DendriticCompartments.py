@@ -11,7 +11,7 @@ class DendriticCompartments():
 		self.graph  = graph
 		self.v_org  = vertices_org
 		self.f_org  = faces_org
-		m           = trimesh.Trimesh(self.v_org, self.f_org)
+		m = trimesh.Trimesh(self.v_org, self.f_org)
 		self.fcenters_org = np.array(m.triangles_center)
 		self.fareas_org   = np.array(m.area_faces)
 		
@@ -27,7 +27,7 @@ class DendriticCompartments():
 		self.distances = self._obtain_distance_between_edges_dendrite(self.nodes)
 
 	def _obtain_distance_between_edges_dendrite(self, nodes):
-		# location
+		# Location
 		locs = []
 		for node in nodes:
 			locs.append(self.graph.nodes[node]['loc'])
@@ -76,14 +76,9 @@ class DendriticCompartments():
 	def create(self):
 		# Obtain faces
 		face_ids = self._split_faces( self.fcenters_org  )
-		areas    = [ np.sum( self.fareas_org[ids] ) for ids in face_ids ]
+		self.split_areas = [ np.sum( self.fareas_org[ids] ) for ids in face_ids ]
+		self.split_faces = [ self.f_org[ids] for ids in face_ids ]
 
 		face_ids = self._split_faces( self.fcenters_fill )
-		closed   = [CloseMesh(self.v_fill, self.f_fill[ids]) for ids in face_ids ]
-		vertices = [c.obtain_vertices() for c in closed ]
-		faces    = [c.obtain_faces()    for c in closed ]
-		volumes  = [c.volume            for c in closed ]
-
-		return vertices, faces, volumes, areas
-
+		self.split_volumes = [CloseMesh(self.v_fill, self.f_fill[ids]).volume  for ids in face_ids]
 

@@ -23,7 +23,8 @@ class SpineCompartments():
 
 
 	def create( self ):
-		# Find the spine heads associated with terminal nodes, then it is associated with a spine-neck.
+		# Find the spine heads associated with terminal nodes, then each head is associated with a spine-neck.
+		# Terminal-based FOR
 		for spine in self.spines:
 			nodes_terminal = spine['nodes_terminal']
 			node_dend      = spine['node_dend']
@@ -31,6 +32,7 @@ class SpineCompartments():
 			spine['neck']  = [ {'id': self.adjacents.obtain_a_neck_connecting_to_head( head['id'] ) } for head in spine['head'] ]
 
 		# Obtain the compartment of each spine head.
+		# Head-based FOR
 		for spine in self.spines:
 			for head in spine['head']:
 				closed_head = CloseMesh( self.vertices, self.head_fs[head['id']] )
@@ -45,6 +47,7 @@ class SpineCompartments():
 				spine['head'] = heads_for_unique_necks
 
 		# Obtain the compartments of each spine neck.
+		# Neck-based FOR
 		for spine in self.spines:
 			for neck, heads in zip( spine['neck'], spine['head'] ):
 				closed_neck = CloseMesh( self.vertices, self.neck_fs[ neck['id'] ] )
@@ -87,7 +90,7 @@ class SpineCompartments():
 		ids_graph_node_dendrite = obtain_path_nodes(self.graph, src_id_dst_id)
 		spines = []
 		for i, id_node_dendrite in enumerate(ids_graph_node_dendrite):
-			spine = {'node_dend': id_node_dendrite, 'nodes_terminal': []}
+			spine  = {'node_dend': id_node_dendrite, 'nodes_terminal': []}
 			sub_gs = [g for g in separated_graphs if g.has_node(id_node_dendrite)]
 			if len(sub_gs) != 1:
 				raise ValueError("multiple/none spine graph(s) was assigned.")
@@ -96,8 +99,20 @@ class SpineCompartments():
 				ids_node_num_branches = dict( sub_g.degree() )
 				spine['nodes_terminal'] = [id for id, num in ids_node_num_branches.items() if num == 1 and id != id_node_dendrite ]
 			spines.append(spine)
-
 		return spines
+
+
+	def _obtain_neck_properties_branched( self, closed_neck, paths ):
+		properties = {}
+		sub_gs = [ self.graph.edge_subgraph(p) for p in paths ]
+		neck_lengths = closed_neck.obtain_lengths_inside( sub_gs )
+		faces_for_branch, fareas_for_branch = closed_neck.assign_mesh_for_each_graph( sub_gs ) ### face assignments
+		ratios       = [l/sum(neck_lengths) for l in neck_lengths] ### length ratios
+		properties['lengths_for_branch'] = neck_lengths
+		properties['volumes_for_branch'] = [closed_neck.volume*ratio for ratio in ratios] ### 円筒だと思うと Volume = S^2 / (4*pi*L)
+		properties['faces_for_branch']   = faces_for_branch
+		properties['areas_for_branch']   = fareas_for_branch
+		return properties
 
 
 	def _aggregate_neck_with_mutiple_heads( self, ids_neck, heads ):
@@ -111,7 +126,6 @@ class SpineCompartments():
 				heads_for_unique_necks[id].append(head)
 		return ids_unique_necks, heads_for_unique_necks
 
-		return properties
 
 	def _associate_ids_head_and_nodes_terminal( self, node_dend, nodes_terminal ):
 		head     = []
@@ -138,22 +152,13 @@ class SpineCompartments():
 		properties['areas']   = closed.unclosed_area
 		return properties
 
+
 	def _obtain_neck_properties_straight( self, closed_neck, path ):
 		properties = {}
 		sub_g = self.graph.edge_subgraph(path)
 		properties['lengths'] = closed_neck.obtain_length_inside( sub_g )
 		properties['volumes'] = closed_neck.volume
 		properties['areas']   = closed_neck.unclosed_area
-		return properties
-
-	def _obtain_neck_properties_branched( self, closed_neck, paths ):
-		properties = {}
-		sub_gs = [ self.graph.edge_subgraph(p) for p in paths ]
-		neck_lengths = [closed_neck.obtain_length_inside( sub_g ) for sub_g in sub_gs ]
-		ratios       = [l/sum(neck_lengths) for l in neck_lengths]
-		properties['lengths'] = neck_lengths
-		properties['volumes'] = [closed_neck.volume*ratio for ratio in ratios]
-		properties['areas']   = [closed_neck.unclosed_area*ratio for ratio in ratios]
 		return properties
 
 
