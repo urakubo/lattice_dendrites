@@ -66,8 +66,8 @@ class PreprocessSimulation(QMainWindow, PlotCompartmentModelBackend):
 					id_neck   = neck['id']
 					#print('id_neck ', id_neck)
 					container_fs = neck['faces_for_branch']
-					cols = plt.get_cmap('hsv', len(container_fs) )
 					
+					'''
 					for e in self.graph.edges( neck['node'] ):
 						g_e = self.graph.edges[e]
 						#print("g_e['path']", g_e['path'])
@@ -75,7 +75,10 @@ class PreprocessSimulation(QMainWindow, PlotCompartmentModelBackend):
 						radiuses  = g_e['radiuses'][::20]
 						normals   = g_e['tangents'][::20,:]
 						self.plot_disks( paths, normals, radiuses )
+
+					'''
 					
+					cols = plt.get_cmap('tab20c', len(container_fs) )# 
 					for i in range( len(container_fs) ):
 						actor = self.plot_mesh(self.vertices, container_fs[i], color = cols(i)[:3] )
 						self.renderer.AddActor(actor)

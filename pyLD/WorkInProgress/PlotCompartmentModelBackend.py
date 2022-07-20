@@ -339,10 +339,12 @@ class PlotCompartmentModelBackend():
 
 	def plot_disk(self, location, normal, radius, color = (1.0, 1.0, 1.0) ):
 		polygon_circle = vtk.vtkRegularPolygonSource()
-		polygon_circle.SetNumberOfSides(10)
+		polygon_circle.SetNumberOfSides(20)
 		polygon_circle.SetNormal( normal   )
 		polygon_circle.SetRadius( radius   )
 		polygon_circle.SetCenter( location )
+		#polygon_circle.SetGeneratePolygon(False)
+		polygon_circle.SetGeneratePolyline(False)
 
 		mapper_circle = vtk.vtkPolyDataMapper()
 		mapper_circle.SetInputConnection(polygon_circle.GetOutputPort())
@@ -350,7 +352,8 @@ class PlotCompartmentModelBackend():
 		actor = vtk.vtkActor()
 		actor.SetMapper(mapper_circle)
 		actor.GetProperty().SetColor(*color)
-		#actor.GetProperty().SetLineWidth(width)
+		actor.GetProperty().SetOpacity(0.5)
+		actor.GetProperty().SetLineWidth(0.0)
 		self.renderer.AddActor(actor)
 
 

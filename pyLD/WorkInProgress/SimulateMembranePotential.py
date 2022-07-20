@@ -12,16 +12,18 @@ from MembraneMechanisms import DistributedNa, DistributedK, PointCurrent, PointN
 
 
 class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCurrent):
-	"""A class for simulating membrane potentials of a multicompartment model. This was purely written in Python to simulate a multicompartment model that has a realistic shape. Users can insert distributed and point mechanisms. The distributed mechanisms denotes the distributed channels of Na, K, and Ca. Only one instance for each mechanism can be generated. The point mechanisms denotes the currents via NMDARs and patch pipettes. Multple point mechanisms can be inserted simultaneously.
+	"""Simulate membrane potential of a multicompartment model. This was purely written in Python to simulate a multicompartment model that has a realistic shape. Users can insert distributed and point mechanisms. The distributed mechanisms denotes the distributed channels of Na, K, and Ca. Only one instance for each mechanism can be generated. The point mechanisms denotes the currents via NMDARs and patch pipettes. Multple point mechanisms can be inserted simultaneously.
 
 	Args:
-		None
+		connections (list[np.array([int, int]), np.array([int, int]), ..., np.array([int, int])]): Connections between compartments i and j
+		surface_areas (np.array([float, float, ..., float])): Surface areas of the compartments (um2)
+		volumes (np.array([float, float, ..., float])): Volumes of the compartments (um3)
+		lengths (np.array([float, float, ..., float])): Volumes of the compartments (um)
 
 	Returns:
 		(pyLD.SimulateMembranePotential): SimulateMembranePotential object that has the follwing instances:
 		- init_V (float): Initial membrane potential
-		- p (dict): Parameters of pasive properties 'Cm' (XX), 'gL' (XX), and 'EL' (mV).
-		- connection (tuple): Connections between compartments (1D array; [id1, id2, id3, ...]).
+		- p (dict): Parameters of pasive properties 'Cm' (uF/um2), 'Rm' (MOhm-um2), 'El' (V), and 'Ra' (MOhm-um).
 		- n_compartments (int): Number of compartments.
 		- s (numpy[float]): Surface areas of compartments (1D array; [area1, area2, area3, ...]).
 		- ra_inv (numpy[float]): Inverse of axial resistances between compartments (1D array; [1?R1, 1/R2, 1/R3, ...]).
@@ -29,23 +31,44 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		- tend (float): End time of simulation.
 	"""
 
-	def __init__(self):
+	def __init__(self, connections, surface_areas, volumes, lengths  ):
 		# Passive properties
 		self.init_V         = -60.0
-		self.p              = {'Cm':1.0, 'gL': 0.3, 'EL': -49.387} # v
-		# Compartment
-		self.connection = tuple([np.array([i,i+1]) for i in range(9)])
-		self.n_compartments = 10
-		# Surface area
-		self.s    = np.ones(self.n_compartments).astype(np.float64)
+		self.p              = {'Cm':1.0e-8, 'Rm': 250e3, 'El': -0.070, 'Ra':1.5}
+		# Units: Cm = uF/um2,  Rm = MOhm-um2, El = Volt, Ra = MOhm-um
+		# Other units: Time = sec, Membrane potentials = Volt
+
+		self._check_arguments(connections, surface_areas, volumes, lengths)
+
+		self.n_compartments= volumes.shape[0]
+		# Connections
+		self.connections   = connections
+		# Surface areas (um)
+		self.surface_areas = surface_areas
+		# Volumes (um3)
+		self.volumes       = volumes
+		# Lengths (um)
+		self.lengths       = lengths
+
+		PointNMDAR.__init__(self)
+		PointCurrent.__init__(self)
+
+	def init(self):
+		"""Initialize the model with a given set of parameters.
+	
+		"""
+		# Surface resistances (MOhm)
+		self.rm      = self.p['Rm'] * self.areas
+		# Section areas (um2)
+		section_areas   = self.volumes / self.lengths
+		# Axial resistance (MOhm)
+		self.ri      = self.p['Ra'] * self.lengths / self.areas
+		# Inverse of axial resistance (1/MOhm)
+		self.ri_inv  = 0.5 / self.ri
 		# Axial registance
 		self.ra_inv = np.ones(self.n_compartments).astype(np.float64)*0.5
 
-		# Unit: um, V, Ohm
-		# ri: Ohm /cm , 
-		Rm = 1.5 # 5000-100,000 Ohm cm2
-		Ra = 100 # 70-250 Ohm cm
-		# 
+
 		# Distributed mechanisms
 		self.distributed_mechanisms    = []
 		self.distributed_num_variables = []
@@ -58,8 +81,6 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		self.point_event               = []
 		self.point_locations           = []
 		self.point_params              = []
-		PointNMDAR.__init__(self)
-		PointCurrent.__init__(self)
 
 		self.tstart = 0.0
 		self.tend   = 50.0
@@ -167,7 +188,7 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 			print('tspan: ', tspan)
 			print('final: ', final)
 			
-			sol = solve_ivp(self._f, tspan, u0, method='RK23', args=(self.s, self.ra_inv, self.connection, ud_num))
+			sol = solve_ivp(self._f, tspan, u0, method='RK23', args=(self.s, self.ra_inv, self.connections, ud_num))
 			self.t = np.hstack([self.t, sol.t])
 			self.y = np.hstack([self.y, sol.y])
 			# Postprocess
@@ -187,6 +208,19 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 				tspan[0] = t_end
 				u0       = np.hstack([v0, ud0, up0])
 		return True
+
+
+		def _check_arguments(self, connections, surface_areas, volumes, lengths):
+
+			if not type(surface_areas).__module__ == type(volumes).__module__ == type(lengths).__module__ == np.__name__:
+				raise ValueError('surface_areas, volumes, and lengths  must be numpy arrays.')
+			elif not surface_areas.ndim == volumes.ndim == lengths.ndim == 1 :
+				raise ValueError('surface_areas, volumes, and lengths must have a dimension 1.')
+			elif not surface_areas.shape[0] == volumes.shape[0] == lengths.shape[0] :
+				raise ValueError('surface_areas, volumes, and lengths must share a same length of np.array.')
+			elif not isinstance( connections, (list, tuple)):
+				raise ValueError('connections must be a list or tuple.')
+
 
 
 if __name__ == '__main__':

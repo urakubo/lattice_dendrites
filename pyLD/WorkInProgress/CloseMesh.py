@@ -12,6 +12,9 @@ class CloseMesh():
 		self.mesh0 = trimesh.Trimesh(vertices, faces)
 		self.unclosed_area = self.mesh0.area
 
+		self.vertices = vertices
+		self.faces    = faces
+
 		part_mesh = pymeshfix.MeshFix(vertices, faces)
 		part_mesh.repair()
 		self.mesh = trimesh.Trimesh(part_mesh.v, part_mesh.f)
@@ -51,11 +54,10 @@ class CloseMesh():
 		# print('paths_enclosed ', paths_enclosed)
 		nums_points    = [path.shape[0] for path in paths_enclosed]
 		num_branches   = len(nums_points)
-		faces    = self.mesh0.faces
 		fcenters = self.mesh0.triangles_center
 		dists = []
-		for num, path in zip(nums_points, paths_enclosed):
-			dist = np.array( [np.linalg.norm((fcenters - path[i,:]), axis=1) for i in range(num)] )
+		for num_points, path in zip(nums_points, paths_enclosed):
+			dist = np.array( [np.linalg.norm((fcenters - path[i,:]), axis=1) for i in range(num_points)] )
 			#print('Before aaggregation dist.shape', dist.shape)
 			dist = np.min( dist, axis = 0)
 			#print('After aaggregation  dist.shape', dist.shape)
@@ -63,9 +65,9 @@ class CloseMesh():
 		dists = np.array(dists)
 		ids_face_for_branch = np.argmin(dists, axis=0)
 
-		faces_for_branch  = [ self.mesh0.faces[ids_face_for_branch==i,:] for i in range(num_branches) ]
-		meshes_for_branch = [ trimesh.Trimesh(self.mesh0.vertices, f)    for f in faces_for_branch    ]
-		fareas_for_branch = [ m.area                                     for m in meshes_for_branch   ]
+		faces_for_branch  = [ self.faces[ids_face_for_branch==i,:] for i in range(num_branches) ]
+		meshes_for_branch = [ trimesh.Trimesh(self.vertices, f)    for f in faces_for_branch    ]
+		fareas_for_branch = [ m.area                               for m in meshes_for_branch   ]
 		# print('closed_ids  ', closed_ids)
 		# print('dists.shape ', dists.shape)
 		# print('closed_ids.shape', closed_ids.shape)
