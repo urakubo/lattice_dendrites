@@ -12,7 +12,7 @@ from MembraneMechanisms import DistributedNa, DistributedK, PointCurrent, PointN
 
 
 class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCurrent):
-	"""Simulate membrane potential of a multicompartment model. This was purely written in Python to simulate a multicompartment model that has a realistic shape. Users can insert distributed and point mechanisms. The distributed mechanisms denotes the distributed channels of Na, K, and Ca. Only one instance for each mechanism can be generated. The point mechanisms denotes the currents via NMDARs and patch pipettes. Multple point mechanisms can be inserted simultaneously.
+	"""A class for simulating membrane potentials of a multicompartment model. This was purely written in Python to simulate a multicompartment model that has a realistic shape. Users can insert distributed and point mechanisms. The distributed mechanisms denotes the distributed channels of Na, K, and Ca. Only one instance for each mechanism can be generated. The point mechanisms denotes the currents via NMDARs and patch pipettes. Multple point mechanisms can be inserted simultaneously.
 
 	Args:
 		None
@@ -40,6 +40,12 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		self.s    = np.ones(self.n_compartments).astype(np.float64)
 		# Axial registance
 		self.ra_inv = np.ones(self.n_compartments).astype(np.float64)*0.5
+
+		# Unit: um, V, Ohm
+		# ri: Ohm /cm , 
+		Rm = 1.5 # 5000-100,000 Ohm cm2
+		Ra = 100 # 70-250 Ohm cm
+		# 
 		# Distributed mechanisms
 		self.distributed_mechanisms    = []
 		self.distributed_num_variables = []
