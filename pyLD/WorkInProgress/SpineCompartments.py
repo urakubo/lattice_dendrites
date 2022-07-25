@@ -29,34 +29,34 @@ class SpineCompartments():
 			nodes_terminal = spine['nodes_terminal']
 			node_dend      = spine['node_dend']
 			spine['head']  = self._associate_ids_head_and_nodes_terminal(node_dend, nodes_terminal)
-			spine['neck']  = [ {'id': self.adjacents.obtain_a_neck_connecting_to_head( head['id'] ) } for head in spine['head'] ]
+			spine['neck']  = [ {'id_neck': self.adjacents.obtain_a_neck_connecting_to_head( head['id_head'] ) } for head in spine['head'] ]
 
 		# Obtain the compartment of each spine head.
 		# Head-based FOR
 		for spine in self.spines:
 			for head in spine['head']:
-				closed_head = CloseMesh( self.vertices, self.head_fs[head['id']] )
+				closed_head = CloseMesh( self.vertices, self.head_fs[head['id_head']] )
 				head.update( self._obtain_head_properties( closed_head,  head['path_from_terminal_to_dend']) )
 
 		# Aggregate the neck that has multiple heads
 		for spine in self.spines:
-			ids_neck  = [n['id'] for n in spine['neck']]
+			ids_neck  = [n['id_neck'] for n in spine['neck']]
 			if len(ids_neck) != len(set(ids_neck)):
 				unique_necks, heads_for_unique_necks = self._aggregate_neck_with_mutiple_heads( ids_neck, spine['head'] )
-				spine['neck'] = [{'id': id } for id in unique_necks ]
+				spine['neck'] = [{'id_neck': id } for id in unique_necks ]
 				spine['head'] = heads_for_unique_necks
 
 		# Obtain the compartments of each spine neck.
 		# Neck-based FOR
 		for spine in self.spines:
 			for neck, heads in zip( spine['neck'], spine['head'] ):
-				closed_neck = CloseMesh( self.vertices, self.neck_fs[ neck['id'] ] )
+				closed_neck = CloseMesh( self.vertices, self.neck_fs[ neck['id_neck'] ] )
 				nodes       = closed_neck.obtain_nodes_inside( self.graph )
 				if isinstance(heads, dict): # Single head
 					neck_properties = self._obtain_neck_properties_straight( closed_neck, heads['path_from_terminal_to_dend'] ) 
 					neck.update( neck_properties )
 				elif len(nodes) == 0:
-					ids_head = [ h['id'] for h in heads ]
+					ids_head = [ h['id_head'] for h in heads ]
 					paths    = [ h['path_from_terminal_to_dend'] for h in heads ]
 					print('Nearly separated branching neck (Neck id: {}, Head ids: {}. Spine neck is divided depending on its length.'.format(neck['id'], ids_head))
 					neck.update( self._obtain_neck_properties_branched( closed_neck, paths ) )
@@ -67,8 +67,8 @@ class SpineCompartments():
 					neck.update( self._obtain_neck_properties_branched( closed_neck, paths_Y ) )
 					neck['node'] = nodes[0]
 				else:
-					ids_head = [ h['id'] for h in heads ]
-					print('heads {} are the member of neck_id {} that has the nodes {}'.format(ids_head, neck['id'], nodes))
+					ids_head = [ h['id_head'] for h in heads ]
+					print('heads {} are the member of neck_id {} that has the nodes {}'.format(ids_head, neck['id_neck'], nodes))
 					print('Neck shape is complicated beyond the current implementation (len(nodes) > 1). Ignored.')
 
 
@@ -138,7 +138,7 @@ class SpineCompartments():
 				print('Warning: the selected spine head is again selected. The latter is ignored.')
 			else:
 				ids_head.append(id_head)
-				head.append( {'id': id_head,\
+				head.append( {'id_head': id_head,\
 							'node_terminal': node_terminal,\
 							'path_from_terminal_to_dend': obtain_path_edges(self.graph, [node_terminal, node_dend]) } )
 		return head
@@ -147,18 +147,18 @@ class SpineCompartments():
 	def _obtain_head_properties( self, closed, path ):
 		properties = {}
 		subgraph   = self.graph.edge_subgraph( path )
-		properties['lengths'] = closed.obtain_length_inside( subgraph )
-		properties['volumes'] = closed.volume
-		properties['areas']   = closed.unclosed_area
+		properties['length'] = closed.obtain_length_inside( subgraph )
+		properties['volume'] = closed.volume
+		properties['area']   = closed.unclosed_area
 		return properties
 
 
 	def _obtain_neck_properties_straight( self, closed_neck, path ):
 		properties = {}
 		sub_g = self.graph.edge_subgraph(path)
-		properties['lengths'] = closed_neck.obtain_length_inside( sub_g )
-		properties['volumes'] = closed_neck.volume
-		properties['areas']   = closed_neck.unclosed_area
+		properties['length'] = closed_neck.obtain_length_inside( sub_g )
+		properties['volume'] = closed_neck.volume
+		properties['area']   = closed_neck.unclosed_area
 		return properties
 
 

@@ -33,8 +33,8 @@ class DendriticCompartments():
 			locs.append(self.graph.nodes[node]['loc'])
 		locs  = np.array(locs)
 		diffs = np.diff(locs, axis=0)
-		dists = np.linalg.norm(locs, axis=1)
-		return dists
+		dists = np.linalg.norm(diffs, axis=1)
+		return dists.tolist()
 
 	def _obtain_nodes_location(self, nodes):
 		locations = [self.graph.nodes[node]['loc'] for node in nodes]
@@ -78,7 +78,6 @@ class DendriticCompartments():
 		face_ids = self._split_faces( self.fcenters_org  )
 		self.split_areas = [ np.sum( self.fareas_org[ids] ) for ids in face_ids ]
 		self.split_faces = [ self.f_org[ids] for ids in face_ids ]
-
 		face_ids = self._split_faces( self.fcenters_fill )
 		self.split_volumes = [CloseMesh(self.v_fill, self.f_fill[ids]).volume  for ids in face_ids]
 

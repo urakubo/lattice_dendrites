@@ -1,13 +1,100 @@
 # from numbalsoda import lsoda_sig, lsoda
 # from numba import njit, cfunc
 # import numba as nb
-# from numba import njit, jit, float64, int64, f8, i8, b1, void, literal_unroll
+from numba import njit, jit, float64, int64, f8, i8, b1, void, literal_unroll
+from numba.typed import Dict, List
+from numba.types import types
 
 
+import os, sys, glob
 import numpy as np
 import itertools
 from scipy.integrate import solve_ivp
+import networkx as nx
 from MembraneMechanisms import DistributedNa, DistributedK, PointCurrent, PointNMDAR
+
+# from pathlib import Path
+import h5py
+import pprint
+import pickle
+import trimesh
+
+
+
+
+# @staticmethod
+@njit(nopython=True)
+def _ff(t, u,
+	cm,
+	rm,
+	ri_inv,
+	connector_to_compartments0,
+	connector_to_compartments1,
+	compartment_to_connectors0,
+	compartment_to_connectors1,
+	n_compartments,
+	v_connectors,
+	ud_num
+	):
+	
+	El = -0.070
+	
+	# Variables:
+	# v : membrane potentials at compartments
+	# ud: internal states (distributed mechanisms)
+	# up: internal states (point mechanisms)
+	# print('t ', t)
+	v, ud, up = np.split(u, [n_compartments, ud_num])
+	ud        = ud.reshape((-1, n_compartments))
+	dv        = np.zeros_like(v)
+	# Passive channel
+	dv += - (v-El) / rm # passive property
+
+	# Voltage transfer among compartments
+	#v_connectors = np.zeros(n_connectors, dtype=float64)
+	#for id_con, id_comps in connector_to_compartments.items():
+	for id_con, id_comps in zip(connector_to_compartments0, connector_to_compartments1) :
+		v_connectors[id_con] = 0
+		denominator = 0
+		numerator   = 0
+		for id_comp in id_comps:
+			denominator += ri_inv[id_comp]
+			numerator   += v[id_comp] * ri_inv[id_comp]
+		v_connectors[id_con] = numerator / denominator
+	for id_comp, id_cons in zip(compartment_to_connectors0, compartment_to_connectors1):
+		current = 0
+		for id_con in id_cons:
+			current  += ri_inv[id_comp] * ( v_connectors[id_con] - v[id_comp] )
+		dv[id_comp]  += current
+
+	'''
+	# Distributed mechanisms
+	i_s = 0
+	d_ud = np.empty_like(ud)
+	for mechanism, num_variables in zip(self.distributed_mechanisms, self.distributed_num_variables):
+		
+		Im, dd_ud = mechanism(v, dv, ud[i_s:i_s+num_variables, :])
+		d_ud[i_s:i_s+num_variables, :] = dd_ud
+		dv  += Im
+		i_s += num_variables
+
+	# Point mechanisms
+	i_s = 0
+	I = np.zeros_like(v)
+	d_up = np.empty_like(up)
+	for mechanism, param, num_variables, loc in \
+		zip(self.point_mechanisms, self.point_params, self.point_num_variables, self.point_locations):
+		I, d_up[i_s:i_s+num_variables] = mechanism(t, v[loc], up[i_s:i_s+num_variables], param)
+		i_s += num_variables
+		dv[loc] += I
+	'''
+
+	# Altogether
+	dv   = dv / cm
+	#dudt = np.vstack((dv, d_ud)).reshape(-1)
+	#dudt = np.hstack([dv, d_up])
+
+	return dv
 
 
 
@@ -15,10 +102,7 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 	"""Simulate membrane potential of a multicompartment model. This was purely written in Python to simulate a multicompartment model that has a realistic shape. Users can insert distributed and point mechanisms. The distributed mechanisms denotes the distributed channels of Na, K, and Ca. Only one instance for each mechanism can be generated. The point mechanisms denotes the currents via NMDARs and patch pipettes. Multple point mechanisms can be inserted simultaneously.
 
 	Args:
-		connections (list[np.array([int, int]), np.array([int, int]), ..., np.array([int, int])]): Connections between compartments i and j
-		surface_areas (np.array([float, float, ..., float])): Surface areas of the compartments (um2)
-		volumes (np.array([float, float, ..., float])): Volumes of the compartments (um3)
-		lengths (np.array([float, float, ..., float])): Volumes of the compartments (um)
+		(None):
 
 	Returns:
 		(pyLD.SimulateMembranePotential): SimulateMembranePotential object that has the follwing instances:
@@ -31,42 +115,12 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		- tend (float): End time of simulation.
 	"""
 
-	def __init__(self, connections, surface_areas, volumes, lengths  ):
+	def __init__(self):
 		# Passive properties
-		self.init_V         = -60.0
-		self.p              = {'Cm':1.0e-8, 'Rm': 250e3, 'El': -0.070, 'Ra':1.5}
+		self.init_V         = -0.07
+		self.p              = {'Cm':1.0e-8, 'Rm': 250e3, 'El': self.init_V, 'Ra':1.5}
 		# Units: Cm = uF/um2,  Rm = MOhm-um2, El = Volt, Ra = MOhm-um
 		# Other units: Time = sec, Membrane potentials = Volt
-
-		self._check_arguments(connections, surface_areas, volumes, lengths)
-
-		self.n_compartments= volumes.shape[0]
-		# Connections
-		self.connections   = connections
-		# Surface areas (um)
-		self.surface_areas = surface_areas
-		# Volumes (um3)
-		self.volumes       = volumes
-		# Lengths (um)
-		self.lengths       = lengths
-
-		PointNMDAR.__init__(self)
-		PointCurrent.__init__(self)
-
-	def init(self):
-		"""Initialize the model with a given set of parameters.
-	
-		"""
-		# Surface resistances (MOhm)
-		self.rm      = self.p['Rm'] * self.areas
-		# Section areas (um2)
-		section_areas   = self.volumes / self.lengths
-		# Axial resistance (MOhm)
-		self.ri      = self.p['Ra'] * self.lengths / self.areas
-		# Inverse of axial resistance (1/MOhm)
-		self.ri_inv  = 0.5 / self.ri
-		# Axial registance
-		self.ra_inv = np.ones(self.n_compartments).astype(np.float64)*0.5
 
 
 		# Distributed mechanisms
@@ -85,48 +139,117 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		self.tstart = 0.0
 		self.tend   = 50.0
 
-	def _f(self, t, u, s, ra_inv, connection, ud_num ):
-		gL = self.p['gL']
-		EL = self.p['EL']
-		C  = self.p['Cm']
-		n_compartments = self.n_compartments
+		PointNMDAR.__init__(self)
+		PointCurrent.__init__(self)
 
-		# Variables
-		v, ud, up = np.split(u, [n_compartments, ud_num])
-		ud        = ud.reshape((-1, n_compartments))
-		dv        = np.zeros_like(v)
-		# Passive channel
-		dv += - gL*(v-EL)
 
-		# Connection
-		# for ii in literal_unroll(connection):
-		for ii in connection:
-			v_center = np.sum(v[ii]*ra_inv[ii]) / np.sum(ra_inv[ii])
-			dv[ii]  += ra_inv[ii]*(v_center - v[ii])
 
-		# Distributed mechanisms
-		i_s = 0
-		dud = np.empty_like(ud)
-		for mechanism, num_variables in zip(self.distributed_mechanisms, self.distributed_num_variables):
-			dud[i_s:i_s+num_variables, :] = mechanism(v, dv, ud[i_s:i_s+num_variables, :])
-			i_s += num_variables
+	def load_spatial_model_graph(self, graph ):
+		"""Import the model described using a networkx graph. Here, each edge correpond to a compartment, and each node is their connector.
+		Args:
+			graph (networkx.classes.graph): Connections to connectors
+		"""
+		edges_for_remove = []
+		if type(graph).__module__ != 'networkx.classes.graph':
+			raise ValueError( 'graph is not "networkx.classes.graph".' )
+		else :
+			for id, edge in graph.edges.items():
+				#print('edge: ', edge)
+				#print(" ('length' in edge) ", ('length' in edge))
+				if  not 'length' in edge:
+					raise ValueError( 'edge {} does not have "length".'.format(id) )
+				elif not 'area' in edge:
+					raise ValueError( 'edge {} does not have "area".'.format(id) )
+				elif not 'volume' in edge:
+					raise ValueError( 'edge {} does not have "volume".'.format(id) )
+				elif edge['length'] <= 0:
+					print('This edge has zero-or-minus length: ', edge)
+					print('Removed.')
+					edges_for_remove.append(id)
+				elif edge['volume'] <= 0:
+					print('This edge has zero-or-minus volume: ', edge)
+					print('Removed.')
+					edges_for_remove.append(id)
 
-		# Point mechanisms
-		i_s = 0
-		I = np.zeros_like(v)
-		dup = np.empty_like(up)
-		for mechanism, param, num_variables, loc in \
-			zip(self.point_mechanisms, self.point_params, self.point_num_variables, self.point_locations):
-			I, dup[i_s:i_s+num_variables] = mechanism(t, v[loc], up[i_s:i_s+num_variables], param)
-			i_s += num_variables
-			dv[loc] += I
+		self.graph = graph # Networkx where the edges contain "surface_area", "volume", "length"
+		self.graph.remove_edges_from(edges_for_remove)
+		
+		
+		# 
+		self.n_compartments = self.graph.number_of_edges()
+		print('self.n_compartments ',  self.n_compartments)
+		
+		self.rm     = np.zeros(self.n_compartments, dtype=float)
+		self.ri_inv = np.zeros(self.n_compartments, dtype=float)
+		self.cm     = np.zeros(self.n_compartments, dtype=float)
+		
+		id_model = 0
+		for edge in self.graph.edges.values():
+			length = edge['length']
+			area   = edge['area']
+			volume = edge['volume']
+			section_area = volume / length
+			ri                    = self.p['Ra'] * length / section_area
+			self.ri_inv[id_model] = 0.5 / ri
+			self.rm[id_model]     = self.p['Rm'] * area
+			self.cm[id_model]     = self.p['Cm'] * area
+			edge['id_model']      = id_model
+			id_model += 1
+		
+		#print('self.ri_inv ', self.ri_inv)
+		#print('self.rm     ', self.rm)
+		#print('self.cm     ', self.cm)
+		
+		
+		self.ids_compartment =  [ e['id_model'] for e in graph.edges.values()]
+		self.ids_connectors  = sorted( set(itertools.chain(*graph.edges.keys())) )
+		# print( 'self.ids_connectors  ', self.ids_connectors )
+		self.n_connectors    = max(self.ids_connectors)+1
 
-		# Altogether
-		dudt = np.vstack((dv/C,dud)).reshape(-1)
-		dudt = np.hstack([dudt, dup])
+		self.compartment_to_connectors = {e['id_model']: list(con) for con, e in graph.edges.items()}
+		tmp = {node: list(graph.edges(node, data='id_model')) for node in graph.nodes.keys()}
+		self.connector_to_compartments = { node: [v[2] for v in values] for node, values in tmp.items() }
+		self.connector_to_compartments = { node: values for node, values in self.connector_to_compartments.items() if values != [] }
 
-		return dudt
 
+
+	def solve_ivp_numba(self, tspan, u0, method='LSODA'):
+
+		compartment_to_connectors0 = List()
+		compartment_to_connectors1 = List()
+		for  key, value in self.compartment_to_connectors.items():
+			compartment_to_connectors0.append(key)
+			compartment_to_connectors1.append(value)
+
+		connector_to_compartments0 = List()
+		connector_to_compartments1 = List()
+		for key, value in self.connector_to_compartments.items():
+			connector_to_compartments0.append(key)
+			connector_to_compartments1.append(value)
+
+		connector_to_compartments1
+
+		v_connectors = np.zeros(self.n_connectors, dtype=float)
+
+
+		print('u0.shape ' ,u0.shape)
+		print('n_compartments ' ,self.n_compartments)
+		print('ud_num ' ,self.ud_num)
+
+
+		sol = solve_ivp(_ff, tspan, u0, method=method, \
+			args=(	self.cm,
+					self.rm,
+					self.ri_inv,
+					connector_to_compartments0,
+					connector_to_compartments1,
+					compartment_to_connectors0,
+					compartment_to_connectors1,
+					self.n_compartments,
+					v_connectors,
+					self.ud_num) )
+
+		return sol
 
 	def run(self):
 		"""Run the simulation.
@@ -143,15 +266,16 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		# Init distributed channels
 		ud0 = [self.init_V]
 		for init in self.distributed_init:
-			init(ud0)
+			ud0.extend( init() )
 		ud0 = np.tile(np.array(ud0),(self.n_compartments,1)).T.reshape(-1)
 		ud_num = ud0.shape[0]
+		self.ud_num = ud_num
 
 		# Init point channels
 		up0 = np.array( list(itertools.chain.from_iterable(self.point_init_variables) ) )
 		len_point_variables = []
 		for init, param, init_variables in zip(self.point_init, self.point_params, self.point_init_variables):
-			init(param)
+			param.update( init(param) )
 			len_point_variables.append( len(init_variables) )
 		id_start_point_variables = [0]+list(itertools.accumulate(len_point_variables))
 		del id_start_point_variables[-1]
@@ -174,27 +298,31 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 		id_que = 0
 		final  = 0
 
-		self.t = np.empty(0)
-		self.y = np.empty([u0.shape[0], 0])
+		self.t = np.empty(0)                # 0-dim array with size 0
+		self.y = np.empty([u0.shape[0], 0]) # 1-dim array with size 0
 		while True:
-			# Preprocess
+			# Preprocess: Setting of the simulation time up to event-time or to tend.
 			if (id_que < len(event_que)) and ( self.tend > event_que[id_que]['time'] ):
 				tspan[1] = event_que[id_que]['time']
 				final    = 0
 			else:
 				tspan[1] = self.tend
 				final    = 1
-			# Simulation
 			print('tspan: ', tspan)
 			print('final: ', final)
 			
-			sol = solve_ivp(self._f, tspan, u0, method='RK23', args=(self.s, self.ra_inv, self.connections, ud_num))
+			# Simulation  (self._f or _ff)
+			sol = solve_ivp(self._f, tspan, u0, method='LSODA')
+			#sol = self.solve_ivp_numba(tspan, u0, method='LSODA')
+			
+			# Postprocess: data storage
 			self.t = np.hstack([self.t, sol.t])
 			self.y = np.hstack([self.y, sol.y])
-			# Postprocess
 			if final == 1:
+				# End of simulation
 				break
 			else:
+				# Event handling
 				t_end = self.t[-1]
 				y_end = self.y[:, -1].copy()
 				v0, ud0, up0 = np.split(y_end, [self.n_compartments, ud_num])
@@ -202,24 +330,75 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 				i   = event_que[id_que]['object_id']
 				ids = list(range( id_start_point_variables[i], id_end_point_variables[i] ))
 				print('ids: ', ids)
-				v0[ loc ], up0[ ids ] = event_que[id_que]['func'](t_end, v0[ loc ], up0[ ids ] )
 				
+				
+				# Send the time, memb_pot, and states to event func
+				v0[ loc ], up0[ ids ] = event_que[id_que]['func'](t_end, v0[ loc ], up0[ ids ] )
 				id_que += 1
 				tspan[0] = t_end
+				# Set the initial condition.
 				u0       = np.hstack([v0, ud0, up0])
 		return True
 
 
-		def _check_arguments(self, connections, surface_areas, volumes, lengths):
+	def _f(self, t, u):
 
-			if not type(surface_areas).__module__ == type(volumes).__module__ == type(lengths).__module__ == np.__name__:
-				raise ValueError('surface_areas, volumes, and lengths  must be numpy arrays.')
-			elif not surface_areas.ndim == volumes.ndim == lengths.ndim == 1 :
-				raise ValueError('surface_areas, volumes, and lengths must have a dimension 1.')
-			elif not surface_areas.shape[0] == volumes.shape[0] == lengths.shape[0] :
-				raise ValueError('surface_areas, volumes, and lengths must share a same length of np.array.')
-			elif not isinstance( connections, (list, tuple)):
-				raise ValueError('connections must be a list or tuple.')
+		cm = self.cm
+		rm = self.rm
+		ri_inv = self.ri_inv
+		connector_to_compartments = self.connector_to_compartments
+		compartment_to_connectors = self.compartment_to_connectors
+		n_compartments = self.n_compartments
+		n_connectors   = self.n_connectors
+		ud_num = self.ud_num
+
+		# Variables:
+		# v : membrane potentials at compartments
+		# ud: internal states (distributed mechanisms)
+		# up: internal states (point mechanisms)
+
+		v, ud, up = np.split(u, [n_compartments, ud_num])
+		ud        = ud.reshape((-1, n_compartments))
+		dv        = np.zeros_like(v)
+		# Passive channel
+		dv += - (v-self.p['El']) / rm # passive property
+
+		# Voltage transfer among compartments
+		v_connectors = np.zeros(n_connectors, dtype=float)
+		for id_con, id_comps in connector_to_compartments.items() :
+
+			# print('id_comps', id_comps, ' np.sum(ri_inv[id_comps]) ', np.sum(ri_inv[id_comps]) )
+			v_connectors[id_con] = np.sum( v[id_comps] * ri_inv[id_comps] ) / np.sum(ri_inv[id_comps])
+		for id_comp, id_cons in compartment_to_connectors.items() :
+			dv[id_comp]  += \
+				self.ri_inv[id_comp] * ( np.sum(v_connectors[id_cons] - v[id_comp]) )
+
+		# Distributed mechanisms
+		i_s = 0
+		d_ud = np.empty_like(ud)
+		for mechanism, num_variables in zip(self.distributed_mechanisms, self.distributed_num_variables):
+			
+			Im, dd_ud = mechanism(v, dv, ud[i_s:i_s+num_variables, :])
+			d_ud[i_s:i_s+num_variables, :] = dd_ud
+			dv  += Im
+			i_s += num_variables
+
+		# Point mechanisms
+		i_s = 0
+		I = np.zeros_like(v)
+		d_up = np.empty_like(up)
+		for mechanism, param, num_variables, loc in \
+			zip(self.point_mechanisms, self.point_params, self.point_num_variables, self.point_locations):
+			I, d_up[i_s:i_s+num_variables] = mechanism(t, v[loc], up[i_s:i_s+num_variables], param)
+			i_s += num_variables
+			dv[loc] += I
+
+		# Altogether
+		dv   = dv / self.cm
+		dudt = np.vstack((dv, d_ud)).reshape(-1)
+		dudt = np.hstack([dudt, d_up])
+
+		return dudt
 
 
 

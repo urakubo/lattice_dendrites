@@ -13,19 +13,11 @@ import trimesh
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
-    qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
-    QPushButton, QGraphicsScene, QGraphicsView, QFrame
-from PyQt5.QtGui import QFont
-
-import vtk
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-
+from SimulateMembranePotential import SimulateMembranePotential
 from vtk_version.Utils import *
-from vtk_version.PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
 
 
-class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
+class CreateCompartmentModel():
 
 	def _loader(self):
 		data_dir = r'C:\Users\uraku\Desktop\LatticeMicrobes\sim_membranepot\vtk_version'
@@ -103,12 +95,7 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 			attr     = 'head'
 			)
 
-
-	def __init__(self):
-		super(CreateCompartmentModel, self).__init__()
-		self._loader()
-		self.initUI2()
-
+	def create(self):
 		# Create a new graph.
 		self.new_graph = nx.Graph()
 		self.count_node = 0
@@ -155,81 +142,37 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 						new_node_neck_head = self.add_neck_branched(new_node_neck_base, neck, j)
 						# head
 						self.add_head(new_node_neck_head, head[j])
-						
 
-
-		
-		"""
-		self.plot_nodes()
-		self.plot_edges()
-		self.plot_spines()
-		for spine in self.spines:
-			for neck, heads in zip( spine['neck'], spine['head'] ):
-				if isinstance(heads, list):
-					id_neck   = neck['id']
-					#print('id_neck ', id_neck)
-					container_fs = neck['faces_for_branch']
-					
-					'''
-					for e in self.graph_org.edges( neck['node'] ):
-						g_e = self.graph_org.edges[e]
-						#print("g_e['path']", g_e['path'])
-						paths     = g_e['path'][::20,:]
-						radiuses  = g_e['radiuses'][::20]
-						normals   = g_e['tangents'][::20,:]
-						self.plot_disks( paths, normals, radiuses )
-
-					'''
-					
-					cols = plt.get_cmap('tab20c', len(container_fs) )# 
-					for i in range( len(container_fs) ):
-						actor = self.plot_mesh(self.vertices, container_fs[i], color = cols(i)[:3] )
-						self.renderer.AddActor(actor)
-		
-		self.plot_faces_dendrite(self.vertices, self.container_faces)
-		self.plot_edges_dendrite(self.locations)
-
-		"""
-
-		self.iren.Initialize()
-
-
-	def initUI2(self):
-		self.setGeometry(0, 0, 700, 900) 
-		centerWidget = QWidget()
-		self.setCentralWidget(centerWidget)
-
-		layout = QVBoxLayout()
-		centerWidget.setLayout(layout)
-
-		self.frame = QFrame()
-		self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
-		layout.addWidget(self.vtkWidget, 1)
-
-		# Vtk root
-		self.renderer = vtk.vtkRenderer()
-		self.renderer.SetBackground(0.1, 0.2, 0.4)
-		self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
-		self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
-
-		# style = vtk.vtkInteractorStyleTrackballCamera()
-		self.style = Interactor()
-		self.style.set_renderer( self.renderer )
-		self.style.set_node_src_id_dst_id( [self.nodes[0], self.nodes[-1]] )
-		self.iren.SetInteractorStyle(self.style)
-
-		# Removable actors
-		self.removable_actors = vtk.vtkActorCollection()
-
-		self.show()
-		#self.iren.Initialize()
-
+	def __init__(self):
+		self._loader()
+		self.create()
 
 
 if __name__ == '__main__':
-	app = QApplication([])
-	window = CreateCompartmentModel()
-	window.show()
-	app.exec_()
-	nx.draw(window.new_graph, with_labels=True)
+	model = CreateCompartmentModel()
+
+
+	filename = 'compartment_model.pickle'
+	with open(filename, 'wb') as f:
+		pickle.dump(model.new_graph, f)
+
+	'''
+	m = SimulateMembranePotential()
+	m.load_spatial_model_graph( model.new_graph )
+
+	p1 = m.insert_nmdar(0)
+	p1['event_time'] = [10.0,20.0,30.0]
+	p2 = m.insert_nmdar(10)
+	p2['event_time'] = [5.0,20.0,45.0]
+	# p = m.insert_current(0)
+	m.run()
+
+
+	import matplotlib.pyplot as plt
+	for i in range(m.n_compartments):
+		plt.plot(m.t,m.y[i,:],'-', label=str(i))
+	plt.legend()
 	plt.show()
+
+	'''
+

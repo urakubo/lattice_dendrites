@@ -7,7 +7,7 @@ import itertools
 
 
 class CreateGraph():
-	"""Create a graph from hdf5.
+	"""Create a Networkx graph of the centerlines from Kimimaro that is stored in a hdf5 file.
 
 	Args:
 		filename_hdf5 (str): Target Hdf5 filename
@@ -139,11 +139,11 @@ class CreateGraph():
 		for id_edge, edge in edges.items():
 			if ( len(edge['nodes']) == 2 ):
 				graph.add_edge(edge['nodes'][0], edge['nodes'][1], \
-					id       = id_edge, \
-					len      = edge['length'], \
-					path     = edge['path'], \
+					id       = id_edge,          \
+					len      = edge['length'],   \
+					path     = edge['path'],     \
 					tangents = edge['tangents'], \
-					radiuses = edge['radiuses']
+					radiuses = edge['radiuses']  \
 					)
 		return graph
 		# http://47.112.232.56/a/stackoverflow/en/629b5e10652087181359e77a.html

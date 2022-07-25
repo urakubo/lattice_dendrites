@@ -1,11 +1,9 @@
 import numpy as np
 
-
-
 class PointNMDAR():
 
 	def __init__(self):
-		self.p['gNMDAR (default)']        = 2.0
+		self.p['gNMDAR (default)']        = 0.001
 		self.p['ENMDAR (default)']        = 0.0
 		self.p['t_act_NMDAR (default)']   = 0.005
 		self.p['t_inact_NMDAR (default)'] = 0.05
@@ -32,8 +30,10 @@ class PointNMDAR():
 		t_max         = t_act_NMDAR * t_inact_NMDAR / (t_inact_NMDAR - t_act_NMDAR)
 		t_max         *= ( np.log(t_inact_NMDAR) - np.log(t_act_NMDAR))
 		c_max         = np.exp(-t_max/t_inact_NMDAR) - np.exp(-t_max/t_act_NMDAR)
-		p['t_max']    = t_max
-		p['c_max']    = c_max
+		q = {}
+		q['t_max']    = t_max
+		q['c_max']    = c_max
+		return q
 
 	def nmdar_event(self, t, v, s):
 		s += 1
@@ -75,7 +75,8 @@ class PointCurrent():
 
 	def current_init(self, p):
 		#return p
-		pass
+		q ={}
+		return q
 
 	def current_event(self, t, v, s):
 		return v, s
@@ -95,7 +96,6 @@ class PointCurrent():
 		return I, ds
 
 
-
 class DistributedNa():
 	def insert_na(self):
 		self.na_init_variables = [0.05, 0.60]
@@ -105,8 +105,8 @@ class DistributedNa():
 		self.distributed_num_variables.append( 2)
 		self.distributed_init.append(self.na_init)
 
-	def na_init(self, ud0):
-		ud0.extend( self.na_init_variables )
+	def na_init(self):
+		return self.na_init_variables
 
 	def na(self, v, dv, s):
 		gNa= self.p['gNa']
@@ -123,10 +123,9 @@ class DistributedNa():
 		h = s[1,:]
 		ds[0,:] = am * (1-m) -bm * m
 		ds[1,:] = ah * (1-h) -bh * h
-		dv += - gNa*m*m*m*h*(v-ENa)
+		Im      = - gNa*m*m*m*h*(v-ENa)
 
-		return ds
-
+		return Im, ds
 
 
 class DistributedK():
@@ -138,8 +137,8 @@ class DistributedK():
 		self.distributed_num_variables.append(1)
 		self.distributed_init.append(self.k_init)
 
-	def k_init(self, ud0):
-		ud0.extend( self.k_init_variables )
+	def k_init(self):
+		return self.k_init_variables
 
 	def k(self, v, dv, s):
 		gK = self.p['gK']
@@ -147,11 +146,11 @@ class DistributedK():
 		ds = np.zeros_like(s)
 
 		# K channel
-		n = s[0,:]
+		n  = s[0,:]
 		an = 0.01  * (v+50.0)/(1-np.exp(-(v+50.0)/10.0))
 		bn = 0.125 * np.exp(-(v+60.0)/80.0)
 		ds = an * (1-n) -bn * n
-		dv +=-gK*n*n*n*n*(v-EK)
+		Im =-gK*n*n*n*n*(v-EK)
 
-		return ds
+		return Im, ds
 
