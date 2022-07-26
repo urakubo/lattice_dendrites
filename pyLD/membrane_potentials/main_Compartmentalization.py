@@ -22,12 +22,6 @@ from PyQt5.QtGui import QFont
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from CreateGraph import CreateGraph
-from Utils import *
-from DendriticCompartments  import DendriticCompartments
-from SpineCompartments      import SpineCompartments
-from PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
-
 
 class Compartmentalization(QMainWindow, PlotCompartmentModelBackend):
 
@@ -100,7 +94,7 @@ class Compartmentalization(QMainWindow, PlotCompartmentModelBackend):
 		for i in range(self.barycenters_neck[:,0].shape[0]):
 			self.plot_text_Billboard(text = str(i), color = (0.0,0.0,1.0), pos = self.barycenters_neck[i,:], size = 0.003)
 
-		with open('data_shared.pickle', 'wb') as f:
+		with open('data/data_shared.pickle', 'wb') as f:
 			pickle.dump(self.graph   , f)
 			pickle.dump(self.vertices, f)
 
@@ -110,7 +104,7 @@ class Compartmentalization(QMainWindow, PlotCompartmentModelBackend):
 		s.create()
 		pprint.pprint(s.spines)
 
-		with open('data_spines.pickle', 'wb') as f:
+		with open('data/data_spines.pickle', 'wb') as f:
 			pickle.dump(s.spines     , f)
 			pickle.dump(self.head_fs , f)
 			pickle.dump(self.neck_fs , f)
@@ -138,7 +132,7 @@ class Compartmentalization(QMainWindow, PlotCompartmentModelBackend):
 
 		pprint.pprint(dendritic_edges)
 		pprint.pprint(dendritic_nodes)
-		with open('data_dendrite.pickle', 'wb') as f:
+		with open('data/data_dendrite.pickle', 'wb') as f:
 			pickle.dump(dendritic_nodes, f)
 			pickle.dump(dendritic_edges, f)
 		#'''

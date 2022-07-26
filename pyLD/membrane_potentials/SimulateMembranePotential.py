@@ -11,7 +11,6 @@ import numpy as np
 import itertools
 from scipy.integrate import solve_ivp
 import networkx as nx
-from MembraneMechanisms import DistributedNa, DistributedK, PointCurrent, PointNMDAR
 
 # from pathlib import Path
 import h5py
@@ -19,11 +18,11 @@ import pprint
 import pickle
 import trimesh
 
-
+from MembraneMechanisms import DistributedNa, DistributedK, PointCurrent, PointNMDAR
 
 
 # @staticmethod
-@njit(nopython=True)
+@njit
 def _ff(t, u,
 	cm,
 	rm,
@@ -118,7 +117,8 @@ class SimulateMembranePotential(DistributedNa, DistributedK, PointNMDAR, PointCu
 	def __init__(self):
 		# Passive properties
 		self.init_V         = -0.07
-		self.p              = {'Cm':1.0e-8, 'Rm': 250e3, 'El': self.init_V, 'Ra':1.5}
+		# self.p              = {'Cm':1.0e-8, 'Rm': 250e3, 'El': self.init_V, 'Ra':1.5} Org
+		self.p              = {'Cm':1.0e-8, 'Rm': 25e3, 'El': self.init_V, 'Ra':3.0}
 		# Units: Cm = uF/um2,  Rm = MOhm-um2, El = Volt, Ra = MOhm-um
 		# Other units: Time = sec, Membrane potentials = Volt
 

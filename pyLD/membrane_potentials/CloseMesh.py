@@ -5,8 +5,21 @@ import pymeshfix
 import itertools
 
 
-
 class CloseMesh():
+	"""Create the closed mesh from a open mech using the pymeshfix. Utility functions are also implemented.
+
+	Args:
+		vertices (numpy[float]): Vertices of a triangular mesh. vertices.shape is (n, 3).
+		faces (numpy[int]): Vertical array of three vertices that specify a triangle. faces.shape is (m, 3).
+
+	Returns:
+		(pyLD.CloseMesh): CloseMesh object that has the follwing instances:
+		- unclosed_area (float): Summed area of input faces.
+		- vertices (numpy[float]): Input vertices
+		- faces (numpy[float]): Input faces
+		- mesh (trimesh object): Closed mesh
+		- volume (float): Volume of the closed mesh.
+	"""
 	def __init__(self, vertices, faces):
 
 		self.mesh0 = trimesh.Trimesh(vertices, faces)
@@ -24,15 +37,31 @@ class CloseMesh():
 		self.volume    = self.mesh.volume
 
 	def obtain_vertices(self):
+		"""Obtain vertices of the closed mesh.
+		Returns:
+			- vertices (numpy[float]): vertices.shape is (n, 3). 
+		"""
 		return np.array(self.mesh.vertices)
 
 	def obtain_faces(self):
+		"""Obtain faces of the closed mesh.
+		Returns:
+			- vertices (numpy[int]): vertices.shape is (n, 3). 
+		"""
 		return np.array(self.mesh.faces)
 
 	def obtain_fcenters(self):
+		"""Obtain the center coordinates of faces in the closed mesh.
+		Returns:
+			- vertices (numpy[int]): vertices.shape is (n, 3). 
+		"""
 		return np.array(self.mesh.triangles_center)
 
 	def obtain_crossing_edges(self, graph):
+		"""Obtain the edges that cross the closed volume if the networkx graph has 'loc' in the nodes.
+		Returns:
+			- crossing_edges (list[(int, int)]): List of the edges that cross the closed volume.
+		"""
 		crossing_edges = []
 		for id_edge in graph.edges.keys():
 			loc0 = graph.nodes[id_edge[0]]['loc'].reshape([1,-1])
@@ -44,10 +73,26 @@ class CloseMesh():
 		return crossing_edges
 
 	def obtain_length_inside(self, graph):
+		"""Obtain the length of the edge of a networkx graph.
+
+		Args:
+			graph (Networkx graph object) : It must contain node['loc'] and edge['path'], both of which specify the location.
+
+		Returns:
+			- (numpy.float): the total length of edges.
+		"""
 		return sum( [self.obtain_inside_length_edge( edge ) for edge in graph.edges.values()] )
 
-	def obtain_lengths_inside(self, sub_gs):
-		return [self.obtain_length_inside( sub_g ) for sub_g in sub_gs ]
+	def obtain_lengths_inside(self, graphs):
+		"""Obtain the length of the edge of networkx graphs.
+
+		Args:
+			graphs (list[Networkx graph object]) : They must contain node['loc'] and edge['path'], both of which specify the location.
+
+		Returns:
+			- (list[numpy.float]): the total lengths of graphs.
+		"""
+		return [self.obtain_length_inside( graph ) for graph in graphs ]
 
 	def assign_mesh_for_each_graph(self, sub_gs):
 		paths_enclosed = [self._pick_up_5_enclosed_points(sub_g) for sub_g in sub_gs]
@@ -105,6 +150,14 @@ class CloseMesh():
 
 
 	def obtain_inside_length_edge(self, edge):
+		"""Obtain the length of the edge in the closed volume.
+
+		Args:
+			edge (the edge of a networkx graph: Vertices of a trace. edge['path'].shape is (n, 3).
+
+		Returns:
+			- ength_sub_path (numpy.float): the length of the edge.
+		"""
 		path    = edge['path']
 		# points ((n, 3) float)
 		# return (n, ) bool

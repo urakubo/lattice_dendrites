@@ -258,7 +258,7 @@ class PlotCompartmentModelBackend():
 		prop_txt.SetFontSize(18)
 		prop_txt.SetColor(color)
 		act_txt.SetDisplayPosition(*pos)
-		self.renderer.AddActor(act_txt)
+		return act_txt
 
 	def plot_text_Billboard(self, text = "3D text", pos = (1.0,1.0,1.0), color = (1.0,1.0,1.0), size = 0.005):
 		act_txt = vtk.vtkBillboardTextActor3D()

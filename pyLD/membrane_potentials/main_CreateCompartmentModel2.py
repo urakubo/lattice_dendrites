@@ -13,22 +13,11 @@ import trimesh
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
-    qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
-    QPushButton, QGraphicsScene, QGraphicsView, QFrame
-from PyQt5.QtGui import QFont
 
-import vtk
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-
-from vtk_version.Utils import *
-from vtk_version.PlotCompartmentModelBackend import PlotCompartmentModelBackend, Interactor
-
-
-class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
+class CreateCompartmentModel():
 
 	def _loader(self):
-		data_dir = r'C:\Users\uraku\Desktop\LatticeMicrobes\sim_membranepot\vtk_version'
+		data_dir = r'C:\Users\uraku\Desktop\LatticeMicrobes\sim_membranepot\data'
 		
 		filename = os.path.join(data_dir, 'data_shared.pickle')
 		with open(filename, 'rb') as f:
@@ -103,12 +92,7 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 			attr     = 'head'
 			)
 
-
-	def __init__(self):
-		super(CreateCompartmentModel, self).__init__()
-		self._loader()
-		self.initUI2()
-
+	def create(self):
 		# Create a new graph.
 		self.new_graph = nx.Graph()
 		self.count_node = 0
@@ -123,7 +107,7 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 				attr         = 'dendrite')
 			new_nodes_dendrite.append(id)
 
-		for i, edge in enumerate( self.dendritic_edges ):
+		for edge in self.dendritic_edges:
 			id_node0 = self.obtain_id_node_from_old_node( edge['edge'][0] )
 			id_node1 = self.obtain_id_node_from_old_node( edge['edge'][1] )
 			
@@ -134,12 +118,13 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 				area     = edge['area']				, \
 				faces    = edge['faces']			, \
 				attr     = 'dendrite')
+			# print('self.count_edge  ', self.count_edge)
+
 
 		# Add spines.
-		for i, spine in enumerate( self.spines ):
-			
+		for spine in  self.spines :
 			new_node_dend_neck = self.obtain_id_node_from_old_node( spine['node_dend'] )
-			for i, (neck, head) in enumerate( zip( spine['neck'], spine['head'] ) ):
+			for neck, head in zip( spine['neck'], spine['head'] ):
 				if 'area' in neck:
 					# neck
 					new_node_neck_head = self.add_neck(new_node_dend_neck, neck)
@@ -155,81 +140,21 @@ class CreateCompartmentModel(QMainWindow, PlotCompartmentModelBackend):
 						new_node_neck_head = self.add_neck_branched(new_node_neck_base, neck, j)
 						# head
 						self.add_head(new_node_neck_head, head[j])
-						
 
-
-		
-		"""
-		self.plot_nodes()
-		self.plot_edges()
-		self.plot_spines()
-		for spine in self.spines:
-			for neck, heads in zip( spine['neck'], spine['head'] ):
-				if isinstance(heads, list):
-					id_neck   = neck['id']
-					#print('id_neck ', id_neck)
-					container_fs = neck['faces_for_branch']
-					
-					'''
-					for e in self.graph_org.edges( neck['node'] ):
-						g_e = self.graph_org.edges[e]
-						#print("g_e['path']", g_e['path'])
-						paths     = g_e['path'][::20,:]
-						radiuses  = g_e['radiuses'][::20]
-						normals   = g_e['tangents'][::20,:]
-						self.plot_disks( paths, normals, radiuses )
-
-					'''
-					
-					cols = plt.get_cmap('tab20c', len(container_fs) )# 
-					for i in range( len(container_fs) ):
-						actor = self.plot_mesh(self.vertices, container_fs[i], color = cols(i)[:3] )
-						self.renderer.AddActor(actor)
-		
-		self.plot_faces_dendrite(self.vertices, self.container_faces)
-		self.plot_edges_dendrite(self.locations)
-
-		"""
-
-		self.iren.Initialize()
-
-
-	def initUI2(self):
-		self.setGeometry(0, 0, 700, 900) 
-		centerWidget = QWidget()
-		self.setCentralWidget(centerWidget)
-
-		layout = QVBoxLayout()
-		centerWidget.setLayout(layout)
-
-		self.frame = QFrame()
-		self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
-		layout.addWidget(self.vtkWidget, 1)
-
-		# Vtk root
-		self.renderer = vtk.vtkRenderer()
-		self.renderer.SetBackground(0.1, 0.2, 0.4)
-		self.vtkWidget.GetRenderWindow().AddRenderer(self.renderer)
-		self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
-
-		# style = vtk.vtkInteractorStyleTrackballCamera()
-		self.style = Interactor()
-		self.style.set_renderer( self.renderer )
-		self.style.set_node_src_id_dst_id( [self.nodes[0], self.nodes[-1]] )
-		self.iren.SetInteractorStyle(self.style)
-
-		# Removable actors
-		self.removable_actors = vtk.vtkActorCollection()
-
-		self.show()
-		#self.iren.Initialize()
-
+	def __init__(self):
+		self._loader()
+		self.create()
 
 
 if __name__ == '__main__':
-	app = QApplication([])
-	window = CreateCompartmentModel()
-	window.show()
-	app.exec_()
-	nx.draw(window.new_graph, with_labels=True)
-	plt.show()
+	model = CreateCompartmentModel()
+
+
+	filename = 'compartment_model.pickle'
+	with open(filename, 'wb') as f:
+		pickle.dump(model.new_graph, f)
+		pickle.dump(model.vertices, f)
+		pickle.dump(model.head_fs, f)
+		pickle.dump(model.neck_fs, f)
+
+
